@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-10-26">
+
+<title>TS - [TS] HW02_Answer</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] HW02_Answer</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 26, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<blockquote class="blockquote">
+<p>해당 자료는 전북대학교 이영미 교수님 2023고급시계열분석 자료임</p>
+</blockquote>
+<div id="71a12286-a917-43b6-91de-66565bde8bb3" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">############## package</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast) <span class="co">#ses</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest) <span class="co">#dwtest</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR) <span class="co">#SMA</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+
+Loading required package: zoo
+
+
+Attaching package: ‘zoo’
+
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+
+
+Attaching package: ‘lubridate’
+
+
+The following objects are masked from ‘package:data.table’:
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    yday, year
+
+
+The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union
+
+</code></pre>
+</div>
+</div>
+<section id="section" class="level1">
+<h1>1</h1>
+<div id="7bea4645-f2e7-43ce-881d-723d9b4bb141" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 데이터 불러오기</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"mindex.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><span class="math inline">\(S_n^{(1)} = w \sum_{j=0}^{n-1} (1-w)^j Z_{n-j} + (1-w)^n S_0^{(1)}\)</span></p>
+<div id="954e49b0-d879-4685-8fb7-c942a08364b8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>simple_exp_smoothing <span class="ot">&lt;-</span> <span class="cf">function</span>(z,w,s0){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> Sn <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a> Sn[<span class="dv">1</span>] <span class="ot">&lt;-</span> w<span class="sc">*</span>z[<span class="dv">1</span>] <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>w)<span class="sc">*</span>s0</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(z)){</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> Sn[k] <span class="ot">&lt;-</span> w <span class="sc">*</span> z[k] <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>w)<span class="sc">*</span>Sn[k<span class="dv">-1</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> <span class="fu">return</span>(Sn)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f478a3c1-d6a4-4c32-9fbd-c6679473d612" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ses_0<span class="fl">.6</span> <span class="ot">&lt;-</span> <span class="fu">simple_exp_smoothing</span>(z,<span class="fl">0.6</span>,<span class="dv">15</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ses_0<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">simple_exp_smoothing</span>(z,<span class="fl">0.2</span>,<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6732811b-34c5-4bc0-b634-1f3be87f7f96" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(<span class="fu">ts</span>(z), ses_0<span class="fl">.6</span>, ses_0<span class="fl">.2</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"z"</span>,<span class="st">"w=0.6"</span>,<span class="st">"w=0.3"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">lty=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>W값이 클수록 원 데이터와 비슷하고, 평활 효과가 작아진다.</p></li>
+<li><p>W값이 작을수록 원데이터를 천천히 따라가고, 평활 효과가 커진다.</p></li>
+</ul>
+<p><span class="math inline">\(\hat Z_{t-1}(1) = S_{t-1}^{(1)}\)</span>이므로</p>
+<div id="05ca9cfc-c7aa-438e-816d-0c465a25112e" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>point <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">99</span>,<span class="dv">100</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ses_0<span class="fl">.6</span>[point<span class="dv">-1</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ses_0<span class="fl">.2</span>[point<span class="dv">-1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>11.58</li><li>11.052</li><li>12.6262842848221</li><li>10.1505137139288</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>13.86</li><li>13.228</li><li>11.4677321254815</li><li>10.8741857003852</li></ol>
+</div>
+</div>
+</section>
+<section id="section-1" class="level1">
+<h1>2</h1>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2">(1)</h2>
+<div id="42208936-6ab2-457e-b0f6-f33f71ba428d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"female.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2c0b6a83-b822-4251-bfb6-47d9dfc59c87" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>추세가 있기 때문에 이중지수평활법을 사용한다.</li>
+</ul>
+<div id="abc459b8-6f21-4c07-b2f9-889434c72768" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>female_smoothing <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(z, <span class="at">gamma =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>female_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and without seasonal component.
+
+Call:
+HoltWinters(x = z, gamma = FALSE)
+
+Smoothing parameters:
+ alpha: 1
+ beta : 0.01666631
+ gamma: FALSE
+
+Coefficients:
+        [,1]
+a 667.000000
+b   5.145043</code></pre>
+</div>
+</div>
+<div id="c3e183c7-c030-41dd-8cba-d36da5d36887" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(female_smoothing, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>,<span class="fu">expression</span>(alpha <span class="sc">==</span> <span class="dv">1</span><span class="sc">~</span><span class="st">","</span><span class="sc">~</span>beta<span class="sc">==</span><span class="fl">0.02</span>)), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 예측오차 분석</p>
+<div id="60dabae8-b8f0-47f4-8e1e-d036309f8878" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(female_smoothing<span class="sc">$</span>fitted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">xhat</th>
+<th data-quarto-table-cell-role="th" scope="col">level</th>
+<th data-quarto-table-cell-role="th" scope="col">trend</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>230.0000</td>
+<td>223</td>
+<td>7.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>235.9833</td>
+<td>229</td>
+<td>6.983334</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>241.9669</td>
+<td>235</td>
+<td>6.966945</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>233.7175</td>
+<td>227</td>
+<td>6.717501</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">7</td>
+<td>242.7555</td>
+<td>236</td>
+<td>6.755542</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">8</td>
+<td>238.5763</td>
+<td>232</td>
+<td>6.576287</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>HoltWinters 함수를 사용하는 경우, 이중지수 평활값이 3번째부터 구해진다. 따라서 예측오차 역시 원데이터의 3번째 값부터 구할 수 있다.</li>
+</ul>
+<div id="50daf958-c1e3-4d85-b2d1-2d3c4999c3f6" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>resid_female <span class="ot">&lt;-</span> z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)] <span class="sc">-</span> female_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>] <span class="co">#또는</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>resid_female <span class="ot">&lt;-</span> <span class="fu">resid</span>(female_smoothing) <span class="co">#같은 방법임</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="04a6cc0e-c3fa-49dc-8cce-c33209e04391" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_female)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</li>
+</ul>
+<div id="7b34692f-c3b2-4e3c-ab78-fd5c60e9c367" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_female)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_female
+t = -0.93497, df = 105, p-value = 0.3519
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -3.276746  1.176749
+sample estimates:
+mean of x 
+-1.049998 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="747bbf73-ec6a-4cfa-b6ae-c5cc7b9860ac" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_female<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_female ~ 1)
+DW = 1.7861, p-value = 0.2662
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관은 없는 것으로 보인다.</p></li>
+<li><p>따라서 예측오차는 분석 결과 평활 결과는 적합하다고 할 수 있다.</p></li>
+</ul>
+</section>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3">(2)</h2>
+<div id="d6d0e3b0-af3b-435d-83c8-12fc8e3eb9e9" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"export.txt"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>지난 과제에 언급한대로 이 시계열에는 이분산성은 없다고 할 수 있다.</p></li>
+<li><p>추세와 계절성분이 있으므로 계절주기가 12, 가법형 계절평활법을 사용하는 것이 적합하다.</p></li>
+<li><p>계절평활을 하기 위해서는 데이터를 ts 객체로 변환해야 한다</p></li>
+</ul>
+<div id="1de10eb0-b2a0-494b-9fbd-8a24c28f0e89" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>z_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(z, <span class="at">frequency=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="8f74cf5d-8845-42ea-b8eb-fd7d5bc78a4f" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>export_smoothing <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(z_ts)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>export_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and additive seasonal component.
+
+Call:
+HoltWinters(x = z_ts)
+
+Smoothing parameters:
+ alpha: 0.3304767
+ beta : 0.04369053
+ gamma: 0.6102758
+
+Coefficients:
+           [,1]
+a    66.9300146
+b     0.3670945
+s1   -0.9590061
+s2   -2.3460160
+s3   -1.4388022
+s4    4.0020957
+s5   -2.8546787
+s6   -3.1036803
+s7    0.4486017
+s8    3.3118493
+s9    1.6302355
+s10   8.0731659
+s11 -11.5480012
+s12  -8.8892298</code></pre>
+</div>
+</div>
+<div id="35f37226-8023-4193-9a5e-f401cea678d8" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(export_smoothing, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"HoltWinters"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 예측오차분석</p>
+<div id="3a2d0437-2a51-499d-9b19-24007cfc7a76" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>resid_export <span class="ot">&lt;-</span> <span class="fu">resid</span>(export_smoothing)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_export)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다</li>
+</ul>
+<div id="8c0c40b1-6c1c-4b8a-8da5-86c18f98e1ca" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_export)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_export
+t = -0.99304, df = 73, p-value = 0.324
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -1.359825  0.455374
+sample estimates:
+ mean of x 
+-0.4522256 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="9d20f36d-92f6-4ad0-a41a-953a51395098" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_export<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_export ~ 1)
+DW = 1.8163, p-value = 0.4267
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관은 없는 것으로 보인다.</p></li>
+<li><p>따라서 예측오차는 분석 결과 평활 결과는 적합하다고 할 수 있다.</p></li>
+<li><p>2장에서 계절추세 모형을 적합한 경우에는 예측오차 간에 자기 상관이 있다는 결과 를 얻었었는데, 평활을 이용한 결과 자기상관이 제거되었다.</p></li>
+</ul>
+<p><code>-</code> 계절추세모형</p>
+<div id="de54adcb-e6e3-46f6-9bad-95f2dd6cb620" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>seasonal_I <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cycle</span>(z_ts))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(z<span class="sc">~</span>t<span class="sc">+</span>seasonal_I)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(z<span class="sc">~</span>t<span class="sc">+</span><span class="fu">I</span>(t<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span>seasonal_I)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2b689fc0-051a-4f02-ac06-76d500967e87" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(export_smoothing, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">ts</span>(<span class="fu">fitted</span>(m2), <span class="at">frequency=</span><span class="dv">12</span>), <span class="at">col=</span><span class="st">'blue'</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">ts</span>(<span class="fu">fitted</span>(m3), <span class="at">frequency=</span><span class="dv">12</span>), <span class="at">col=</span><span class="st">'green'</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"HoltWinters"</span>, <span class="st">"seasonal trend (1)"</span>, <span class="st">"seasonal trend (2)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> SSE 비교하기</p>
+<div id="f8429c0a-52ab-4ad9-825d-e9a5e9882e84" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(export_smoothing<span class="sc">$</span>fitted) <span class="do">## 평활값은 12시차 이후값부터 생성됨</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 6 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">xhat</th>
+<th data-quarto-table-cell-role="th" scope="col">level</th>
+<th data-quarto-table-cell-role="th" scope="col">trend</th>
+<th data-quarto-table-cell-role="th" scope="col">season</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">Jan 2</td>
+<td>23.77825</td>
+<td>28.21682</td>
+<td>0.8502812</td>
+<td>-5.2888542</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Feb 2</td>
+<td>25.99728</td>
+<td>30.78616</td>
+<td>0.9253878</td>
+<td>-5.7142708</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">Mar 2</td>
+<td>34.53331</td>
+<td>32.80963</td>
+<td>0.9733636</td>
+<td>0.7503125</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Apr 2</td>
+<td>35.55911</td>
+<td>34.44285</td>
+<td>1.0021933</td>
+<td>0.1140625</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">May 2</td>
+<td>39.71058</td>
+<td>35.83200</td>
+<td>1.0190994</td>
+<td>2.8594792</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Jun 2</td>
+<td>41.81786</td>
+<td>37.04258</td>
+<td>1.0274655</td>
+<td>3.7478125</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="edf5424e-410b-498f-9239-e318ebf470bf" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sse_smoothing <span class="ot">&lt;-</span> <span class="fu">sum</span>((z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)]<span class="sc">-</span>export_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>) <span class="co">#또는</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>sse_smoothing <span class="ot">&lt;-</span> export_smoothing<span class="sc">$</span>SSE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a60cfcca-242f-4e90-8959-c044d008e091" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sse_m2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">resid</span>(m2)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>sse_m3 <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">resid</span>(m3)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="fe0dfca5-62fd-4497-abf8-5e1564bfad09" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"SSE_smomthing = "</span>,sse_smoothing)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"SSE_m2 = "</span>, sse_m2)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"SSE_m3 = "</span>, sse_m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'SSE_smomthing = 1135.42182593918'
+</div>
+<div class="cell-output cell-output-display">
+'SSE_m2 = 1371.05731181319'
+</div>
+<div class="cell-output cell-output-display">
+'SSE_m3 = 934.603221419272'
+</div>
+</div>
+<ul>
+<li>모형을 1시차 예측오차에 대한 제곱합으로 비교하면 2차추세모형을 적합한 m3의 SSE값이 가장 작고, 1차선형추세를 사용한 모형의 SSE가 가장 크다.</li>
+</ul>
+<div id="6e8e9971-8aa1-4509-b6bf-c172113e9281" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mse_smoothing <span class="ot">&lt;-</span> <span class="fu">mean</span>((z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)]<span class="sc">-</span>export_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>mse_m2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">resid</span>(m2)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>mse_m3 <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">resid</span>(m3)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"MSE_smomthing = "</span>,mse_smoothing)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"MSE_m2 = "</span>, mse_m2)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"MSE_m3 = "</span>, mse_m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'MSE_smomthing = 15.3435381883673'
+</div>
+<div class="cell-output cell-output-display">
+'MSE_m2 = 15.9425268815487'
+</div>
+<div class="cell-output cell-output-display">
+'MSE_m3 = 10.8674793188287'
+</div>
+</div>
+<ul>
+<li>MSE로 비교하여도 결과는 같다.</li>
+</ul>
+</section>
+</section>
+<section id="section-4" class="level1">
+<h1>3</h1>
+<section id="section-5" class="level2">
+<h2 class="anchored" data-anchor-id="section-5">(1)</h2>
+<div id="668d938a-ba67-4993-ac3c-46ce4b2e723e" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'data1.csv'</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">X</th>
+<th data-quarto-table-cell-role="th" scope="col">t</th>
+<th data-quarto-table-cell-role="th" scope="col">z</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>1</td>
+<td>1</td>
+<td>-1.5346871</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2</td>
+<td>2</td>
+<td>2.6850469</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>3</td>
+<td>3</td>
+<td>-0.4288189</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>4</td>
+<td>4</td>
+<td>1.3724199</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>5</td>
+<td>5</td>
+<td>-0.9800884</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>6</td>
+<td>6</td>
+<td>2.4156505</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="612a0108-2921-4178-9d6b-f1bb0ce27357" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dt<span class="sc">$</span>z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>추세가 있음, 계절성분은 없음</p></li>
+<li><p>선형추세 모형 적합</p></li>
+</ul>
+<div id="5b75963c-2e6a-4aa2-a10c-d583eec17d54" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>m_trend <span class="ot">&lt;-</span> <span class="fu">lm</span>(z<span class="sc">~</span>t, dt)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_trend)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = z ~ t, data = dt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0803 -1.0287  0.0169  0.8426  4.3288 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 0.818932   0.296301   2.764  0.00682 ** 
+t           0.099619   0.005094  19.557  &lt; 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.47 on 98 degrees of freedom
+Multiple R-squared:  0.796, Adjusted R-squared:  0.7939 
+F-statistic: 382.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li><p>모형 적합이 잘 되었음.</p></li>
+<li><p><span class="math inline">\(\hat Z = 0.82 + 0.10t\)</span></p></li>
+</ul>
+<div id="ef165ed8-7a0e-4672-825a-888809097ebf" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dt<span class="sc">$</span>z)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(m_trend, <span class="at">col=</span><span class="st">'red'</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"trend"</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 잔차분석</p>
+<div id="70b2b41f-fa21-4293-aaac-864ab660fd97" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>resid_m <span class="ot">&lt;-</span> <span class="fu">resid</span>(m_trend)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_m)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>잔차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</li>
+</ul>
+<div id="34d1a674-df66-44d1-86e1-4eb1a2555ecb" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_m
+t = -5.2362e-16, df = 99, p-value = 1
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.2902834  0.2902834
+sample estimates:
+    mean of x 
+-7.660376e-17 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다</li>
+</ul>
+<div id="19cba45c-3907-4e19-8095-2dba9d9d3e4d" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(m_trend)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  m_trend
+DW = 2.2164, p-value = 0.8389
+alternative hypothesis: true autocorrelation is greater than 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 잔차들 간의 자기 상관은 없는 것으로 보인다.</p></li>
+<li><p>따라서 잔차 분석 결과 추세모형 결과는 적절하다고 할 수 있다.</p></li>
+</ul>
+</section>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6">(2)</h2>
+<div id="98028041-23c8-46a1-95ad-a20adefa96eb" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>new_dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t=</span><span class="dv">100</span><span class="sc">+</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pred_trend <span class="ot">&lt;-</span> <span class="fu">predict</span>(m_trend, new_dt)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>pred_trend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>1</dt><dd>10.8804416292757</dd><dt>2</dt><dd>10.9800605357706</dd><dt>3</dt><dd>11.0796794422655</dd><dt>4</dt><dd>11.1792983487603</dd><dt>5</dt><dd>11.2789172552552</dd><dt>6</dt><dd>11.3785361617501</dd><dt>7</dt><dd>11.4781550682449</dd><dt>8</dt><dd>11.5777739747398</dd><dt>9</dt><dd>11.6773928812347</dd><dt>10</dt><dd>11.7770117877295</dd></dl>
+</div>
+</div>
+</section>
+<section id="section-7" class="level2">
+<h2 class="anchored" data-anchor-id="section-7">(3)</h2>
+<ul>
+<li>추세만 있으므로 이중지수평활 적용</li>
+</ul>
+<div id="0fb4a069-aa5b-45c8-9380-4391657dba89" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>m_smoothing <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(dt<span class="sc">$</span>z, <span class="at">gamma=</span><span class="cn">FALSE</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>m_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and without seasonal component.
+
+Call:
+HoltWinters(x = dt$z, gamma = FALSE)
+
+Smoothing parameters:
+ alpha: 0.496601
+ beta : 0.396225
+ gamma: FALSE
+
+Coefficients:
+        [,1]
+a  9.7266353
+b -0.3150449</code></pre>
+</div>
+</div>
+<div id="716f1a8f-6ef5-41c8-8e6c-7108755c83a0" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_smoothing, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>,<span class="st">"smoothing"</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-40-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 예측오차 분석</p>
+<div id="8d33e053-cbe5-435b-896f-29655e5f1051" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>resid_smoothing <span class="ot">&lt;-</span> dt<span class="sc">$</span>z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)] <span class="sc">-</span> m_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>] <span class="co">#또는</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>resid_smoothing <span class="ot">&lt;-</span> <span class="fu">resid</span>(m_smoothing) <span class="co">#같은 방법임</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="255625c1-7e49-4ad2-a674-db5e4e661d7c" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_smoothing)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-42-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</li>
+</ul>
+<div id="bb21f248-e9d3-42e8-a0e0-4c8e8429e091" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_smoothing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_smoothing
+t = -1.0711, df = 97, p-value = 0.2868
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.6709125  0.2005740
+sample estimates:
+ mean of x 
+-0.2351693 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="9176864e-8b05-4b78-828a-7e44fa6866a2" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_smoothing<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_smoothing ~ 1)
+DW = 1.9664, p-value = 0.8675
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관은 없는 것으로 보인다.</p></li>
+<li><p>따라서 예측오차는 분석 결과 평활 결과는 적절하다고 할 수 있다.</p></li>
+</ul>
+</section>
+<section id="section-8" class="level2">
+<h2 class="anchored" data-anchor-id="section-8">(4)</h2>
+<div id="6d40dd0a-9d01-40ee-afb4-45615afa4f87" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>pred_smoothing <span class="ot">&lt;-</span> <span class="fu">predict</span>(m_smoothing, <span class="at">n.ahead=</span><span class="dv">10</span>, <span class="at">prediction.interval =</span> T, <span class="at">level=</span><span class="fl">0.95</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>pred_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 10 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">fit</th>
+<th data-quarto-table-cell-role="th" scope="col">upr</th>
+<th data-quarto-table-cell-role="th" scope="col">lwr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">101</td>
+<td>9.411590</td>
+<td>13.67142</td>
+<td>5.1517644</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">102</td>
+<td>9.096545</td>
+<td>14.28017</td>
+<td>3.9129175</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">103</td>
+<td>8.781500</td>
+<td>15.20395</td>
+<td>2.3590541</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">104</td>
+<td>8.466456</td>
+<td>16.38382</td>
+<td>0.5490889</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">105</td>
+<td>8.151411</td>
+<td>17.77356</td>
+<td>-1.4707380</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">106</td>
+<td>7.836366</td>
+<td>19.34098</td>
+<td>-3.6682458</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">107</td>
+<td>7.521321</td>
+<td>21.06388</td>
+<td>-6.0212357</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">108</td>
+<td>7.206276</td>
+<td>22.92649</td>
+<td>-8.5139377</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">109</td>
+<td>6.891231</td>
+<td>24.91716</td>
+<td>-11.1346959</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">110</td>
+<td>6.576186</td>
+<td>27.02692</td>
+<td>-13.8745530</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cf34b2fe-be09-476f-b498-3a3209fb9e15" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">holt</span>(dt<span class="sc">$</span>z, <span class="at">alpha =</span> m_smoothing<span class="sc">$</span>alpha, <span class="at">beta=</span>m_smoothing<span class="sc">$</span>beta, <span class="at">h=</span><span class="dv">10</span>)<span class="co">#, initial)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast       Lo 80    Hi 80      Lo 95    Hi 95
+101       8.862685   6.0523463 11.67302   4.564643 13.16073
+102       8.360702   4.5932352 12.12817   2.598859 14.12254
+103       7.858719   2.6320999 13.08534  -0.134705 15.85214
+104       7.356735   0.3034311 14.41004  -3.430363 18.14383
+105       6.854752  -2.3086731 16.01818  -7.159497 20.86900
+106       6.352769  -5.1561498 17.86169 -11.248603 23.95414
+107       5.850786  -8.2094249 19.91100 -15.652451 27.35402
+108       5.348803 -11.4485541 22.14616 -20.340538 31.03814
+109       4.846819 -14.8590196 24.55266 -25.290661 34.98430
+110       4.344836 -18.4296256 27.11930 -30.485697 39.17537</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>잘려서 뒤에가 뭐라고 써있는지를 모르겠음. initial값에 뭘 지정하는 것 같은데 똑같은 값이 안나온다</p>
+</blockquote>
+</section>
+<section id="section-9" class="level2">
+<h2 class="anchored" data-anchor-id="section-9">(5)</h2>
+<div id="13ab5361-098d-4507-a046-711a0550c11f" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>real_new_dt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data1_new.csv"</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>real_new_dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 10 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">X</th>
+<th data-quarto-table-cell-role="th" scope="col">t</th>
+<th data-quarto-table-cell-role="th" scope="col">z</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>101</td>
+<td>11.577471</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>102</td>
+<td>13.171004</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>103</td>
+<td>12.730258</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>104</td>
+<td>12.242375</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>105</td>
+<td>10.877077</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>106</td>
+<td>13.297355</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>107</td>
+<td>14.632224</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>108</td>
+<td>15.049088</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>109</td>
+<td>9.671734</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>110</td>
+<td>12.216420</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="c9f8a932-d285-4394-a9b5-8a27091ef411" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(dt<span class="sc">$</span>z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-1.53468707477591
+</div>
+</div>
+<div id="c3cee632-ab29-4004-ade7-c34c646e6600" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dt<span class="sc">$</span>t,dt<span class="sc">$</span>z, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">110</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">15</span>), <span class="at">type=</span><span class="st">'l'</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">101</span><span class="sc">:</span><span class="dv">110</span>, pred_trend, <span class="at">col=</span><span class="dv">2</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">101</span><span class="sc">:</span><span class="dv">110</span>, pred_smoothing, <span class="at">col=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ERROR: Error in xy.coords(x, y): 'x' and 'y' lengths differ</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-49-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>MSE, MAPE, MAE 값을 이용하여 비교할 수 있다.</p></li>
+<li><p><span class="math inline">\(MSE = \dfrac{1}{m} \sum_{i=1}^n \hat e_{n-1+t}(1)^2\)</span></p></li>
+<li><p><span class="math inline">\(MAPE = \dfrac{100}{n} \sum_{i=1}^n \left| \dfrac{\hat e_{n-1+t}(1)}{Z_{n+t}} \right|\)</span></p></li>
+<li><p><span class="math inline">\(MAE = \dfrac{1}{m} \sum_{i=1}^m \left| \hat e_{n-1+t}(1) \right|\)</span></p></li>
+</ul>
+<div id="6b257737-120e-4049-b103-0ccf576e2348" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>e_trend <span class="ot">&lt;-</span> real_new_dt<span class="sc">$</span>z <span class="sc">-</span> pred_trend</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>e_smoothing <span class="ot">&lt;-</span> real_new_dt<span class="sc">$</span>z <span class="sc">-</span> pred_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="261540f4-47ab-46a8-879d-d55dbd1fe6af" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">MSE_trend =</span> <span class="fu">mean</span>(e_trend<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">MSE_smoothing =</span> <span class="fu">mean</span>(e_smoothing<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>(<span class="at">MAPE_trend =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">abs</span>(e_trend<span class="sc">/</span> real_new_dt<span class="sc">$</span>z)) <span class="sc">/</span> <span class="dv">10</span>)</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>(<span class="at">MAPE_smoothing =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">abs</span>(e_smoothing<span class="sc">/</span> real_new_dt<span class="sc">$</span>z)) <span class="sc">/</span> <span class="dv">10</span>)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>(<span class="at">MAE_trend =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(e_trend)))</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>(<span class="at">MAE_smoothing =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(e_smoothing)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+3.91978903404576
+</div>
+<div class="cell-output cell-output-display">
+127.173436899506
+</div>
+<div class="cell-output cell-output-display">
+13.1385437579375
+</div>
+<div class="cell-output cell-output-display">
+218.735568237967
+</div>
+<div class="cell-output cell-output-display">
+1.69927387507187
+</div>
+<div class="cell-output cell-output-display">
+9.02750167882282
+</div>
+</div>
+<blockquote class="blockquote">
+<p>교수님 풀이랑 smoothing 의 값이 좀 다르다.</p>
+</blockquote>
+<ul>
+<li><p>어떤 값을 보나 1차선형 추세 모형이 예측을 더 잘했다고 할 수 있다.</p></li>
+<li><p>추세가 전체적으로 변하지 않는 경우에는 평활법보다는 선형추세 모형이 더 적합하 다고 할 수 있다.</p></li>
+</ul>
+</section>
+</section>
+<section id="section-10" class="level1">
+<h1>4</h1>
+<div id="582a734f-e597-4194-8e47-c07079c907d4" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">'export.txt'</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-52-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="section-11" class="level2">
+<h2 class="anchored" data-anchor-id="section-11">(1)</h2>
+<ul>
+<li>위에서 2차선형추세 모형이 더 적절했다고 했으므로, 2차 추세 모형을 적합한다.</li>
+</ul>
+<div id="ab9b61b0-8193-4533-a4b5-a1e759afa3b8" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>z_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(z, <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>seasonal_I <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cycle</span>(z_ts))</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d8713b12-4c0f-4158-8183-fd2c70d57d39" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>dec1_trend <span class="ot">&lt;-</span> <span class="fu">fitted</span>(<span class="fu">lm</span>(z<span class="sc">~</span>t<span class="sc">+</span><span class="fu">I</span>(t<span class="sc">^</span><span class="dv">2</span>))) <span class="do">## 추세성분</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="fb53bde0-a41f-4f74-a911-2977d8edffdd" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>adjtrend <span class="ot">=</span> z<span class="sc">-</span>dec1_trend</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>dec1_seasonal <span class="ot">&lt;-</span> <span class="fu">fitted</span>(<span class="fu">lm</span>(adjtrend <span class="sc">~</span> <span class="dv">0</span><span class="sc">+</span>seasonal_I)) <span class="do">## 계절성분</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c62e0908-a8de-4db1-a8ff-afc13b7bb0f0" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>dec1_irr <span class="ot">=</span> z<span class="sc">-</span>dec1_trend<span class="sc">-</span>dec1_seasonal <span class="do">## 불규칙 성분</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7a59103b-4f11-40fc-bd93-74db649a5a3d" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dec1_trend)</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dec1_seasonal)</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dec1_irr)</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>par9mfrow<span class="ot">=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-57-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-12" class="level2">
+<h2 class="anchored" data-anchor-id="section-12">(2)</h2>
+<div id="6f054d50-087d-4473-9bcd-7d82630084ae" class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dec1_irr)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-58-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 보이지 않는다.</li>
+</ul>
+<div id="ee5a4e95-7120-477f-9547-af5be0838fda" class="cell" data-execution_count="73">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(dec1_irr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  dec1_irr
+t = 2.2831e-16, df = 85, p-value = 1
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.7179805  0.7179805
+sample estimates:
+   mean of x 
+8.244475e-17 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="fc8ff6f1-b139-4d0b-9a6c-53634b299f7d" class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(dec1_irr<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(dec1_irr ~ 1)
+DW = 1.1429, p-value = 2.78e-05
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관은 있는 것으로 보인다.</p></li>
+<li><p>오차들간의 상관관계가 있는 것을 제외하고는 적절하다고 볼 수 있다.</p></li>
+</ul>
+</section>
+<section id="section-13" class="level2">
+<h2 class="anchored" data-anchor-id="section-13">(3)</h2>
+<ul>
+<li><p>이분산성을 보이지 않기 때문에 가법 모형을 사용</p></li>
+<li><p>decompose 함수 사용</p></li>
+</ul>
+<div id="5837a510-fd09-4393-9a30-55b95188914e" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>dec_fit <span class="ot">&lt;-</span> <span class="fu">decompose</span>(z_ts, <span class="st">'additive'</span>)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dec_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-61-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-14" class="level2">
+<h2 class="anchored" data-anchor-id="section-14">(4)</h2>
+<div id="3d95e7e9-9fc1-4261-8505-0024f7684bcf" class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>dec2_irr <span class="ot">&lt;-</span> dec_fit<span class="sc">$</span>random</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(dec2_irr)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-62-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</p>
+<div id="f5ba2586-7a2e-400f-9139-8165dc39ea51" class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(dec2_irr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  dec2_irr
+t = 0.074013, df = 73, p-value = 0.9412
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.5674456  0.6112171
+sample estimates:
+ mean of x 
+0.02188575 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다</li>
+</ul>
+<div id="7e13a0fd-8409-4446-8f4d-fa3ac0580caa" class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(dec2_irr<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(dec2_irr ~ 1)
+DW = 1.9469, p-value = 0.8188
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관은 없는 것으로 보인다.</p></li>
+<li><p>따라서 예측오차는 분석 결과 평활 결과는 적절하다고 할 수 있다.</p></li>
+<li><p>추세를 이용한 분해법에서 예측 오차는 상관관계가 있었지만, 평활법을 사용하면서 예측오차들의 상관관계를 제거할 수 있었다.</p></li>
+</ul>
+</section>
+<section id="section-15" class="level2">
+<h2 class="anchored" data-anchor-id="section-15">(5)</h2>
+<div id="875627df-7e5e-4e76-9909-29217034d594" class="cell" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>sse_1 <span class="ot">=</span> <span class="fu">sum</span>(dec1_irr<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>sse_2 <span class="ot">=</span> <span class="fu">sum</span>(dec2_irr<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"SSE_1 = "</span>, sse_1)</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"SSE_2 = "</span>, sse_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'SSE_1 = 953.219486362055'
+</div>
+<div class="cell-output cell-output-display">
+'SSE_2 = 472.381499188028'
+</div>
+</div>
+<ul>
+<li>SSE 값을 비교하였을 때, 평활에 의한 분해법의 값이 더 작다.</li>
+</ul>
+<div id="63be22b6-d790-48b8-b840-4bd3f1d3a1fe" class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>mse_1 <span class="ot">=</span> <span class="fu">mean</span>(dec1_irr<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>mse_2 <span class="ot">=</span> <span class="fu">mean</span>(dec2_irr<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"MSE_1 = "</span>, mse_1)</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"MSE_2 = "</span>, mse_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'MSE_1 = 11.0839475158378'
+</div>
+<div class="cell-output cell-output-display">
+'MSE_2 = 6.38353377281119'
+</div>
+</div>
+<ul>
+<li><p>MSE 값을 비교하여도 결과가 같다.</p></li>
+<li><p>따라서 불규칙성분을 분석한 결과와 더불어 평활에 의한 분해법이 더 적절하다고 할 수 있다.</p></li>
+</ul>
+</section>
+</section>
+<section id="section-16" class="level1">
+<h1>5</h1>
+<div id="eb58940d-5513-4828-9197-188fe365186a" class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">'usapass.txt'</span>)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-67-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="section-17" class="level2">
+<h2 class="anchored" data-anchor-id="section-17">(1)</h2>
+<ul>
+<li><p>계절성분의 진폭이 시간이 흐름에 따라 증가하고 있는 것을 볼 수 있다.</p></li>
+<li><p>따라서 이분산성을 제거하기 위해 로그변환이 필요하다.</p></li>
+</ul>
+<div id="c12f7788-cdda-411e-8845-00b7e15875ba" class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>log_z <span class="ot">&lt;-</span> <span class="fu">log</span>(z)</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(log_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-68-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>로그변환을 통해 이분산성이 제거된 것을 확인할 수 있다.</p></li>
+<li><p>이 자료에는 추세성분과 계절성분(주기 12)이 있다.</p></li>
+</ul>
+</section>
+<section id="section-18" class="level2">
+<h2 class="anchored" data-anchor-id="section-18">(2)</h2>
+<ul>
+<li>지수함수를 사용한 계절형 추세모형을 적합한다.</li>
+</ul>
+<div id="c24fd4d9-418a-413a-96ef-1a1685b4bb74" class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>z_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(z, <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>log_z_ts <span class="ot">=</span> <span class="fu">log</span>(z_ts)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>seasonal_I <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cycle</span>(log_z_ts))</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>m_trend <span class="ot">&lt;-</span> <span class="fu">lm</span>(log_z_ts<span class="sc">~</span><span class="dv">0</span><span class="sc">+</span>t<span class="sc">+</span>seasonal_I)</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_trend)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = log_z_ts ~ 0 + t + seasonal_I)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.159814 -0.044426  0.000623  0.045572  0.151846 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+t            0.0100999  0.0001252   80.67   &lt;2e-16 ***
+seasonal_I1  4.7246982  0.0198289  238.27   &lt;2e-16 ***
+seasonal_I2  4.7026123  0.0198822  236.52   &lt;2e-16 ***
+seasonal_I3  4.8342011  0.0199361  242.49   &lt;2e-16 ***
+seasonal_I4  4.8015084  0.0199907  240.19   &lt;2e-16 ***
+seasonal_I5  4.8009618  0.0200459  239.50   &lt;2e-16 ***
+seasonal_I6  4.9237482  0.0201017  244.94   &lt;2e-16 ***
+seasonal_I7  5.0296649  0.0201582  249.51   &lt;2e-16 ***
+seasonal_I8  5.0223242  0.0202153  248.44   &lt;2e-16 ***
+seasonal_I9  4.8708171  0.0202729  240.26   &lt;2e-16 ***
+seasonal_I10 4.7357833  0.0203312  232.93   &lt;2e-16 ***
+seasonal_I11 4.5905564  0.0203901  225.14   &lt;2e-16 ***
+seasonal_I12 4.7032829  0.0204496  229.99   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.06224 on 131 degrees of freedom
+Multiple R-squared:  0.9999,    Adjusted R-squared:  0.9999 
+F-statistic: 8.844e+04 on 13 and 131 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(\hat Z_t = 0.01t + 4.72I_1 + 4.70I_2 + \dots + 4.70I_{12}\)</span></p>
+<div id="15b037cb-9688-4617-acbd-cf35c61a31f1" class="cell" data-execution_count="85">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(log_z_ts, <span class="fu">ts</span>(<span class="fu">fitted</span>(m_trend), <span class="at">frequency=</span><span class="dv">12</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"log_z"</span>, <span class="st">"trend_log"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-70-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="5bddf065-bd50-48c0-bae7-0ff741eefcb8" class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(z_ts, <span class="fu">ts</span>(<span class="fu">exp</span>(<span class="fu">fitted</span>(m_trend)), <span class="at">frequency=</span><span class="dv">12</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"trend"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-71-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 잔차분석</p>
+<div id="2f61ec21-8d9e-405c-a54e-ecb05dc1f00a" class="cell" data-execution_count="87">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>resid_trend <span class="ot">&lt;-</span> <span class="fu">resid</span>(m_trend)</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_m)</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-72-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>잔차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다</li>
+</ul>
+<div id="31fa21dd-036d-4a53-a214-729e50d64563" class="cell" data-execution_count="88">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_m
+t = -5.2362e-16, df = 99, p-value = 1
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.2902834  0.2902834
+sample estimates:
+    mean of x 
+-7.660376e-17 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="d4d95a16-fa1d-499e-82b3-76755aba74af" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(m_trend, <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  m_trend
+DW = 0.40831, p-value &lt; 2.2e-16
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 잔차들 간의 자기 상관이 있는 것으로 보인다.</p></li>
+<li><p>따라서 잔차 분석 결과 추세모형 결과는 오차간의 자기 상관이 있는 것을 제외하면 적절해 보인다. 하지만 오차간의 자기상관을 제거할 필요가 있다.</p></li>
+</ul>
+</section>
+<section id="section-19" class="level2">
+<h2 class="anchored" data-anchor-id="section-19">(3)</h2>
+<ul>
+<li><p>추세와 계절성분이 있으므로 계절평활평활을 사용한다.</p></li>
+<li><p>로그변환한 데이터에 대해 가법 모형을 적용할 수도 있고, 원래 데이터에 대한 승법 모형을 적합할 수도 있다.</p></li>
+</ul>
+<p><code>-</code> 로그변환한 데이터에 대한 가법 모형</p>
+<div id="bb7ffbc0-fb39-4451-9d6d-6ed6a3ec8f82" class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>m_smoothing <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(log_z_ts)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>m_smoothing</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and additive seasonal component.
+
+Call:
+HoltWinters(x = log_z_ts)
+
+Smoothing parameters:
+ alpha: 0.3447498
+ beta : 0.003585913
+ gamma: 0.879488
+
+Coefficients:
+            [,1]
+a    6.165298459
+b    0.008744433
+s1  -0.073696849
+s2  -0.142822821
+s3  -0.039964334
+s4   0.015968620
+s5   0.033673237
+s6   0.157016140
+s7   0.300626468
+s8   0.285698068
+s9   0.098491289
+s10 -0.021898771
+s11 -0.190036243
+s12 -0.096734648</code></pre>
+</div>
+</div>
+<div id="14856aa8-6b19-4baf-8ba2-eb498d519c16" class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_smoothing, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"log_z"</span>, <span class="st">"HoltWinters"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-76-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 잔차분석</p>
+<div id="9afec982-3ab0-4130-8ead-23dbb160f63a" class="cell" data-execution_count="93">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>resid_smooting <span class="ot">&lt;-</span> <span class="fu">resid</span>(m_smoothing)</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_smooting)</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-77-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</li>
+</ul>
+<div id="57326e05-5020-4622-8731-777749981c8c" class="cell" data-execution_count="94">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_smooting)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_smooting
+t = 1.2026, df = 131, p-value = 0.2313
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.002766709  0.011346227
+sample estimates:
+  mean of x 
+0.004289759 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</li>
+</ul>
+<div id="1bb72be2-a6aa-40c9-80aa-8c595ccc0bf2" class="cell" data-execution_count="95">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_smooting<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_smooting ~ 1)
+DW = 1.4549, p-value = 0.001604
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li><p>DW test 결과 예측오차들 간의 자기 상관이 있는 것으로 보인다.</p></li>
+<li><p>하지만, 추세모형을 적합하였을 때 얻어진 잔차에 비해 유의확률값이 크다.</p></li>
+<li><p>예측오차는 분석 결과 추세모형 적합 결과보다는 평활 결과가 더 적절하다고 할 수 있다.</p></li>
+</ul>
+<p><code>-</code> 원 데이터에 대한 승법모형 적용</p>
+<div id="8fb9d49d-ea02-4ba9-a89d-adae76ac4368" class="cell" data-execution_count="96">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>m_smoothing_multi <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(z_ts, <span class="at">seasonal =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>m_smoothing_multi </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and multiplicative seasonal component.
+
+Call:
+HoltWinters(x = z_ts, seasonal = "multiplicative")
+
+Smoothing parameters:
+ alpha: 0.3204565
+ beta : 0.02388265
+ gamma: 1
+
+Coefficients:
+           [,1]
+a   464.9721064
+b     2.7859138
+s1    0.9464640
+s2    0.8810274
+s3    0.9648716
+s4    1.0334898
+s5    1.0470250
+s6    1.1793118
+s7    1.3631491
+s8    1.3399425
+s9    1.1195987
+s10   0.9993794
+s11   0.8438225
+s12   0.9290880</code></pre>
+</div>
+</div>
+<div id="84be9082-b4ce-4256-aaf0-3c2988c3adf0" class="cell" data-execution_count="97">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_smoothing_multi, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"HoltWinters (multiplicative)"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-81-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="63862315-f103-4a7a-970f-8a8dbb31fc00" class="cell" data-execution_count="99">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_smoothing_multi, <span class="at">lwd=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">exp</span>(m_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>]), <span class="at">col=</span><span class="dv">4</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"z"</span>, <span class="st">"HoltWinters (multiplicative)"</span>, <span class="st">"exp(HoltWinters)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-82-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 승법모형에 대한 잔차분석</p>
+<div id="0e445db8-4a13-4f6a-bf58-abbdbb04dff6" class="cell" data-execution_count="100">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>resid_smooting_multi <span class="ot">&lt;-</span> <span class="fu">resid</span>(m_smoothing_multi)</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_smooting_multi)</span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-83-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>예측오차의 경우 0을 중심으로 대칭이고, 이분산성은 없어 보인다.</li>
+</ul>
+<div id="cee06069-61ca-419f-a940-70bf7ba83196" class="cell" data-execution_count="101">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_smooting_multi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_smooting_multi
+t = 1.5746, df = 131, p-value = 0.1178
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.4315512  3.7983414
+sample estimates:
+mean of x 
+ 1.683395 </code></pre>
+</div>
+</div>
+<ul>
+<li><p>t-test 결과 예측오차의 평균은 0이라고 할 수 있다.</p></li>
+<li><p>DW test 결과 예측오차들 간의 자기 상관이 있는 것으로 보인다.</p></li>
+<li><p>하지만, 추세모형을 적합하였을 때 얻어진 잔차에 비해 유의확률값이 크지만, 가법 모형을 사용한 평활법에 비하면 조금 크다.</p></li>
+<li><p>차이가 크지 않지만, 가법 모형이 더 적절하다고 할 수 있다. 따라서 가법 모형 사용.</p></li>
+</ul>
+</section>
+<section id="section-20" class="level2">
+<h2 class="anchored" data-anchor-id="section-20">(4)</h2>
+<ul>
+<li>로그변환한 데이터에 대한 가법모형을 사용하거나, 원래 데이터에 대한 승법 모형 적합 가능</li>
+<li>decompose 함수 사용</li>
+</ul>
+<div id="80b5098d-0757-4ed2-bd57-bc613a2d62c5" class="cell" data-execution_count="102">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>m_decompose_add <span class="ot">&lt;-</span> <span class="fu">decompose</span>(log_z_ts, <span class="st">'additive'</span>)</span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_decompose_add)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-85-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="7c19e92a-d6b6-414f-a64d-a1d85cda42e5" class="cell" data-execution_count="103">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>m_decompose_multi <span class="ot">&lt;-</span> <span class="fu">decompose</span>(z_ts, <span class="st">'multiplicative'</span>)</span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m_decompose_multi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-86-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="44158057-fc0e-4b5e-b623-e935844bddf5" class="cell" data-execution_count="104">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>fitted_dec_add <span class="ot">&lt;-</span> m_decompose_add<span class="sc">$</span>trend <span class="sc">+</span> m_decompose_add<span class="sc">$</span>seasonal <span class="co">#가법모형은 더</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>fitted_dec_multi <span class="ot">&lt;-</span> m_decompose_multi<span class="sc">$</span>trend <span class="sc">*</span> m_decompose_multi<span class="sc">$</span>seasonal <span class="co">#승법모</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="566bf763-bcda-4838-9c59-f764bb8a6e3b" class="cell" data-execution_count="107">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(z_ts, <span class="fu">exp</span>(fitted_dec_add), fitted_dec_multi, <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"z"</span>,<span class="st">"decompose_add"</span>, <span class="st">"decompose_multi"</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>), <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-88-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>가법모형과 승법 모형은 차이가 거의 없어 보임</li>
+</ul>
+<p><code>-</code> 잔차분석을 하라는 문제는 없었지만 한 번 해보겠음.</p>
+<div id="5e2a6359-4c6c-460a-8621-5876e7e0b99a" class="cell" data-execution_count="108">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>resid_decompose_add <span class="ot">&lt;-</span> m_decompose_add<span class="sc">$</span>random</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>resid_decompose_multi <span class="ot">&lt;-</span> m_decompose_multi<span class="sc">$</span>random</span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_decompose_add, <span class="at">main=</span><span class="st">"잔차그림 : 분해법(가법모형)"</span>)</span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(resid_decompose_multi, <span class="at">main=</span><span class="st">"잔차그림 : 분해법(승법모형)"</span>)</span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">1</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW02_A_files/figure-html/cell-89-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>가법모형의 경우 0을 중심으로 대칭이고, 승법모형의 경우 1을 중심으로 대칭이다.</p></li>
+<li><p>두 경우 모두 이분산성은 없어 보인다.</p></li>
+</ul>
+<div id="9ded7352-f745-4599-a510-0352379c575f" class="cell" data-execution_count="109">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_decompose_add)</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(resid_decompose_multi, <span class="at">mu=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_decompose_add
+t = -0.28335, df = 131, p-value = 0.7774
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.006909609  0.005178249
+sample estimates:
+  mean of x 
+-0.00086568 </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid_decompose_multi
+t = -0.59098, df = 131, p-value = 0.5556
+alternative hypothesis: true mean is not equal to 1
+95 percent confidence interval:
+ 0.992186 1.004219
+sample estimates:
+mean of x 
+0.9982026 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test 결과 가법모형에서 예측오차의 평균은 0이라고 할 수 있고, 승법모형에서 예 측오차의 평균은 1이라고 할 수 있다</li>
+</ul>
+<div id="2e5c2d98-d193-4fc0-b966-3cf85941194b" class="cell" data-execution_count="110">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_decompose_add<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">dwtest</span>(<span class="fu">lm</span>(resid_decompose_multi<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_decompose_add ~ 1)
+DW = 1.1441, p-value = 7.258e-07
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(resid_decompose_multi ~ 1)
+DW = 1.1426, p-value = 6.946e-07
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<ul>
+<li>DW test 결과 가법,승법 모두 예측오차들 간의 자기 상관이 있는 것으로 보인다.</li>
+</ul>
+</section>
+<section id="section-21" class="level2">
+<h2 class="anchored" data-anchor-id="section-21">(5)</h2>
+<p>주의 : 예측오차의 제곱합을 구하기 위해서는 로그변환한 자료를 사용한 분석 방법 의 경우 지수함수를 이용한 역변환을 한 후 계산해야 한다.</p>
+<div id="6396678b-2233-41c4-b9d8-0299a08bda83" class="cell" data-execution_count="111">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a>e_trend <span class="ot">&lt;-</span> z<span class="sc">-</span><span class="fu">exp</span>(<span class="fu">fitted</span>(m_trend)) <span class="co">#추세모형을 적합한 경우의 예측오차</span></span>
+<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a>e_smoothing_add <span class="ot">&lt;-</span> z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)]<span class="sc">-</span><span class="fu">exp</span>(m_smoothing<span class="sc">$</span>fitted[,<span class="dv">1</span>]) <span class="co">#평활(가법)을 적합한 경</span></span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>e_smoothing_multi <span class="ot">&lt;-</span> z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)]<span class="sc">-</span>m_smoothing_multi<span class="sc">$</span>fitted[,<span class="dv">1</span>] <span class="co">#평활(가법)을 적합한</span></span>
+<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>e_decompose_add <span class="ot">&lt;-</span> z <span class="sc">-</span> <span class="fu">exp</span>(fitted_dec_add) <span class="co">#분해법(가법)을 적합한 경우의 예측오차</span></span>
+<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>e_decompose_multi <span class="ot">&lt;-</span> z <span class="sc">-</span> fitted_dec_multi <span class="co">#분해법(승법)을 적합한 경우의 예측오차</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="80ffd86a-5381-4d5c-967f-28eb1c704f3a" class="cell" data-execution_count="112">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SSE</span></span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>sse1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(e_trend<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>sse2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(e_smoothing_add<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a>sse3 <span class="ot">&lt;-</span> <span class="fu">sum</span>(e_smoothing_multi<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a>sse4 <span class="ot">&lt;-</span> <span class="fu">sum</span>(e_decompose_add<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a>sse5 <span class="ot">&lt;-</span> <span class="fu">sum</span>(e_decompose_multi<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="85d63115-0670-4abc-afcd-04bb468ff6cd" class="cell" data-execution_count="113">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"추세분석에서의 SSE = "</span>, sse1)</span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"가법 계절평활법에 의한 SSE = "</span>, sse2)</span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"승법 계절평활법에 의한 SSE = "</span>, sse3)</span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"가법 분해법에 의한 SSE = "</span>, sse4)</span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"승법 분해법에 의한 SSE = "</span>, sse5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'추세분석에서의 SSE = 49268.5277996137'
+</div>
+<div class="cell-output cell-output-display">
+'가법 계절평활법에 의한 SSE = 20103.3932111226'
+</div>
+<div class="cell-output cell-output-display">
+'승법 계절평활법에 의한 SSE = 20138.5987482274'
+</div>
+<div class="cell-output cell-output-display">
+'가법 분해법에 의한 SSE = 15284.0239261845'
+</div>
+<div class="cell-output cell-output-display">
+'승법 분해법에 의한 SSE = 14748.922939659'
+</div>
+</div>
+<ul>
+<li><p>분해법에 의해 얻어진 예측오차의 제곱합이 가작 작았으며, 그 중 승법 모형을 적합 한 결과의 SSE 값이 더 작았다.</p></li>
+<li><p>추세분으로 얻어진 SSE가 가장 큰 값을 갖는다.</p></li>
+</ul>
+<div id="b499137b-24a8-46a4-9d5c-d5715d51fe18" class="cell" data-execution_count="114">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co">#MSE</span></span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a>mse1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(e_trend<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a>mse2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(e_smoothing_add<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb125-4"><a href="#cb125-4" aria-hidden="true" tabindex="-1"></a>mse3 <span class="ot">&lt;-</span> <span class="fu">mean</span>(e_smoothing_multi<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb125-5"><a href="#cb125-5" aria-hidden="true" tabindex="-1"></a>mse4 <span class="ot">&lt;-</span> <span class="fu">mean</span>(e_decompose_add<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span>
+<span id="cb125-6"><a href="#cb125-6" aria-hidden="true" tabindex="-1"></a>mse5 <span class="ot">&lt;-</span> <span class="fu">mean</span>(e_decompose_multi<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7634f2d0-153d-4562-bbe5-ce8739644186" class="cell" data-execution_count="115">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"추세분석에서의 MSE = "</span>, mse1)</span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"가법 계절평활법에 의한 MSE = "</span>, mse2)</span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"승법 계절평활법에 의한 MSE = "</span>, mse3)</span>
+<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"가법 분해법에 의한 MSE = "</span>, mse4)</span>
+<span id="cb126-5"><a href="#cb126-5" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"승법 분해법에 의한 MSE = "</span>, mse5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'추세분석에서의 MSE = 342.142554163984'
+</div>
+<div class="cell-output cell-output-display">
+'가법 계절평활법에 의한 MSE = 152.298433417596'
+</div>
+<div class="cell-output cell-output-display">
+'승법 계절평활법에 의한 MSE = 152.565142032026'
+</div>
+<div class="cell-output cell-output-display">
+'가법 분해법에 의한 MSE = 115.788060046852'
+</div>
+<div class="cell-output cell-output-display">
+'승법 분해법에 의한 MSE = 111.734264694387'
+</div>
+</div>
+<ul>
+<li>MSE 역시 승법 분해법을 이용했을 때 가장 작은 값을 갖는다</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

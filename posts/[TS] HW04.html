@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-11-28">
+
+<title>TS - [TS] HW04</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] HW04</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 28, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="장" class="level1">
+<h1>1 (7장)</h1>
+<p><span class="math inline">\(ε_t\)</span> 가 <span class="math inline">\(W N(0, σ^2)\)</span>를 따를 때, 다음과 같은 확률과정 모형에 대하여 각 물음에 답하고, 답에 대한 이유를 밝혀라.</p>
+<p><span class="math display">\[(1 − B)^2(1 − B^{12})Z_t = (1 − 0.5B)ε_t\]</span></p>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section">(1)</h2>
+<p><span class="math inline">\(\{Z_t\}\)</span>는 정상시계열인가?</p>
+<p>비정상 시계열이다.</p>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1">(2)</h2>
+<p><span class="math inline">\(W_t = (1 − B)Z_t\)</span>는 정상시계열인가?</p>
+<p>비정상 시계열이다. 한 번 차분해도 계절 성분이 있는 비정상 시계열을 얻는다.</p>
+</section>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2">(3)</h2>
+<p><span class="math inline">\(W_t = Z_t − 2Z_{t−1} + Z_{t−2}\)</span>는 정상시계열인가?</p>
+<p><span class="math inline">\(W_t=(1-B)^2\)</span>가 정상 시계열인가 묻는 문제이다. 비정상 시계열이다. 두 번 차분해도 계절 성분이 있는 비정상 시계열을 얻는다.</p>
+</section>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3">(4)</h2>
+<p><span class="math inline">\(W_t = Z_t − Z_{t−12}\)</span>는 정상시계열인가?</p>
+<p><span class="math inline">\(W_t = (1-B^{12})\)</span>이다. 비정상시계열이다. 추세 성분이 남아있다.</p>
+</section>
+<section id="section-4" class="level2">
+<h2 class="anchored" data-anchor-id="section-4">(5)</h2>
+<p><span class="math inline">\(W_t = (1 − B)^2(1 − B^{12})Z_t\)</span>는 정상시계열인가?</p>
+<p>정상 시계열이다.</p>
+</section>
+</section>
+<section id="section-5" class="level1">
+<h1>2</h1>
+<p>다음은 시계열자료 <span class="math inline">\(\{Z_t\}\)</span>의 표본 크기 <span class="math inline">\(n\)</span>, 평균 <span class="math inline">\(\bar Z\)</span>, 표준편차 <span class="math inline">\(s_Z\)</span>, 그리고 시차 13까지의 SACF와 SPACF이다. 각 시계열자료를 잘 설명하는 모형은 무엇인지 식별하여라.</p>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6">(1)</h2>
+<p><span class="math inline">\(n = 100, \bar Z = 24.75, s_Z = 9.27\)</span></p>
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>k</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\hat ρ_k\)</span></td>
+<td>-0.48</td>
+<td>-0.04</td>
+<td>-0.06</td>
+<td>0.14</td>
+<td>-0.22</td>
+<td>0.19</td>
+<td>-0.10</td>
+<td>-0.02</td>
+<td>0.09</td>
+<td>-0.03</td>
+<td>-0.12</td>
+<td>0.09</td>
+<td>0.03</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat ϕ_{kk}\)</span></td>
+<td>-0.48</td>
+<td>-0.24</td>
+<td>-0.21</td>
+<td>0.01</td>
+<td>-0.20</td>
+<td>-0.01</td>
+<td>-0.05</td>
+<td>-0.15</td>
+<td>-0.04</td>
+<td>-0.06</td>
+<td>-0.04</td>
+<td>0.02</td>
+<td>0.06</td>
+</tr>
+</tbody>
+</table>
+<p>MA(1)모형</p>
+<div id="e3b998bf-de6f-44b8-8c93-9c3b7292d474" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.96</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.196
+</div>
+</div>
+<p>시차 2부터는 0.196보다 작다. 즉 다 0이므로 무시하자..</p>
+<p><span class="math inline">\(\bar Z\)</span>와 <span class="math inline">\(sz\)</span>는 MA모형에서 절편이 있는 모형인지 아닌지 판단하기 위한 것</p>
+<p><span class="math inline">\(\dfrac{\bar Z}{s_Z/\sqrt{n}}\)</span> 이 t분포나..정규분포를 따르는지 확인하자.</p>
+<div id="9eb6cc1c-4212-419a-ae44-6da64914cec2" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fl">24.75</span><span class="sc">/</span>(<span class="fl">9.27</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+26.6990291262136
+</div>
+</div>
+<p>절편을 추가해야 한다.</p>
+</section>
+<section id="section-7" class="level2">
+<h2 class="anchored" data-anchor-id="section-7">(2)</h2>
+<p><span class="math inline">\(n = 100, \bar Z = 25.56, s_Z = 3.85\)</span></p>
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>k</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\hat ρ_k\)</span></td>
+<td>0.59</td>
+<td>0.44</td>
+<td>0.33</td>
+<td>0.23</td>
+<td>0.24</td>
+<td>0.16</td>
+<td>0.05</td>
+<td>0.01</td>
+<td>-0.03</td>
+<td>-0.11</td>
+<td>-0.08</td>
+<td>-0.07</td>
+<td>0.01</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat ϕ_{kk}\)</span></td>
+<td>0.59</td>
+<td>0.13</td>
+<td>0.04</td>
+<td>-0.02</td>
+<td>0.12</td>
+<td>-0.05</td>
+<td>-0.12</td>
+<td>-0.03</td>
+<td>-0.01</td>
+<td>-0.13</td>
+<td>0.06</td>
+<td>0.04</td>
+<td>0.13</td>
+</tr>
+</tbody>
+</table>
+<p>AR(1)모형</p>
+<div id="cd18f42b-cfed-4b14-b945-1c8c35a5edd7" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fl">25.26</span><span class="sc">/</span>(<span class="fl">3.85</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+65.6103896103896
+</div>
+</div>
+<p>절편이 있어야 한다.</p>
+</section>
+<section id="section-8" class="level2">
+<h2 class="anchored" data-anchor-id="section-8">(3)</h2>
+<p><span class="math inline">\(n = 99, \bar W = 19.02, s_w = 1.351,\)</span> 단 <span class="math inline">\(W = (1 − B)Z_k\)</span></p>
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>k</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\hat ρ_k\)</span></td>
+<td>-0.44</td>
+<td>-0.05</td>
+<td>-0.01</td>
+<td>-0.03</td>
+<td>0.12</td>
+<td>-0.15</td>
+<td>0.15</td>
+<td>-0.04</td>
+<td>-0.10</td>
+<td>0.09</td>
+<td>0.08</td>
+<td>-0.07</td>
+<td>0.06</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat ϕ_{kk}\)</span></td>
+<td>-0.44</td>
+<td>-0.31</td>
+<td>-0.25</td>
+<td>-0.25</td>
+<td>-0.07</td>
+<td>-0.21</td>
+<td>-0.01</td>
+<td>0.02</td>
+<td>-0.09</td>
+<td>-0.02</td>
+<td>0.03</td>
+<td>-0.02</td>
+<td>0.01</td>
+</tr>
+</tbody>
+</table>
+<p>차분을 한 번 진행했다.</p>
+<p>W가 MA(1)모형이다.</p>
+<p>그리고 Z_k는 ARIMA(0,1,1)모형이다.</p>
+<p>평균이 유의한지 확인하기 위해서,</p>
+<p><span class="math inline">\(\dfrac{\bar W}{S_w}\)</span>를 확인한다.</p>
+<div id="5d7524e1-67ae-4d45-be95-58404a593137" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fl">19.02</span><span class="sc">/</span><span class="fl">1.351</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+14.0784603997039
+</div>
+</div>
+<p>해당 값은 정규분포에서 나올 확률이 적으므로 절편을 추가한다.</p>
+</section>
+</section>
+<section id="section-9" class="level1">
+<h1>3</h1>
+<p>두 시계열 <span class="math inline">\(X_t\)</span>와 <span class="math inline">\(Y_t\)</span>가 각각 다음과 같은 MA(1)모형을 따른다고 하자.</p>
+<p><span class="math display">\[X_t = ε_t − θ_1ε_{t−1}, ε_t ∼ W N(0, σ^2_ε)\]</span></p>
+<p><span class="math display">\[Y_t = a_t + θ_1a_{t−1}, a_t ∼ W N(0, σ^2_a)\]</span></p>
+<p><span class="math inline">\(Z_t = X_t + Y_t\)</span>는 어떤 모형이 되겠는가? 만일, <span class="math inline">\(σ^2_ε = σ^2_a = σ^2\)</span> 이라면 어떤 모형이 되겠는가? 그 이유를 자세히 설명하여라.</p>
+<p><span class="math inline">\(\epsilon_t^* \sim N(0,1)\)</span>이라고 가정하자.</p>
+<p>그러면</p>
+<p><span class="math inline">\(X_t = \sigma_\epsilon \epsilon_t^* - \theta_1 \sigma_\epsilon \epsilon_{t-1}^*\)</span></p>
+<p><span class="math inline">\(Y_t = a_t \epsilon_t^* + \theta_1 \sigma_a \epsilon_{t-1}^*\)</span></p>
+<p><span class="math inline">\(X_t + Y_t = (\sigma_\epsilon + \sigma_a ) \epsilon_t^* + (-\theta_1 \sigma_\epsilon + \theta_1 a_n) \epsilon_{t-1}^*\)</span>$</p>
+<blockquote class="blockquote">
+<p><span class="math inline">\(\tilde \epsilon_t = {(\sigma_\epsilon + \sigma_a ) \epsilon_t^*}\)</span></p>
+</blockquote>
+<p>= <span class="math inline">\(\tilde \epsilon_t + \dfrac{-\theta_1\sigma_\epsilon + \theta_1 \sigma_a}{\sigma_\epsilon + \sigma_a} \times (\sigma_\epsilon + \sigma_a) \times \epsilon_{t-1}^*\)</span></p>
+<blockquote class="blockquote">
+<p><span class="math inline">\(\tilde \epsilon_{t-1} = (\sigma_\epsilon + \sigma_a) \times \epsilon_{t-1}^*\)</span></p>
+</blockquote>
+<p>= <span class="math inline">\(\tilde \epsilon_t +\dfrac{-\theta_1\sigma_\epsilon + \theta_1 \sigma_a}{\sigma_\epsilon + \sigma_a} \times \tilde \epsilon_{t-1}\)</span></p>
+<p><span class="math inline">\(\therefore Z_t = \tilde \epsilon_t + \tilde \theta_1 \tilde \epsilon_{t-1}\)</span> 이 되므로 MA(1) 모형이 된다.</p>
+<p>만일, <span class="math inline">\(σ^2_ε = σ^2_a = σ^2\)</span> 이라면 위 식에서 분수의 <span class="math inline">\(\dfrac{-\theta_1\sigma_\epsilon + \theta_1 \sigma_a}{\sigma_\epsilon + \sigma_a}\)</span> 분자값이 0이 되므로</p>
+<p><span class="math inline">\(Z_t^* = \tilde \epsilon_t\)</span> 가 되므로 WN이 된다.</p>
+</section>
+<section id="장-1" class="level1">
+<h1>4 (7장)</h1>
+<p>(R실습). ex7 3.txt는 <span class="math inline">\(\{ε_t\}\)</span>가 <span class="math inline">\(WN(0, 25)\)</span>를 따를 때 확률과정 <span class="math display">\[(1 − B^4)Z_t = (1 − 0.5B)ε_t\]</span> 로부터 생성된 모의실험자료이다. 다음 물음에 답하여라. .</p>
+<div id="1f2175e2-882e-4fc3-acf2-35ffbace19dd" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z4 <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"ex7_3.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="section-10" class="level2">
+<h2 class="anchored" data-anchor-id="section-10">(1)</h2>
+<p><span class="math inline">\(Z_t\)</span> 의 시계열 그림을 그려라. 비성상성이 존재하는가? 존재한다면 비정상성분은 무엇이라고 생각하는가?</p>
+<div id="b52fba13-bee8-4fdb-83c6-02a33f78b889" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z4, <span class="at">main =</span> <span class="st">"ex7_3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>추세와 계절성분에 의한 비정상성이 존재하는 것으로 보인다.</p>
+</section>
+<section id="section-11" class="level2">
+<h2 class="anchored" data-anchor-id="section-11">(2)</h2>
+<p>1차 차분시계열 <span class="math inline">\((1 − B)Z_t\)</span>의 시계열그림을 그려라. 계절성분에 의한 비정상성이 존재하는가? 존재한다면 계정성분을 제거하기 위하여 계절차분을 하여라.</p>
+<div id="740190f5-5ff9-400f-9551-844b074444ae" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z4), <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>ACF가 들쭉날쭉 하다.. 계절 성분이 있어 보인다. (시도표로 확인했을 떄도 계절 성분이 있어 보임)</li>
+</ul>
+<div id="ec81f31a-d4f6-4913-ae92-aa0bda956745" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(<span class="fu">diff</span>(z4),<span class="dv">4</span>), <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-12" class="level2">
+<h2 class="anchored" data-anchor-id="section-12">(3)</h2>
+<p>계절주기가 <span class="math inline">\(4\)</span>인 계절차분된 시계열 <span class="math inline">\((1 − B^4)Z_t\)</span>의 시계열을그림을 그려라. 비정상성이 존재하 는가?</p>
+<div id="f917cd37-a95a-4ff4-9f9f-c4181d815560" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z4_2 <span class="ot">&lt;-</span> <span class="fu">diff</span>(z4, <span class="dv">4</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z4_2, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-13" class="level2">
+<h2 class="anchored" data-anchor-id="section-13">(4)</h2>
+<p>차분의 순서에 따라 결과가 달라짐에 주목하고 이에 대해 논하여라.</p>
+<p>계절 차분을 먼저 진행하였고 추세가 없어짐을 볼 수 있다. 추세 차분을 먼저 진행하는 경우 계절 추세가 남을 수 있으니, 계절 차분을 먼저 진행해 주는 것이 좋다.</p>
+</section>
+</section>
+<section id="장-2" class="level1">
+<h1>5 (7장)</h1>
+<p>(R실습). ex7 4.txt는 <span class="math inline">\(\{ε_t\}\)</span>가 <span class="math inline">\(W N(0, 25)\)</span>를 따를 때 확률과정 <span class="math display">\[(1 − B^4)(1 − B)Z_t = (1 − 0.5B)ε_t\]</span> 로부터 생성된 모의실험자료이다. 다음 물음에 답하여라. .</p>
+<section id="section-14" class="level2">
+<h2 class="anchored" data-anchor-id="section-14">(1)</h2>
+<p><span class="math inline">\(Z_t\)</span> 의 시계열 그림을 그려라. 비성상성이 존재하는가? 존재한다면 비정상성분은 무엇이라고 생각하는가?</p>
+<div id="401af62e-7c79-4067-8408-ff9636d4919c" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>z5 <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"ex7_4.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0711c68c-4dbb-41b1-8f70-cb2e4e073657" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z5, <span class="at">main =</span> <span class="st">"ex7_4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>시도표를 확인 했을 때는 계절 성분이 있어 보이고, 시간에 따라 분산이 점점 작아 보인다.</p>
+</section>
+<section id="section-15" class="level2">
+<h2 class="anchored" data-anchor-id="section-15">(2)</h2>
+<p>1차 차분시계열 <span class="math inline">\((1 − B)Z_t\)</span>의 시계열그림을 그려라. 계절성분에 의한 비정상성이 존재하는가?</p>
+<div id="42c67632-c77f-46be-a3c3-f837577c3336" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z5), <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>계절성분에 의해 ACF가 주기에 따라 들쭉 날쭉 하다. 비정상 시계열이다.</p>
+</section>
+<section id="section-16" class="level2">
+<h2 class="anchored" data-anchor-id="section-16">(3)</h2>
+<p>계절주기가 <span class="math inline">\(4\)</span>인 계절차분된 시계열 <span class="math inline">\((1 − B^4)Z_t\)</span>의 시계열을그림을 그려라. 비정상성이 존재하 는가? 존재한다면 비정상성분은 무엇이라 생각되는가?</p>
+<div id="f0943cd5-2650-4188-8b2a-a7b43e3e7933" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>z5_2 <span class="ot">&lt;-</span> <span class="fu">diff</span>(z5, <span class="dv">4</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z5_2, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>정상 시계열이다..(아마..)</p>
+</section>
+<section id="section-17" class="level2">
+<h2 class="anchored" data-anchor-id="section-17">(4)</h2>
+<p>1차 및 계절 차분 된 시계열 <span class="math inline">\((1 − B^4)(1 − B)Z_t\)</span> 의 시계열그림을 그려라. 비정상성이 존재하 는가?</p>
+<div id="7f189fd4-9eb6-43b9-8d53-b95bad1f8e09" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>z5_3 <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">diff</span>(z5),<span class="dv">4</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z5_3), <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>정상 시계열이다.</p>
+</section>
+<section id="section-18" class="level2">
+<h2 class="anchored" data-anchor-id="section-18">(5)</h2>
+<p>4번 문제와, 위의 결과로부터 차분의 순서에 대하여 논하라.</p>
+<p>계절 성분을 먼저 차분 하면 추세가 없어지는 경우가 생기므로 그 이후의 차분을 하지 않아도 된다.</p>
+<p>추세 차분을 먼저 하고 계절 차분을 진행해도 같은 정상 시계열을 얻을 수 있다. 다만, 모형이 복잡해질 수 있고 과대 차분으로 인해 분산이 커질 수 있다.</p>
+<div id="75698057-626b-4a69-b08b-6cdb21a2f5c9" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(z5_2)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(z5_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+6.44212496199616
+</div>
+<div class="cell-output cell-output-display">
+6.42585266650135
+</div>
+</div>
+<p>옷! 근데 이 예제에서는 분산이 커지진 않는당 ㅎ</p>
+</section>
+</section>
+<section id="section-19" class="level1">
+<h1>6</h1>
+<p>(R실습). ex8 2b.txt 는 어느 확률과정으로부터 생성된 모의시험 자료들이다. 각 자료를 가장 잘 설명하는 모형을 식별하고 추정한 후 잔차분석 포트맨토 검정 등의 모형 진단을 통해 모형을 적합하여라.</p>
+<div id="21a3546e-8905-4332-91aa-bac77396367c" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>z6 <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"ex8_2b.txt"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>시도표를 확인하였을 때 게절성분이 있어보인다 평균이 100근처로 보인다. 정상 시계열로 판단된다. AR(1)모형인가..</li>
+</ul>
+<div id="8c7caef6-fc25-4020-8563-8620b1e0489f" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0 WN</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z6, <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z6, <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z6, <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z6
+X-squared = 36.228, df = 1, p-value = 1.755e-09</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z6
+X-squared = 66.617, df = 6, p-value = 2.015e-12</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z6
+X-squared = 68.101, df = 12, p-value = 7.247e-10</code></pre>
+</div>
+</div>
+<ul>
+<li>모든 시차에서 p-value값이 작으므로 H0를 기각한다. 즉 WN이 아니다.</li>
+</ul>
+<div id="d7a45b8a-ee17-4052-9354-ca756436c22a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 단위근 검정 H0 : 단위근이 있다.</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z6, <span class="at">lags =</span> <span class="dv">0</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z6, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z6, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning message in fUnitRoots::adfTest(z6, lags = 0, type = "c"):
+“p-value smaller than printed p-value”
+Warning message in fUnitRoots::adfTest(z6, lags = 2, type = "c"):
+“p-value smaller than printed p-value”</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 0
+  STATISTIC:
+    Dickey-Fuller: -4.469
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Nov 29 00:28:02 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -3.2151
+  P VALUE:
+    0.02306 
+
+Description:
+ Wed Nov 29 00:28:02 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 2
+  STATISTIC:
+    Dickey-Fuller: -3.5452
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Nov 29 00:28:02 2023 by user: </code></pre>
+</div>
+</div>
+<ul>
+<li>p-value값이 작으므로 H0를 기각한다. 차분을 하지 않는다.</li>
+</ul>
+<div id="94dd8f0a-73c3-4de7-a5dd-1aba6ad015fb" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 모형적합 AR(1)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z6,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = z6, order = c(1, 0, 0))
+
+Coefficients:
+         ar1  intercept
+      0.6231   100.4528
+s.e.  0.0805     0.8253
+
+sigma^2 estimated as 9.962:  log likelihood = -257.08,  aic = 520.16
+
+Training set error measures:
+                       ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -0.004602625 3.156255 2.452284 -0.1060461 2.457104 0.8991709
+                  ACF1
+Training set -0.100928</code></pre>
+</div>
+</div>
+<div id="b8242907-ddc8-4675-bb69-c54435d6e71a" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(z6, <span class="fu">fitted</span>(fit), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fu">mean</span>(z6), <span class="at">col=</span><span class="st">"grey"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"z6"</span>, <span class="st">"fitted z"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>AR(1) 모형이 잘 적합되었다.</li>
+</ul>
+<div id="6edb1bc4-f27b-41a9-8351-64c6adea0589" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+           Estimate Std. Error  z value  Pr(&gt;|z|)    
+ar1         0.62308    0.08054   7.7364 1.023e-14 ***
+intercept 100.45278    0.82533 121.7118 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<ul>
+<li>각 계수들도 유의하게 나온다.</li>
+</ul>
+<div id="70c7f2b0-887c-4588-9167-a32e8cb3fec6" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span>sigma2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+9.96194659591476
+</div>
+</div>
+<p>즉 모형은 AR(1)모형이고</p>
+<p><span class="math inline">\(Z_t − 100.45278 = - 0.62308(Z_{t−1} − 100.45278) + ε_t\)</span></p>
+<p><span class="math inline">\(\hatσ^2 = 9.96194659591476\)</span></p>
+<p><code>-</code> 잔차분석</p>
+<div id="f43a754e-aacf-4750-b4d1-05e146bbdb8f" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>몇 개 삐져나가는 게 있긴 하지만.. 유의해보인다.</li>
+</ul>
+<div id="d6ac2c2a-e906-4756-a313-7fdcdbe6c967" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>6.515031</td>
+<td>5</td>
+<td>0.2592767</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>7.252215</td>
+<td>11</td>
+<td>0.7783062</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>10.891994</td>
+<td>17</td>
+<td>0.8621232</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>20.207804</td>
+<td>23</td>
+<td>0.6293457</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>p-value의 값이 0.05보다 크므로 H0를 기각 할 수 없다. 즉 rho1=…=rhok=0이다! 잔차는 WN이다.</li>
+</ul>
+<div id="cebde226-4d95-456a-b934-f615a8857a9a" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: norma</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Jarque Bera Test
+
+data:  resid
+X-squared = 5.6073, df = 2, p-value = 0.06059</code></pre>
+</div>
+</div>
+<div id="41efbe84-a31f-4f0e-9303-db4e0a768a06" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-27-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>정규분포이다</li>
+</ul>
+<div id="0c28b672-84fd-43b6-82d7-306ff7353cb5" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 잔차 검정</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima</span>(z6, <span class="at">p=</span><span class="dv">1</span>, <span class="at">d=</span><span class="dv">0</span>, <span class="at">q=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>initial  value 1.388134 
+iter   2 value 1.155478
+iter   3 value 1.154827
+iter   4 value 1.154367
+iter   5 value 1.154330
+iter   6 value 1.154281
+iter   7 value 1.154281
+iter   8 value 1.154281
+iter   9 value 1.154281
+iter  10 value 1.154281
+iter  10 value 1.154281
+iter  10 value 1.154281
+final  value 1.154281 
+converged
+initial  value 1.151883 
+iter   2 value 1.151854
+iter   3 value 1.151845
+iter   4 value 1.151844
+iter   5 value 1.151843
+iter   5 value 1.151843
+iter   5 value 1.151843
+final  value 1.151843 
+converged</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>$fit
+
+Call:
+arima(x = xdata, order = c(p, d, q), seasonal = list(order = c(P, D, Q), period = S), 
+    xreg = xmean, include.mean = FALSE, transform.pars = trans, fixed = fixed, 
+    optim.control = list(trace = trc, REPORT = 1, reltol = tol))
+
+Coefficients:
+         ar1     xmean
+      0.6231  100.4528
+s.e.  0.0805    0.8253
+
+sigma^2 estimated as 9.962:  log likelihood = -257.08,  aic = 520.16
+
+$degrees_of_freedom
+[1] 98
+
+$ttable
+      Estimate     SE  t.value p.value
+ar1     0.6231 0.0805   7.7364       0
+xmean 100.4528 0.8253 121.7118       0
+
+$AIC
+[1] 5.201564
+
+$AICc
+[1] 5.202801
+
+$BIC
+[1] 5.279719</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-28-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 과대적합</p>
+<div id="69569287-bb0b-4873-b8be-6b59bc0ba81d" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">arima</span>(z6,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co">#AR(1)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">arima</span>(z6,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co">#AR(2)</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">arima</span>(z6,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>)) <span class="co">#ARMA(1,1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0930af51-aed5-4a0d-bc25-fb8f7ee72343" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+           Estimate Std. Error  z value  Pr(&gt;|z|)    
+ar1         0.62308    0.08054   7.7364 1.023e-14 ***
+intercept 100.45278    0.82533 121.7118 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<div id="ece7876f-1f1e-4472-8398-ef332f4b13f4" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+            Estimate Std. Error  z value  Pr(&gt;|z|)    
+ar1         0.514525   0.099785   5.1564 2.518e-07 ***
+ar2         0.178841   0.100295   1.7832   0.07456 .  
+intercept 100.380132   0.989402 101.4554 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<div id="20886791-f262-4632-8dee-71604d7d54ff" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+            Estimate Std. Error  z value  Pr(&gt;|z|)    
+ar1         0.738491   0.096895   7.6215 2.507e-14 ***
+ma1        -0.183319   0.125867  -1.4565    0.1453    
+intercept 100.392697   0.955466 105.0719 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<ul>
+<li>추가한 다른 것들이 유의하지 않다. AR(1)모형이 올바르게 선택된 것 같다.</li>
+</ul>
+<div id="219dbb44-5f4f-435b-9ff8-c70dca61ea80" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"AIC for AR(1) = "</span>, fit1<span class="sc">$</span>aic)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"AIC for AR(2) = "</span>, fit2<span class="sc">$</span>aic)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">"AIC for ARMA(1,1) = "</span>, fit3<span class="sc">$</span>aic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'AIC for AR(1) = 520.15636325545'
+</div>
+<div class="cell-output cell-output-display">
+'AIC for AR(2) = 519.032837177322'
+</div>
+<div class="cell-output cell-output-display">
+'AIC for ARMA(1,1) = 520.135652361021'
+</div>
+</div>
+<div id="68617f38-4333-4412-a3a7-2121c16f8ac3" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 올바르게 선택했는지 확인용</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(z6, <span class="at">trace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ ARIMA(2,0,2) with non-zero mean : 520.8564
+ ARIMA(0,0,0) with non-zero mean : 564.5433
+ ARIMA(1,0,0) with non-zero mean : 520.4064
+ ARIMA(0,0,1) with non-zero mean : 539.802
+ ARIMA(0,0,0) with zero mean     : 1208.216
+ ARIMA(2,0,0) with non-zero mean : 519.4539
+ ARIMA(3,0,0) with non-zero mean : 519.4331
+ ARIMA(4,0,0) with non-zero mean : 521.4544
+ ARIMA(3,0,1) with non-zero mean : 521.5667
+ ARIMA(2,0,1) with non-zero mean : 520.4177
+ ARIMA(4,0,1) with non-zero mean : 523.7179
+ ARIMA(3,0,0) with zero mean     : Inf
+
+ Best model: ARIMA(3,0,0) with non-zero mean 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Series: z6 
+ARIMA(3,0,0) with non-zero mean 
+
+Coefficients:
+         ar1     ar2      ar3      mean
+      0.5428  0.2545  -0.1524  100.4523
+s.e.  0.1003  0.1110   0.1012    0.8540
+
+sigma^2 = 9.822:  log likelihood = -254.4
+AIC=518.79   AICc=519.43   BIC=531.82</code></pre>
+</div>
+</div>
+<div id="e9559595-b026-4999-8d68-071b43b01587" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> <span class="fu">arima</span>(z6,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co">#AR(3)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+           Estimate Std. Error  z value  Pr(&gt;|z|)    
+ar1         0.54278    0.10028   5.4125 6.214e-08 ***
+ar2         0.25451    0.11103   2.2923   0.02189 *  
+ar3        -0.15237    0.10121  -1.5054   0.13221    
+intercept 100.45229    0.85397 117.6303 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<p>(best로 뽑아준거 AR(3)이 AR(1)보다는 나아 보이지 않는다. .. 모형이 덜 복잡한 AR(1)모형 선택)</p>
+</section>
+<section id="다시" class="level1">
+<h1>7 (다시)</h1>
+<p>(R실습). ex7 5c.txt 는 어느 확률과정으로부터 생성된 모의시험 자료들이다. 각 자료를 가장 잘 설명하는 모형을 식별하고 추정한 후 잔차분석 포트맨토 검정 등의 모형 진단을 통해 모형을 적합하여라.</p>
+<div id="66e2e49f-be44-4010-9bc1-787bbb41232d" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>z7 <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"ex7_5c.txt"</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-36-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="69dc53b1-1617-49dd-b2f9-14510040d88e" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(z7, <span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-37-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="b9717236-c142-47d3-a180-f9cdcd17912f" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(z7, <span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>추세가 있어보이나.. 결정적 추세가 아닌 확률적 추세가 있어보인다. 평균이 100근처인 느낌이다.</p></li>
+<li><p>ACF가 그림상 sin함수의 주기로 감소하는 느낌…. pacf는 2개만 살아있고 다 절단이다. AR(2)모형인 것 같다.</p></li>
+</ul>
+<div id="697139cd-925c-4b34-918e-111b4f957998" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0 WN</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z7, <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z7, <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(z7, <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z7
+X-squared = 88.163, df = 1, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z7
+X-squared = 284.49, df = 6, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  z7
+X-squared = 304.02, df = 12, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li>pvalue값이 작으므로 H0를 기각한다. WN이 아니다.</li>
+</ul>
+<div id="3933bd56-3854-4b41-8965-f1afee38448e" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(z7) <span class="co"># ADF 검정</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 단위근 검정 H0 : 단위근이 있다.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Augmented Dickey-Fuller Test
+
+data:  z7
+Dickey-Fuller = -2.9537, Lag order = 4, p-value = 0.1816
+alternative hypothesis: stationary</code></pre>
+</div>
+</div>
+<div id="77908a7d-0b55-452b-aa44-034b951ba1ab" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">pp.test</span>(z7) <span class="co"># PP 검정</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Phillips-Perron Unit Root Test
+
+data:  z7
+Dickey-Fuller Z(alpha) = -10.033, Truncation lag parameter = 3, p-value
+= 0.5337
+alternative hypothesis: stationary</code></pre>
+</div>
+</div>
+<ul>
+<li>PVALUE값의 0.05보다 크므로 h0를 기각할 수 없다. 즉 단위근이 조냊하므로 차분이 필요하다.</li>
+</ul>
+<p>결정적 추세가 아닌 확률적 추세가 있어보이므로 차분을 진행하자.</p>
+<div id="aef3e5e2-d5a1-4c3d-bec9-75f9c9aa0559" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 차분</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>diff_z <span class="ot">=</span> <span class="fu">diff</span>(z7)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-42-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="0b36946c-5f56-4349-aaea-27bd6e1b2130" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">diff</span>(z7), <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">diff</span>(z7), <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  diff(z7)
+X-squared = 13.76, df = 6, p-value = 0.03244</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  diff(z7)
+X-squared = 21.112, df = 12, p-value = 0.04876</code></pre>
+</div>
+</div>
+<ul>
+<li>pvalue값이 0.05보다 작으므로 H0를 기각한다. WN이 아니다.</li>
+</ul>
+<div id="13ad7555-5bbd-4977-a563-efd3d9da70cf" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">diff</span>(z7))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  diff(z7)
+t = 0.51483, df = 98, p-value = 0.6078
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -1.643556  2.795071
+sample estimates:
+mean of x 
+0.5757576 </code></pre>
+</div>
+</div>
+<ul>
+<li>t-test의 pvalue가 0.6078이므로…. 평균=0</li>
+</ul>
+<div id="64b3610b-3aaf-4ad4-9621-f883f7586ef1" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Zt ~ radomwalk, ARIMA(0,1,0) with drift</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 모형 ARIMA(0,1,0)</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z7,<span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = z7, order = c(0, 1, 0))
+
+
+sigma^2 estimated as 122.9:  log likelihood = -378.64,  aic = 759.27
+
+Training set error measures:
+                  ME     RMSE     MAE      MPE     MAPE      MASE      ACF1
+Training set 0.57096 11.03042 9.03096 0.157609 6.319408 0.9901052 0.3373427</code></pre>
+</div>
+</div>
+<p><code>-</code> 분해법 이용</p>
+<div id="4c4c9ef7-05f9-41b7-8403-18cc27c78cff" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="do">## 회귀모형</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z7)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(z7<span class="sc">~</span>t)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = z7 ~ t)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-63.730 -22.451  -4.656  18.260  77.126 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 130.9630     6.0886  21.510  &lt; 2e-16 ***
+t             0.3534     0.1047   3.376  0.00105 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 30.21 on 98 degrees of freedom
+Multiple R-squared:  0.1042,    Adjusted R-squared:  0.09506 
+F-statistic:  11.4 on 1 and 98 DF,  p-value: 0.001055</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(\hat T_t = 130.9630 + 0.3534 t\)</span></p>
+<p><span class="math inline">\(Z_t = T_t + I_t = b_0 + b_1t + e_t\)</span></p>
+<ul>
+<li>모형이 유의하게 나왔땅</li>
+</ul>
+<div id="6eda358a-daa9-44e8-93ce-a837634f7ea5" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>et <span class="ot">&lt;-</span> z7 <span class="sc">-</span> <span class="fu">fitted</span>(fit1) <span class="co">#추세 제거</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(et, <span class="at">main=</span><span class="st">"추세 제거 e7"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>0을 중심으로 대칭인가 아닌가 애매하다.</li>
+</ul>
+<div id="ef8385cb-3223-42e2-b629-55a94bec3eb8" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 모형 적합도 확인</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="do">##H0 : rho1 = ... = rho6 = 0</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(et, <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="do">##H0 : rho1 = ... = rho12 = 0</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(et, <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  et
+X-squared = 279.09, df = 6, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  et
+X-squared = 298.76, df = 12, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li>오차항이 WN아님.</li>
+</ul>
+<div id="972c26ad-a226-4329-a33d-1ec79edf6aae" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co">#H0 : phi=1</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(et, <span class="at">lags =</span> <span class="dv">0</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(et, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(et, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 0
+  STATISTIC:
+    Dickey-Fuller: -2.0272
+  P VALUE:
+    0.04335 
+
+Description:
+ Wed Nov 29 22:15:48 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning message in fUnitRoots::adfTest(et, lags = 1, type = "nc"):
+“p-value smaller than printed p-value”</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -2.9693
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Nov 29 22:15:48 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 2
+  STATISTIC:
+    Dickey-Fuller: -2.4681
+  P VALUE:
+    0.01551 
+
+Description:
+ Wed Nov 29 22:15:48 2023 by user: </code></pre>
+</div>
+</div>
+<ul>
+<li>H0기각할 수 없다. 차분 필요 없음.</li>
+</ul>
+<div id="d0aae6e6-c735-4af4-826a-4281024dcc02" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(et)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  et
+t = -6.6103e-16, df = 99, p-value = 1
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -5.964947  5.964947
+sample estimates:
+    mean of x 
+-1.987195e-15 </code></pre>
+</div>
+</div>
+<div id="b5c370db-814d-4e6b-9a14-04504b0bf9a6" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="do">###### lm (1차추세 모형)</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="do">###### et ~ AR(2)</span></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>fit_et <span class="ot">&lt;-</span> <span class="fu">arima</span>(et, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">include.mean =</span> F) <span class="do">## et</span></span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_et)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = et, order = c(2, 0, 0), include.mean = F)
+
+Coefficients:
+         ar1      ar2
+      1.2897  -0.3875
+s.e.  0.0913   0.0923
+
+sigma^2 estimated as 100.3:  log likelihood = -373.45,  aic = 752.9
+
+Training set error measures:
+                     ME     RMSE    MAE       MPE    MAPE      MASE       ACF1
+Training set 0.07085178 10.01366 7.9766 -35.02261 105.705 0.8734854 0.06942246</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(z_t = 1.2897⋅z_{t−1} −0.3875⋅z_{t−2}+ϵ_t\)</span></p>
+<div id="dbbd1413-ca2d-442f-9cd6-d16b0b087eb9" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2897-0.3875</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.9022
+</div>
+</div>
+<div id="2f8d55d6-ca7a-4dd5-863d-0d7c551b32f4" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit_et)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+     Estimate Std. Error z value  Pr(&gt;|z|)    
+ar1  1.289702   0.091293 14.1270 &lt; 2.2e-16 ***
+ar2 -0.387540   0.092268 -4.2002 2.667e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<p>유의하네…</p>
+<div id="063c13ef-6503-40a0-8ea6-97b3a92ce9a7" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co">#hat_zt = hat_Tt + hat_et</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>hat_zt <span class="ot">=</span> <span class="fu">fitted</span>(fit1) <span class="sc">+</span> <span class="fu">fitted</span>(fit_et)</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(z7, hat_zt, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="fu">c</span>(<span class="st">"z7"</span>,<span class="st">"hat_z"</span>), <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-55-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="72d3d725-a262-411b-988b-9f86649e52dd" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### ut에 대한 잔차검정</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>ut <span class="ot">&lt;-</span> <span class="fu">resid</span>(fit_et)</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(ut)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-56-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>wn이다.</li>
+</ul>
+<div id="70aa09ad-46a7-4e6f-8784-bfa2f2f58898" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(ut) <span class="do">##JB test H0: normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Jarque Bera Test
+
+data:  ut
+X-squared = 2.5243, df = 2, p-value = 0.283</code></pre>
+</div>
+</div>
+<ul>
+<li>정규분포이다.</li>
+</ul>
+<div id="3da44255-4231-4d7a-8aa6-972359458c53" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(ut)</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(ut, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(ut)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-58-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="74af0e77-ff64-4009-a2de-78e7102330fc" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit_et, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>4.478742</td>
+<td>4</td>
+<td>0.3450755</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>7.922301</td>
+<td>10</td>
+<td>0.6364264</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>16.292465</td>
+<td>16</td>
+<td>0.4327419</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>18.569598</td>
+<td>22</td>
+<td>0.6717336</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>모든 차수에서 rho=0이다. wn이다.</li>
+</ul>
+<div id="d68be967-4d16-471a-bbff-6ddc61ba0054" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 잔차 검정</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima</span>(et, <span class="at">p=</span><span class="dv">2</span>, <span class="at">d=</span><span class="dv">0</span>, <span class="at">q=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>initial  value 3.390891 
+iter   2 value 3.366724
+iter   3 value 2.566255
+iter   4 value 2.445142
+iter   5 value 2.325612
+iter   6 value 2.303803
+iter   7 value 2.302399
+iter   8 value 2.302221
+iter   9 value 2.302187
+iter  10 value 2.302174
+iter  11 value 2.302142
+iter  12 value 2.302121
+iter  13 value 2.302100
+iter  14 value 2.302097
+iter  15 value 2.302097
+iter  15 value 2.302097
+final  value 2.302097 
+converged
+initial  value 2.316698 
+iter   2 value 2.316354
+iter   3 value 2.315707
+iter   4 value 2.315565
+iter   5 value 2.315436
+iter   6 value 2.315391
+iter   7 value 2.315378
+iter   8 value 2.315377
+iter   8 value 2.315377
+final  value 2.315377 
+converged</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>$fit
+
+Call:
+arima(x = xdata, order = c(p, d, q), seasonal = list(order = c(P, D, Q), period = S), 
+    xreg = xmean, include.mean = FALSE, transform.pars = trans, fixed = fixed, 
+    optim.control = list(trace = trc, REPORT = 1, reltol = tol))
+
+Coefficients:
+         ar1      ar2    xmean
+      1.2889  -0.3866  -1.8345
+s.e.  0.0914   0.0924   9.7931
+
+sigma^2 estimated as 100.2:  log likelihood = -373.43,  aic = 754.86
+
+$degrees_of_freedom
+[1] 97
+
+$ttable
+      Estimate     SE t.value p.value
+ar1     1.2889 0.0914 14.1042  0.0000
+ar2    -0.3866 0.0924 -4.1843  0.0001
+xmean  -1.8345 9.7931 -0.1873  0.8518
+
+$AIC
+[1] 7.548632
+
+$AICc
+[1] 7.551132
+
+$BIC
+[1] 7.652838</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW04_files/figure-html/cell-60-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="bc22c249-3b9a-4c7e-90c2-914763883d77" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 올바르게 선택했는지 확인용</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(z7, <span class="at">trace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ ARIMA(2,1,2) with drift         : Inf
+ ARIMA(0,1,0) with drift         : 761.1324
+ ARIMA(1,1,0) with drift         : 751.3387
+ ARIMA(0,1,1) with drift         : 745.3847
+ ARIMA(0,1,0)                    : 759.316
+ ARIMA(1,1,1) with drift         : 746.6741
+ ARIMA(0,1,2) with drift         : 746.685
+ ARIMA(1,1,2) with drift         : 748.8309
+ ARIMA(0,1,1)                    : 743.4057
+ ARIMA(1,1,1)                    : 744.6798
+ ARIMA(0,1,2)                    : 744.6976
+ ARIMA(1,1,0)                    : 749.3425
+ ARIMA(1,1,2)                    : 746.8224
+
+ Best model: ARIMA(0,1,1)                    
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Series: z7 
+ARIMA(0,1,1) 
+
+Coefficients:
+         ma1
+      0.4905
+s.e.  0.0986
+
+sigma^2 = 103.2:  log likelihood = -369.64
+AIC=743.28   AICc=743.41   BIC=748.47</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
