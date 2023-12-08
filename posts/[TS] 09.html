@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="김보람">
-<meta name="dcterms.date" content="2023-12-04">
+<meta name="dcterms.date" content="2023-12-06">
 
 <title>TS - [TS] 09. Forecast 실습</title>
 <style>
@@ -100,6 +100,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -169,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 4, 2023</p>
+        <p class="date">December 6, 2023</p>
       </div>
     </div>
     
@@ -187,151 +190,692 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="a3b08b04-9f71-4a75-a21b-6fc3222f6ce4" class="cell">
+<div id="a3b08b04-9f71-4a75-a21b-6fc3222f6ce4" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="ex-8.7-모의-실험-데이터" class="level1">
 <h1>EX 8.7 모의 실험 데이터</h1>
-<div id="0c586b01-e8d2-4e0e-a511-28f3a7488aa5" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"DAT/eg8_7.txt"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0f8c6798-77dc-4bd9-b7fa-3f0329332f8e" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'/home/coco/Dropbox/Scribbling/posts'
 </div>
-<div id="93d48d28-dc04-480a-8d88-bfd662a18d8e" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">ggtsdisplay</span>(z,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">smooth=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="60446ede-9f4a-476b-a520-33a3e3d5fc47" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">method=</span><span class="st">'ML'</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0c586b01-e8d2-4e0e-a511-28f3a7488aa5" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"eg8_7.txt"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
 </div>
-<div id="0d20f601-9e02-4efb-8eeb-d0566840fa78" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
 </div>
+</div>
+<ul>
+<li>평균이 20정도로 움직이는 정상 시계열로 보인다. —&gt; AR(1)모형</li>
+</ul>
+<div id="93d48d28-dc04-480a-8d88-bfd662a18d8e" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">ggtsdisplay</span>(z,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">smooth=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><code>smooth=T</code>를 쓰면 추세가 있는지 확인하는 파란 선이 생긴다.</li>
+</ul>
+<div id="60446ede-9f4a-476b-a520-33a3e3d5fc47" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">method=</span><span class="st">'ML'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = z, order = c(1, 0, 0), method = "ML")
+
+Coefficients:
+          ar1  intercept
+      -0.6715    19.8312
+s.e.   0.0728     0.1776
+
+sigma^2 estimated as 8.744:  log likelihood = -250.61,  aic = 507.22</code></pre>
+</div>
+</div>
+<div id="0d20f601-9e02-4efb-8eeb-d0566840fa78" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+19.832691
+</div>
+</div>
+<ul>
+<li><code>intercept</code>는 delta가 아니라 mu이다.</li>
+</ul>
 <p><span class="math inline">\(\hat Z_n(l) = \hat μ + \hat ϕ^l(Z_n − \hat μ)\)</span></p>
-<div id="60dc8a25-d0a4-413b-85ee-975e8721a4d6" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>forecast_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit, <span class="dv">25</span>) <span class="co">#MMSE : zn(l) = mu + phi^l*(zn-mu), l=1,...,10</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>forecast_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="da1d1de8-5254-4d77-8358-8843f0420ecd" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+100
 </div>
-<div id="a3a3864c-2ff2-4a0b-b47c-7a66bf66e481" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit)[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="4517ff92-a910-410a-b62a-b3a3ac3dcec0" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hat_phi <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)[<span class="dv">1</span>]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-</code> 예측하는 함수</p>
+<ul>
+<li>모형을 기준으로 25개를 예측할거야!</li>
+</ul>
+<div id="60dc8a25-d0a4-413b-85ee-975e8721a4d6" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>forecast_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit, <span class="dv">25</span>) <span class="co">#MMSE : zn(l) = mu + phi^l*(zn-mu), l=1,...,25</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>forecast_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+101       20.82225 17.03269 24.61181 15.02662 26.61788
+102       19.16558 14.60082 23.73034 12.18439 26.14678
+103       20.27811 15.40393 25.15229 12.82369 27.73253
+104       19.53100 14.52353 24.53847 11.87273 27.18926
+105       20.03272 14.96628 25.09915 12.28427 27.78116
+106       19.69579 14.60299 24.78859 11.90702 27.48456
+107       19.92205 14.81740 25.02670 12.11517 27.72893
+108       19.77011 14.66013 24.88009 11.95507 27.58515
+109       19.87214 14.75976 24.98453 12.05343 27.69086
+110       19.80362 14.69015 24.91709 11.98325 27.62399
+111       19.84964 14.73568 24.96359 12.02852 27.67076
+112       19.81874 14.70456 24.93291 11.99728 27.64019
+113       19.83949 14.72521 24.95376 12.01788 27.66110
+114       19.82555 14.71123 24.93987 12.00387 27.64723
+115       19.83491 14.72057 24.94925 12.01320 27.65662
+116       19.82863 14.71428 24.94297 12.00690 27.65035
+117       19.83285 14.71849 24.94720 12.01112 27.65457
+118       19.83001 14.71566 24.94437 12.00828 27.65174
+119       19.83191 14.71756 24.94627 12.01018 27.65365
+120       19.83064 14.71628 24.94499 12.00890 27.65237
+121       19.83150 14.71714 24.94585 12.00976 27.65323
+122       19.83092 14.71656 24.94527 12.00919 27.65265
+123       19.83131 14.71695 24.94566 12.00957 27.65304
+124       19.83105 14.71669 24.94540 12.00931 27.65278
+125       19.83122 14.71686 24.94558 12.00949 27.65295</code></pre>
 </div>
-<div id="ccf214be-8869-4526-9cf3-337e02a9f6e7" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="sc">+</span> hat_phi <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu) <span class="co"># l= 1 z_100_(1)</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="sc">+</span> hat_phi<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu) <span class="co"># l= 2 z_100_(2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7ece7778-fb77-47d8-93d7-6ebc89ae3533" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(l, <span class="cf">function</span>(x) hat_mu <span class="sc">+</span> hat_phi<span class="sc">^</span>x <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-</code> 직접 계산</p>
+<div id="bf214b95-e7c9-49f1-b0cf-543fd2f1d4d9" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>ar1</dt><dd>-0.671544059932036</dd><dt>intercept</dt><dd>19.8311503070686</dd></dl>
 </div>
-<div id="95592bc0-72b0-4d1e-87c1-9845999f4cee" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="fc558d3b-b56b-48f3-9dda-ff816328e28a" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4517ff92-a910-410a-b62a-b3a3ac3dcec0" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>hat_phi <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)[<span class="dv">1</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a1b482bc-1a0b-4016-aff3-84c23d0e6ffd" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sarima_fit <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z,<span class="dv">25</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ccf214be-8869-4526-9cf3-337e02a9f6e7" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="sc">+</span> hat_phi <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu) <span class="co"># l= 1 z_100_(1)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>hat_mu <span class="sc">+</span> hat_phi<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu) <span class="co"># l= 2 z_100_(2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<strong>intercept:</strong> 20.8222488141294
 </div>
-<div id="b187e87f-9000-40a7-a76a-aaff56729b86" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sarima_fit<span class="sc">$</span>pred</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sarima_fit<span class="sc">$</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<strong>intercept:</strong> 19.1655839918444
 </div>
-<div id="0b8685eb-e9fd-4f29-9607-d8d376fd91f2" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sarima_fit<span class="sc">$</span>pred <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">*</span>sarima_fit<span class="sc">$</span>se) <span class="do">##95% 신뢰구간 상한</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sarima_fit<span class="sc">$</span>pred <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">*</span>sarima_fit<span class="sc">$</span>se) <span class="do">##95% 신뢰구간 하한</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>100번째를 기준으로 그 다음값을 구하고 싶어.</li>
+</ul>
+<div id="7ece7778-fb77-47d8-93d7-6ebc89ae3533" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(l, <span class="cf">function</span>(x) hat_mu <span class="sc">+</span> hat_phi<span class="sc">^</span>x <span class="sc">*</span> (z[<span class="dv">100</span>] <span class="sc">-</span> hat_mu))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>intercept</dt><dd>20.8222488141294</dd><dt>intercept</dt><dd>19.1655839918444</dd><dt>intercept</dt><dd>20.2781074125482</dd><dt>intercept</dt><dd>19.5309989178393</dd><dt>intercept</dt><dd>20.0327151895859</dd><dt>intercept</dt><dd>19.6957906075232</dd><dt>intercept</dt><dd>19.9220503092525</dd><dt>intercept</dt><dd>19.7701069505542</dd><dt>intercept</dt><dd>19.8721436105341</dd><dt>intercept</dt><dd>19.8036214976293</dd></dl>
+</div>
+</div>
+<div id="95592bc0-72b0-4d1e-87c1-9845999f4cee" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>점점 평균값으로 수렴한다.</p></li>
+<li><p>AR process의 정보가 점점 사라지는 것..</p></li>
+</ul>
+<div id="fc558d3b-b56b-48f3-9dda-ff816328e28a" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">autoplot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="a1b482bc-1a0b-4016-aff3-84c23d0e6ffd" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sarima_fit <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z,<span class="dv">25</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)  <span class="co"># z함수, 25개 볼거야, p, d, q</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="b187e87f-9000-40a7-a76a-aaff56729b86" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sarima_fit<span class="sc">$</span>pred</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sarima_fit<span class="sc">$</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>20.8222483489762</li><li>19.1655839559512</li><li>20.2781070098918</li><li>19.5309988141942</li><li>20.032714849742</li><li>19.6957904500696</li><li>19.9220500133516</li><li>19.7701067583474</li><li>19.8721433414928</li><li>19.8036212850204</li><li>19.849636861772</li><li>19.8187353767205</li><li>19.8394870839858</li><li>19.8255513992216</li><li>19.8349098248857</li><li>19.8286252301641</li><li>19.8328456121207</li><li>19.830011439887</li><li>19.8319147112811</li><li>19.8306365807722</li><li>19.8314949016627</li><li>19.8309185014078</li><li>19.8313055795478</li><li>19.8310456395405</li><li>19.831220200696</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>2.95700711959937</li><li>3.5619005566917</li><li>3.80334404182832</li><li>3.90734998536685</li><li>3.95335857242263</li><li>3.97393285636323</li><li>3.98317649989949</li><li>3.98733810739122</li><li>3.98921345277822</li><li>3.99005889146209</li><li>3.99044010149264</li><li>3.9906120043846</li><li>3.99068952524303</li><li>3.99072448443737</li><li>3.99074024993262</li><li>3.99074735969909</li><li>3.990750565996</li><li>3.99075201194324</li><li>3.99075266402387</li><li>3.99075295809352</li><li>3.9907530907105</li><li>3.99075315051696</li><li>3.99075317748796</li><li>3.99075318965111</li><li>3.99075319513634</li></ol>
+</div>
+</div>
+<div id="0b8685eb-e9fd-4f29-9607-d8d376fd91f2" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sarima_fit<span class="sc">$</span>pred <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">*</span>sarima_fit<span class="sc">$</span>se) <span class="do">##95% 신뢰구간 상한</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sarima_fit<span class="sc">$</span>pred <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">*</span>sarima_fit<span class="sc">$</span>se) <span class="do">##95% 신뢰구간 하한</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>26.6178758054195</li><li>26.1467807635801</li><li>27.7325243526903</li><li>27.1892640605063</li><li>27.781155269663</li><li>27.4845557255219</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>15.0266208925329</li><li>12.1843871483223</li><li>12.8236896670933</li><li>11.8727335678821</li><li>12.2842744298209</li><li>11.9070251746172</li></ol>
+</div>
 </div>
 </section>
 <section id="ex-9.5-ima11-arima011" class="level1">
 <h1>EX 9.5 IMA(1,1) = ARIMA(0,1,1)</h1>
-<div id="881d6344-bada-4538-87cb-d6e07d5ac87f" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"DAT/eg9_5.txt"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">ggtsdisplay</span>(z, <span class="at">smooth=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>차분을 했더니 MA(1)모형</li>
+</ul>
+<div id="881d6344-bada-4538-87cb-d6e07d5ac87f" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"eg9_5.txt"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">ggtsdisplay</span>(z, <span class="at">smooth=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
-<div id="50cd1051-3364-4794-8d54-a645c78d5e88" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">0</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-19-output-2.png" class="img-fluid"></p>
 </div>
-<div id="8dae258f-2fcc-4ba1-8858-89bcda010b3e" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lag_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(z)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(lag_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="03ba4742-26ff-4f0c-ba45-6ceac2ff31e9" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mean : H0 : mu = 0</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(lag_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>ACF가 천천히 감소한다. (확률적 추세가 있어보임)</li>
+</ul>
+<div id="50cd1051-3364-4794-8d54-a645c78d5e88" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">0</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(z, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 0
+  STATISTIC:
+    Dickey-Fuller: -1.43
+  P VALUE:
+    0.5246 
+
+Description:
+ Tue Dec  5 20:19:59 2023 by user: </code></pre>
 </div>
-<div id="ea794281-0251-475b-95ad-820b85beac50" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">arima</span>(lag_z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">include.mean =</span> F)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -2.3543
+  P VALUE:
+    0.1803 
+
+Description:
+ Tue Dec  5 20:19:59 2023 by user: </code></pre>
 </div>
-<div id="66bdc452-43f5-458b-b134-7f379a5f6766" class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 2
+  STATISTIC:
+    Dickey-Fuller: -1.7307
+  P VALUE:
+    0.4126 
+
+Description:
+ Tue Dec  5 20:19:59 2023 by user: </code></pre>
 </div>
+</div>
+<ul>
+<li><p>평균이 있으니 ‘C’ 옵션을 사용하자.</p></li>
+<li><p>모든 차수에 대해서 p-value &lt; 0.05이므로 차분이 필요하다.</p></li>
+</ul>
+<div id="8dae258f-2fcc-4ba1-8858-89bcda010b3e" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lag_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(z)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(lag_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>0을 중심으로 움직인다.</p></li>
+<li><p>PACF가 SIN함수를 그리며 지수적으로 감소함</p></li>
+<li><p>ACF가 1차에만 유효하고 나머지는 유효하지 않음 -&gt; MA(1)모형</p></li>
+</ul>
+<div id="03ba4742-26ff-4f0c-ba45-6ceac2ff31e9" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mean : H0 : mu = 0</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(lag_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  lag_z
+t = -0.02617, df = 298, p-value = 0.9791
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.4480209  0.4362617
+sample estimates:
+   mean of x 
+-0.005879599 </code></pre>
+</div>
+</div>
+<ul>
+<li>유의확률이 크게 나와서 평균이 0이 맞아!</li>
+</ul>
+<p><code>-</code> 차분한 모형(평균 F)</p>
+<div id="ea794281-0251-475b-95ad-820b85beac50" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">arima</span>(lag_z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">include.mean =</span> F)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = lag_z, order = c(0, 0, 1), include.mean = F)
+
+Coefficients:
+         ma1
+      0.7605
+s.e.  0.0342
+
+sigma^2 estimated as 9.479:  log likelihood = -760.93,  aic = 1525.86</code></pre>
+</div>
+</div>
+<p><code>-</code> 원래 모형(평균 있음)</p>
+<div id="66bdc452-43f5-458b-b134-7f379a5f6766" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(z, <span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = z, order = c(0, 1, 1))
+
+Coefficients:
+         ma1
+      0.7605
+s.e.  0.0342
+
+sigma^2 estimated as 9.479:  log likelihood = -760.93,  aic = 1525.86</code></pre>
+</div>
+</div>
+<ul>
+<li>두 가지 방법이 모두 동일하게 나온다.</li>
+</ul>
 <p><span class="math inline">\(Z_t = ε_t + 0.7605ε_t, \hat θ = −0.7605\)</span></p>
-<div id="5d2d6b4e-b513-4040-8ae4-ef1cc03b9718" class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p>부호가 반대!!!</p></li>
+<li><p>MA모형 평균이 없당</p></li>
+</ul>
+<p><code>-</code> 잔차분석</p>
+<div id="5d2d6b4e-b513-4040-8ae4-ef1cc03b9718" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,1)
+Q* = 7.1117, df = 9, p-value = 0.6255
+
+Model df: 1.   Total lags used: 10
+</code></pre>
 </div>
-<div id="c9996822-b41e-49f0-9d43-c4f60291e192" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
 </div>
-<div id="bc7032ef-ebc0-43d4-89f2-202dfd89ebd7" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#portes::LjungBox(fit, lags=c(6,12,18,24))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="dfc18573-416c-4c9d-83e8-199961326632" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p>정규분포</p></li>
+<li><p>10개시차까지 모든 cov가 0</p></li>
+<li><p>WN이다</p></li>
+</ul>
+<div id="c9996822-b41e-49f0-9d43-c4f60291e192" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
 </div>
-<div id="90bd1ac5-4de1-47cb-bd9d-b4ea7f192975" class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="04d895e9-7118-4107-82cf-eea605298c58" class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 잔차 검정</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima</span>(z, <span class="at">p=</span><span class="dv">0</span>, <span class="at">d=</span><span class="dv">1</span>, <span class="at">q=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="bc7032ef-ebc0-43d4-89f2-202dfd89ebd7" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>4.520231</td>
+<td>5</td>
+<td>0.4771812</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>7.964175</td>
+<td>11</td>
+<td>0.7165093</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>10.346863</td>
+<td>17</td>
+<td>0.8884381</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>12.926680</td>
+<td>23</td>
+<td>0.9535620</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="f78f724a-994a-4668-9f7b-0086825b607e" class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fore_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit, <span class="dv">25</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>fore_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7f8c6149-840d-49e0-89e6-f17e9bc2a6c2" class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fore_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="dfc18573-416c-4c9d-83e8-199961326632" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Jarque Bera Test
+
+data:  resid
+X-squared = 1.1606, df = 2, p-value = 0.5597</code></pre>
 </div>
-<div id="67d0b997-9fd3-4f8a-bcba-cc45c387ae6e" class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="3a6a2660-9e9f-4199-bee5-e16aa40c958c" class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(lag_z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="90bd1ac5-4de1-47cb-bd9d-b4ea7f192975" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
 </div>
-<div id="0b887c9c-89b3-4c5d-8cfd-7b381a31da2c" class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fore_diff_z <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(lag_z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="at">plot=</span>F)<span class="sc">$</span>pred</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fore_diff_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f3144fc7-4561-4e53-8f96-500204ce1dc2" class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fore_z <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>, <span class="at">plot=</span>F)<span class="sc">$</span>pred</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>fore_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="04d895e9-7118-4107-82cf-eea605298c58" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 잔차 검정</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima</span>(z, <span class="at">p=</span><span class="dv">0</span>, <span class="at">d=</span><span class="dv">1</span>, <span class="at">q=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>initial  value 1.355425 
+iter   2 value 1.182804
+iter   3 value 1.144176
+iter   4 value 1.129179
+iter   5 value 1.127095
+iter   6 value 1.125914
+iter   7 value 1.125753
+iter   8 value 1.125727
+iter   9 value 1.125726
+iter  10 value 1.125726
+iter  11 value 1.125726
+iter  11 value 1.125726
+final  value 1.125726 
+converged
+initial  value 1.125981 
+iter   2 value 1.125979
+iter   3 value 1.125977
+iter   4 value 1.125975
+iter   5 value 1.125974
+iter   6 value 1.125974
+iter   6 value 1.125974
+final  value 1.125974 
+converged</code></pre>
 </div>
+<div class="cell-output cell-output-display">
+<pre><code>$fit
+
+Call:
+arima(x = xdata, order = c(p, d, q), seasonal = list(order = c(P, D, Q), period = S), 
+    xreg = constant, transform.pars = trans, fixed = fixed, optim.control = list(trace = trc, 
+        REPORT = 1, reltol = tol))
+
+Coefficients:
+         ma1  constant
+      0.7605   -0.0146
+s.e.  0.0342    0.3130
+
+sigma^2 estimated as 9.479:  log likelihood = -760.93,  aic = 1527.86
+
+$degrees_of_freedom
+[1] 297
+
+$ttable
+         Estimate     SE t.value p.value
+ma1        0.7605 0.0342 22.2124  0.0000
+constant  -0.0146 0.3130 -0.0468  0.9627
+
+$AIC
+[1] 5.109891
+
+$AICc
+[1] 5.110027
+
+$BIC
+[1] 5.14702</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p><span class="math inline">\((1-B)\hat Z_n (l) = \hat \mu - \hat \theta \hat \epsilon_n: l=1\)</span></p>
+<p><span class="math inline">\(\hat \mu: l \geq 2\)</span></p>
+<p><code>-</code> 원데이터를예측하는 거니까 원데이터 넣어주기(차분데이터X)</p>
+<div id="f78f724a-994a-4668-9f7b-0086825b607e" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fore_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit, <span class="dv">25</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>fore_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast     Lo 80    Hi 80     Lo 95    Hi 95
+301       129.0191 125.07348 132.9647 122.98480 135.0534
+302       129.0191 121.03051 137.0077 116.80160 141.2366
+303       129.0191 118.43291 139.6053 112.82893 145.2093
+304       129.0191 116.35746 141.6807 109.65480 148.3834
+305       129.0191 114.57726 143.4609 106.93221 151.1060
+306       129.0191 112.99361 145.0446 104.51022 153.5280
+307       129.0191 111.55296 146.4852 102.30694 155.7313
+308       129.0191 110.22240 147.8158 100.27203 157.7662
+309       129.0191 108.98000 149.0582  98.37194 159.6663
+310       129.0191 107.81025 150.2279  96.58297 161.4552
+311       129.0191 106.70173 151.3365  94.88763 163.1506
+312       129.0191 105.64572 152.3925  93.27261 164.7656
+313       129.0191 104.63541 153.4028  91.72746 166.3107
+314       129.0191 103.66532 154.3729  90.24384 167.7944
+315       129.0191 102.73101 155.3072  88.81493 169.2233
+316       129.0191 101.82878 156.2094  87.43509 170.6031
+317       129.0191 100.95554 157.0827  86.09959 171.9386
+318       129.0191 100.10867 157.9295  84.80441 173.2338
+319       129.0191  99.28591 158.7523  83.54611 174.4921
+320       129.0191  98.48531 159.5529  82.32170 175.7165
+321       129.0191  97.70517 160.3330  81.12858 176.9096
+322       129.0191  96.94400 161.0942  79.96448 178.0737
+323       129.0191  96.20049 161.8377  78.82736 179.2108
+324       129.0191  95.47344 162.5648  77.71544 180.3228
+325       129.0191  94.76183 163.2764  76.62712 181.4111</code></pre>
+</div>
+</div>
+<div id="7f8c6149-840d-49e0-89e6-f17e9bc2a6c2" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fore_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>평균으로 거의 예측이 됨.</li>
+</ul>
+<div id="67d0b997-9fd3-4f8a-bcba-cc45c387ae6e" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$pred</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>129.010634626429</li><li>128.995997383896</li><li>128.981360141362</li><li>128.966722898829</li><li>128.952085656296</li><li>128.937448413762</li><li>128.922811171229</li><li>128.908173928696</li><li>128.893536686162</li><li>128.878899443629</li><li>128.864262201096</li><li>128.849624958562</li><li>128.834987716029</li><li>128.820350473496</li><li>128.805713230962</li><li>128.791075988429</li><li>128.776438745896</li><li>128.761801503362</li><li>128.747164260829</li><li>128.732527018296</li><li>128.717889775762</li><li>128.703252533229</li><li>128.688615290696</li><li>128.673978048162</li><li>128.659340805629</li></ol>
+</dd>
+    <dt>$se</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>3.07876798320946</li><li>6.23357705966339</li><li>8.26051775756748</li><li>9.88002147201177</li><li>11.2691390510429</li><li>12.5048856698518</li><li>13.6290438505565</li><li>14.6672937839507</li><li>15.6367572600282</li><li>16.5495271314128</li><li>17.4145203476207</li><li>18.2385358404128</li><li>19.0268983354184</li><li>19.7838704739663</li><li>20.5129276700085</li><li>21.2169477602064</li><li>21.898345666366</li><li>22.5591713852255</li><li>23.2011828201129</li><li>23.8259009256026</li><li>24.434652147738</li><li>25.0286015639165</li><li>25.6087790983797</li><li>26.1761005035879</li><li>26.7313843307499</li></ol>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-33-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="3a6a2660-9e9f-4199-bee5-e16aa40c958c" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(lag_z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$pred</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-4.29136464101854</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li></ol>
+</dd>
+    <dt>$se</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>3.07876823197791</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li><li>3.86796612789283</li></ol>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 09_files/figure-html/cell-34-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="0b887c9c-89b3-4c5d-8cfd-7b381a31da2c" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>fore_diff_z <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(lag_z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="at">plot=</span>F)<span class="sc">$</span>pred</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>fore_diff_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-4.29136464101854</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li><li>-0.014636625581003</li></ol>
+</div>
+</div>
+<div id="e0b71c59-05ca-4c5d-9760-15dc3b8d193d" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fore_diff_z_ <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit1, <span class="dv">25</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>fore_diff_z_<span class="sc">$</span>mean  <span class="co"># 차분한 값에 대한 예측</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-4.28290139590614</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li></ol>
+</div>
+</div>
+<div id="f3144fc7-4561-4e53-8f96-500204ce1dc2" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>fore_z <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.for</span>(z, <span class="dv">25</span>, <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>, <span class="at">plot=</span>F)<span class="sc">$</span>pred</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>fore_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>129.010634626429</li><li>128.995997383896</li><li>128.981360141362</li><li>128.966722898829</li><li>128.952085656296</li><li>128.937448413762</li><li>128.922811171229</li><li>128.908173928696</li><li>128.893536686162</li><li>128.878899443629</li><li>128.864262201096</li><li>128.849624958562</li><li>128.834987716029</li><li>128.820350473496</li><li>128.805713230962</li><li>128.791075988429</li><li>128.776438745896</li><li>128.761801503362</li><li>128.747164260829</li><li>128.732527018296</li><li>128.717889775762</li><li>128.703252533229</li><li>128.688615290696</li><li>128.673978048162</li><li>128.659340805629</li></ol>
+</div>
+</div>
+<div id="9a087625-ca99-4112-a3a2-739049f87753" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>fore_z_ <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit,<span class="dv">25</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>fore_z_<span class="sc">$</span>mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li><li>129.01909823039</li></ol>
+</div>
+</div>
+<p><code>-</code> 차분한 값에.. 원래데이터의 예측값을 알고 싶다면?</p>
 <p><span class="math inline">\(\widehat{▽Z_t} = \hat Z_t − \hat Z_{t−1}\)</span></p>
 <p><span class="math inline">\(\hat Z_t = \widehat{▽Z_t} + \hat Z_{t−1}\)</span></p>
-<p><span class="math inline">\(\hat Z_{300}(1) = \widehat{▽Z_{300}(1)} + Z_300\)</span></p>
-<div id="57421d2d-e345-442b-aac6-8badc71785de" class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>z_300_1 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(fore_diff_z[<span class="dv">1</span>]) <span class="sc">+</span> z[<span class="dv">300</span>]</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>z_300_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="math inline">\(\hat Z_{300}(1) = \widehat{▽Z_{300}(1)} + Z_{300}\)</span></p>
+<div id="57421d2d-e345-442b-aac6-8badc71785de" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>z_300_1 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(fore_diff_z[<span class="dv">1</span>]) <span class="sc">+</span> z[<span class="dv">300</span>]</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>z_300_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+129.010635358981
+</div>
 </div>
 <p><span class="math inline">\(\hat Z_{300}(2) = \widehat{▽Z_{300}(2)} + \hat Z_{300}(1)\)</span></p>
-<div id="466afee3-4020-413d-9ee3-d65ae1c017c2" class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>z_300_2 <span class="ot">&lt;-</span> fore_diff_z[<span class="dv">2</span>] <span class="sc">+</span> z_300_1</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>z_300_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="466afee3-4020-413d-9ee3-d65ae1c017c2" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>z_300_2 <span class="ot">&lt;-</span> fore_diff_z[<span class="dv">2</span>] <span class="sc">+</span> z_300_1</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>z_300_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+128.9959987334
+</div>
 </div>
 
 
