@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-10-15">
+
+<title>TS - [TS] CH04_02. 평활에 의한 분할법 실습</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] CH04_02. 평활에 의한 분할법 실습</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 15, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<blockquote class="blockquote">
+<p>해당 자료는 전북대학교 이영미 교수님 2023고급시계열분석 자료임</p>
+</blockquote>
+<section id="패키지-설치" class="level1">
+<h1>패키지 설치</h1>
+<div id="70527e99-4202-490f-8826-f57867e2ca87" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">############## package</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast) <span class="co">#ma</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR) <span class="co">#sma</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest) <span class="co">#dwtest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+
+Loading required package: zoo
+
+
+Attaching package: ‘zoo’
+
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+</code></pre>
+</div>
+</div>
+<div id="cd6b551d-9c27-4b0c-ad61-358151999ff7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">15</span>, <span class="at">repr.plot.height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="단순이동평균과-중심이동평균" class="level1">
+<h1>단순이동평균과 중심이동평균</h1>
+<div id="5cff85e3-b123-4e1b-8af1-04f2a742c0d4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"mindex.txt"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mindex <span class="ot">&lt;-</span> <span class="fu">ts</span>(z, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1986</span>, <span class="dv">1</span>), <span class="at">frequency =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="28deb7dd-bd4e-4203-a613-518a00ea5680" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mindex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 9 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1986</td>
+<td>9.3</td>
+<td>10.7</td>
+<td>13.3</td>
+<td>14.1</td>
+<td>17.8</td>
+<td>18.1</td>
+<td>19.4</td>
+<td>18.8</td>
+<td>19.1</td>
+<td>18.4</td>
+<td>18.0</td>
+<td>17.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1987</td>
+<td>19.5</td>
+<td>20.1</td>
+<td>19.4</td>
+<td>15.7</td>
+<td>15.6</td>
+<td>16.1</td>
+<td>14.9</td>
+<td>16.0</td>
+<td>14.6</td>
+<td>18.3</td>
+<td>18.2</td>
+<td>23.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1988</td>
+<td>22.2</td>
+<td>22.1</td>
+<td>18.8</td>
+<td>17.7</td>
+<td>13.8</td>
+<td>12.7</td>
+<td>16.5</td>
+<td>15.6</td>
+<td>16.3</td>
+<td>10.7</td>
+<td>10.4</td>
+<td>7.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1989</td>
+<td>4.7</td>
+<td>4.5</td>
+<td>4.0</td>
+<td>6.0</td>
+<td>6.2</td>
+<td>5.7</td>
+<td>4.4</td>
+<td>4.2</td>
+<td>5.0</td>
+<td>5.8</td>
+<td>6.4</td>
+<td>4.9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1990</td>
+<td>7.9</td>
+<td>8.2</td>
+<td>11.8</td>
+<td>10.0</td>
+<td>11.1</td>
+<td>11.7</td>
+<td>12.4</td>
+<td>15.2</td>
+<td>14.0</td>
+<td>15.2</td>
+<td>12.9</td>
+<td>18.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1991</td>
+<td>14.4</td>
+<td>12.7</td>
+<td>8.3</td>
+<td>11.5</td>
+<td>11.9</td>
+<td>11.6</td>
+<td>10.3</td>
+<td>8.5</td>
+<td>11.6</td>
+<td>12.3</td>
+<td>14.5</td>
+<td>11.1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1992</td>
+<td>11.8</td>
+<td>12.4</td>
+<td>12.7</td>
+<td>9.8</td>
+<td>10.0</td>
+<td>10.2</td>
+<td>9.6</td>
+<td>6.9</td>
+<td>5.3</td>
+<td>4.8</td>
+<td>4.6</td>
+<td>1.9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1993</td>
+<td>3.8</td>
+<td>4.7</td>
+<td>7.7</td>
+<td>7.0</td>
+<td>7.2</td>
+<td>7.8</td>
+<td>8.6</td>
+<td>11.4</td>
+<td>10.7</td>
+<td>11.8</td>
+<td>11.3</td>
+<td>16.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1994</td>
+<td>13.2</td>
+<td>12.0</td>
+<td>8.5</td>
+<td>11.4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="79ba7444-d9cd-428f-8f20-5164265b8831" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SMA</span>(mindex,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 9 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1986</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>13.04</td>
+<td>14.80</td>
+<td>16.54</td>
+<td>17.64</td>
+<td>18.64</td>
+<td>18.76</td>
+<td>18.74</td>
+<td>18.26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1987</td>
+<td>18.40</td>
+<td>18.60</td>
+<td>18.80</td>
+<td>18.34</td>
+<td>18.06</td>
+<td>17.38</td>
+<td>16.34</td>
+<td>15.66</td>
+<td>15.44</td>
+<td>15.98</td>
+<td>16.40</td>
+<td>18.02</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1988</td>
+<td>19.26</td>
+<td>20.76</td>
+<td>20.86</td>
+<td>20.76</td>
+<td>18.92</td>
+<td>17.02</td>
+<td>15.90</td>
+<td>15.26</td>
+<td>14.98</td>
+<td>14.36</td>
+<td>13.90</td>
+<td>12.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1989</td>
+<td>9.82</td>
+<td>7.46</td>
+<td>6.12</td>
+<td>5.24</td>
+<td>5.08</td>
+<td>5.28</td>
+<td>5.26</td>
+<td>5.30</td>
+<td>5.10</td>
+<td>5.02</td>
+<td>5.16</td>
+<td>5.26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1990</td>
+<td>6.00</td>
+<td>6.64</td>
+<td>7.84</td>
+<td>8.56</td>
+<td>9.80</td>
+<td>10.56</td>
+<td>11.40</td>
+<td>12.08</td>
+<td>12.88</td>
+<td>13.70</td>
+<td>13.94</td>
+<td>15.06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1991</td>
+<td>14.90</td>
+<td>14.64</td>
+<td>13.26</td>
+<td>12.98</td>
+<td>11.76</td>
+<td>11.20</td>
+<td>10.72</td>
+<td>10.76</td>
+<td>10.78</td>
+<td>10.86</td>
+<td>11.44</td>
+<td>11.60</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1992</td>
+<td>12.26</td>
+<td>12.42</td>
+<td>12.50</td>
+<td>11.56</td>
+<td>11.34</td>
+<td>11.02</td>
+<td>10.46</td>
+<td>9.30</td>
+<td>8.40</td>
+<td>7.36</td>
+<td>6.24</td>
+<td>4.70</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1993</td>
+<td>4.08</td>
+<td>3.96</td>
+<td>4.54</td>
+<td>5.02</td>
+<td>6.08</td>
+<td>6.88</td>
+<td>7.66</td>
+<td>8.40</td>
+<td>9.14</td>
+<td>10.06</td>
+<td>10.76</td>
+<td>12.24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1994</td>
+<td>12.60</td>
+<td>12.86</td>
+<td>12.20</td>
+<td>12.22</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="23be292e-920e-4e05-9680-c5d3c276a1f9" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ma</span>(mindex, <span class="at">order=</span><span class="dv">5</span>, <span class="at">centre =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 9 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1986</td>
+<td>NA</td>
+<td>NA</td>
+<td>13.04</td>
+<td>14.80</td>
+<td>16.54</td>
+<td>17.64</td>
+<td>18.64</td>
+<td>18.76</td>
+<td>18.74</td>
+<td>18.26</td>
+<td>18.40</td>
+<td>18.60</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1987</td>
+<td>18.80</td>
+<td>18.34</td>
+<td>18.06</td>
+<td>17.38</td>
+<td>16.34</td>
+<td>15.66</td>
+<td>15.44</td>
+<td>15.98</td>
+<td>16.40</td>
+<td>18.02</td>
+<td>19.26</td>
+<td>20.76</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1988</td>
+<td>20.86</td>
+<td>20.76</td>
+<td>18.92</td>
+<td>17.02</td>
+<td>15.90</td>
+<td>15.26</td>
+<td>14.98</td>
+<td>14.36</td>
+<td>13.90</td>
+<td>12.00</td>
+<td>9.82</td>
+<td>7.46</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1989</td>
+<td>6.12</td>
+<td>5.24</td>
+<td>5.08</td>
+<td>5.28</td>
+<td>5.26</td>
+<td>5.30</td>
+<td>5.10</td>
+<td>5.02</td>
+<td>5.16</td>
+<td>5.26</td>
+<td>6.00</td>
+<td>6.64</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1990</td>
+<td>7.84</td>
+<td>8.56</td>
+<td>9.80</td>
+<td>10.56</td>
+<td>11.40</td>
+<td>12.08</td>
+<td>12.88</td>
+<td>13.70</td>
+<td>13.94</td>
+<td>15.06</td>
+<td>14.90</td>
+<td>14.64</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1991</td>
+<td>13.26</td>
+<td>12.98</td>
+<td>11.76</td>
+<td>11.20</td>
+<td>10.72</td>
+<td>10.76</td>
+<td>10.78</td>
+<td>10.86</td>
+<td>11.44</td>
+<td>11.60</td>
+<td>12.26</td>
+<td>12.42</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1992</td>
+<td>12.50</td>
+<td>11.56</td>
+<td>11.34</td>
+<td>11.02</td>
+<td>10.46</td>
+<td>9.30</td>
+<td>8.40</td>
+<td>7.36</td>
+<td>6.24</td>
+<td>4.70</td>
+<td>4.08</td>
+<td>3.96</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1993</td>
+<td>4.54</td>
+<td>5.02</td>
+<td>6.08</td>
+<td>6.88</td>
+<td>7.66</td>
+<td>8.40</td>
+<td>9.14</td>
+<td>10.06</td>
+<td>10.76</td>
+<td>12.24</td>
+<td>12.60</td>
+<td>12.86</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1994</td>
+<td>12.20</td>
+<td>12.22</td>
+<td>NA</td>
+<td>NA</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="662f9939-ccdf-4769-90e8-118f2ccf685d" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(mindex, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">""</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">SMA</span>(mindex,<span class="at">n=</span><span class="dv">5</span>), <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">ma</span>(mindex, <span class="at">order=</span><span class="dv">5</span>, <span class="at">centre =</span> <span class="cn">TRUE</span>), <span class="at">col=</span><span class="st">'blue'</span>,<span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>) <span class="co"># centre: 중심이동평균 할것인지</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">'topright'</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">'black'</span>, <span class="st">'red'</span>, <span class="st">'blue'</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a> <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">c</span>(<span class="st">'원시계열'</span>, <span class="st">"SMA(m=5)"</span>, <span class="st">"CSMA(l=2)"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a> <span class="at">bty=</span><span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="이동평균을-이용한-분해법" class="level2">
+<h2 class="anchored" data-anchor-id="이동평균을-이용한-분해법">이동평균을 이용한 분해법</h2>
+<div id="5e43ba0b-5fbf-4529-8a07-dae8bd178f39" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"food.txt"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>food <span class="ot">&lt;-</span> <span class="fu">ts</span>(z, <span class="at">start=</span><span class="fu">c</span>(<span class="dv">1981</span>,<span class="dv">1</span>), <span class="at">frequency=</span><span class="dv">12</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>log_food <span class="ot">&lt;-</span> <span class="fu">log</span>(food) <span class="co">#이분산성 제거를 위한 로그변환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="afbaa4b4-ce9a-4a9a-820b-0413f5fbbc16" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(log_food)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">ma</span>(log_food,<span class="dv">3</span>), <span class="at">col=</span><span class="st">'blue'</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">ma</span>(log_food,<span class="dv">12</span>), <span class="at">col=</span><span class="st">'red'</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">'topleft'</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">'black'</span>, <span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">c</span>(<span class="st">'원시계열'</span>, <span class="st">"CSMA(m=3)"</span>, <span class="st">"CSMA(m=12)"</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">bty=</span><span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>파란색 실선: 계절성분이 아직 남아있다.</p></li>
+<li><p>빨간색 실선: 추세성분</p></li>
+</ul>
+<div id="5c4e34ad-9703-4042-a3f9-83c15b4be592" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(log_food,<span class="fu">ma</span>(log_food,<span class="dv">3</span>),<span class="fu">ma</span>(log_food,<span class="dv">12</span>),<span class="at">col=</span><span class="fu">c</span>(<span class="st">'black'</span>, <span class="st">'red'</span>, <span class="st">'blue'</span>),<span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">'topleft'</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">'black'</span>, <span class="st">'red'</span>, <span class="st">'blue'</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">c</span>(<span class="st">'원시계열'</span>, <span class="st">"CSMA(m=3)"</span>, <span class="st">"CSMA(m=12)"</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">bty=</span><span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="추세성분-계절주기와-동일한-m을-이용한-중심이동평균" class="level3">
+<h3 class="anchored" data-anchor-id="추세성분-계절주기와-동일한-m을-이용한-중심이동평균">1. 추세성분 : 계절주기와 동일한 m을 이용한 중심이동평균</h3>
+<div id="3fab8a55-949a-4e30-993c-0a2eecd99fde" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>trend <span class="ot">=</span> <span class="fu">ma</span>(log_food, <span class="dv">12</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(trend, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="계절성분-z_t---hatt_t-추세가-조정된-시계열에서-각-계절성분의-평균을-구한-후-평균을-0으로-조정" class="level3">
+<h3 class="anchored" data-anchor-id="계절성분-z_t---hatt_t-추세가-조정된-시계열에서-각-계절성분의-평균을-구한-후-평균을-0으로-조정">2. 계절성분 <span class="math inline">\(Z_t - \hat{T}_t\)</span>: (추세가 조정된 시계열에서) 각 계절성분의 평균을 구한 후, 평균을 0으로 조정</h3>
+<div id="8647eebc-b6c0-4a36-b8a2-fea6ad2e32b4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>trend  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 12 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1981</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>3.776909</td>
+<td>3.768171</td>
+<td>3.765650</td>
+<td>3.772193</td>
+<td>3.780789</td>
+<td>3.787192</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1982</td>
+<td>3.792454</td>
+<td>3.800800</td>
+<td>3.809986</td>
+<td>3.813205</td>
+<td>3.811735</td>
+<td>3.809846</td>
+<td>3.807105</td>
+<td>3.808179</td>
+<td>3.813880</td>
+<td>3.818792</td>
+<td>3.824604</td>
+<td>3.832142</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1983</td>
+<td>3.839197</td>
+<td>3.842931</td>
+<td>3.851755</td>
+<td>3.865473</td>
+<td>3.878257</td>
+<td>3.891586</td>
+<td>3.906633</td>
+<td>3.923833</td>
+<td>3.937371</td>
+<td>3.946951</td>
+<td>3.957391</td>
+<td>3.969470</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1984</td>
+<td>3.982121</td>
+<td>3.995975</td>
+<td>4.006874</td>
+<td>4.016255</td>
+<td>4.026038</td>
+<td>4.034346</td>
+<td>4.044893</td>
+<td>4.052862</td>
+<td>4.058200</td>
+<td>4.064307</td>
+<td>4.068383</td>
+<td>4.071068</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1985</td>
+<td>4.074011</td>
+<td>4.078939</td>
+<td>4.082001</td>
+<td>4.083920</td>
+<td>4.089078</td>
+<td>4.095447</td>
+<td>4.100883</td>
+<td>4.109219</td>
+<td>4.118915</td>
+<td>4.125308</td>
+<td>4.129394</td>
+<td>4.130955</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1986</td>
+<td>4.132087</td>
+<td>4.133212</td>
+<td>4.137813</td>
+<td>4.145571</td>
+<td>4.152502</td>
+<td>4.160765</td>
+<td>4.170780</td>
+<td>4.178388</td>
+<td>4.185752</td>
+<td>4.195880</td>
+<td>4.206118</td>
+<td>4.216379</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1987</td>
+<td>4.227826</td>
+<td>4.239234</td>
+<td>4.247686</td>
+<td>4.256777</td>
+<td>4.266321</td>
+<td>4.273846</td>
+<td>4.280121</td>
+<td>4.287533</td>
+<td>4.295180</td>
+<td>4.302811</td>
+<td>4.311553</td>
+<td>4.323067</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1988</td>
+<td>4.335021</td>
+<td>4.342923</td>
+<td>4.344312</td>
+<td>4.347814</td>
+<td>4.359916</td>
+<td>4.371597</td>
+<td>4.383732</td>
+<td>4.397334</td>
+<td>4.410493</td>
+<td>4.421668</td>
+<td>4.431175</td>
+<td>4.440963</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1989</td>
+<td>4.449280</td>
+<td>4.458997</td>
+<td>4.476260</td>
+<td>4.489322</td>
+<td>4.492920</td>
+<td>4.490487</td>
+<td>4.489941</td>
+<td>4.492986</td>
+<td>4.495008</td>
+<td>4.499586</td>
+<td>4.503510</td>
+<td>4.506159</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1990</td>
+<td>4.507716</td>
+<td>4.512991</td>
+<td>4.519904</td>
+<td>4.523437</td>
+<td>4.526672</td>
+<td>4.535067</td>
+<td>4.540304</td>
+<td>4.542365</td>
+<td>4.543296</td>
+<td>4.541811</td>
+<td>4.544339</td>
+<td>4.548056</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1991</td>
+<td>4.553791</td>
+<td>4.558916</td>
+<td>4.566754</td>
+<td>4.576309</td>
+<td>4.583845</td>
+<td>4.591157</td>
+<td>4.599096</td>
+<td>4.606357</td>
+<td>4.613876</td>
+<td>4.624492</td>
+<td>4.633683</td>
+<td>4.639443</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1992</td>
+<td>4.645921</td>
+<td>4.654420</td>
+<td>4.657406</td>
+<td>4.661770</td>
+<td>4.669345</td>
+<td>4.675451</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>m=12인 경우, 만약 7월 기준이면 (6,5,4,3,2,1<em>0.5), (8,9,10,11,12,1</em>0.5) 1월제외하고 1/12의 weight값이 들어가는데 1월은 1/24의 weight값이 들어간다</li>
+</ul>
+<div id="3209118b-5cba-4384-913c-b2c3a4c4dc2f" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>adj_trend <span class="ot">&lt;-</span> log_food <span class="sc">-</span> trend</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(adj_trend, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="20f18566-72bc-47cb-974d-2d3b44e405da" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>seasonal <span class="ot">&lt;-</span> <span class="fu">tapply</span>(adj_trend, <span class="fu">cycle</span>(adj_trend), <span class="cf">function</span>(y) <span class="fu">mean</span>(y,<span class="at">na.rm=</span>T))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>seasonal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>1</dt><dd>-0.0805893756242992</dd><dt>2</dt><dd>-0.146731082360269</dd><dt>3</dt><dd>-0.0134322135758371</dd><dt>4</dt><dd>0.0398094944047773</dd><dt>5</dt><dd>0.0899945621558338</dd><dt>6</dt><dd>0.0389913881930259</dd><dt>7</dt><dd>0.00979448967609888</dd><dt>8</dt><dd>0.058074627390531</dd><dt>9</dt><dd>0.0406542700575191</dd><dt>10</dt><dd>-0.0186247058516065</dd><dt>11</dt><dd>-0.0475874742255177</dd><dt>12</dt><dd>0.0213986388818562</dd></dl>
+</div>
+</div>
+<ul>
+<li><p>각 월 데이터의 평균</p></li>
+<li><p>아래 summary값의 <code>Estimate</code>와 동일함..</p></li>
+</ul>
+<div id="4dbdd00e-db43-45ec-a009-95ca0e47f839" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(adj_trend<span class="sc">~</span><span class="dv">0</span><span class="sc">+</span><span class="fu">as.factor</span>(<span class="fu">cycle</span>(adj_trend))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = adj_trend ~ 0 + as.factor(cycle(adj_trend)))
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.171707 -0.018376  0.001116  0.023348  0.098197 
+
+Coefficients:
+                               Estimate Std. Error t value Pr(&gt;|t|)    
+as.factor(cycle(adj_trend))1  -0.080589   0.011748  -6.860 3.22e-10 ***
+as.factor(cycle(adj_trend))2  -0.146731   0.011748 -12.489  &lt; 2e-16 ***
+as.factor(cycle(adj_trend))3  -0.013432   0.011748  -1.143 0.255181    
+as.factor(cycle(adj_trend))4   0.039809   0.011748   3.388 0.000951 ***
+as.factor(cycle(adj_trend))5   0.089995   0.011748   7.660 5.28e-12 ***
+as.factor(cycle(adj_trend))6   0.038991   0.011748   3.319 0.001197 ** 
+as.factor(cycle(adj_trend))7   0.009794   0.011748   0.834 0.406115    
+as.factor(cycle(adj_trend))8   0.058075   0.011748   4.943 2.52e-06 ***
+as.factor(cycle(adj_trend))9   0.040654   0.011748   3.460 0.000748 ***
+as.factor(cycle(adj_trend))10 -0.018625   0.011748  -1.585 0.115531    
+as.factor(cycle(adj_trend))11 -0.047587   0.011748  -4.051 9.10e-05 ***
+as.factor(cycle(adj_trend))12  0.021399   0.011748   1.821 0.071036 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.03897 on 120 degrees of freedom
+  (12 observations deleted due to missingness)
+Multiple R-squared:  0.7419,    Adjusted R-squared:  0.716 
+F-statistic: 28.74 on 12 and 120 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div id="6ce69d9a-956c-43c3-a4e3-5e947a8aa13a" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(seasonal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.000687281739823944
+</div>
+</div>
+<div id="ad937935-90e0-4300-8411-ad33e736b1b8" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>seasonal <span class="ot">&lt;-</span> seasonal <span class="sc">-</span> <span class="fu">mean</span>(seasonal) <span class="co">#평균을 0으로 수정</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>seasonal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>1</dt><dd>-0.0799020938844753</dd><dt>2</dt><dd>-0.146043800620445</dd><dt>3</dt><dd>-0.0127449318360131</dd><dt>4</dt><dd>0.0404967761446012</dd><dt>5</dt><dd>0.0906818438956577</dd><dt>6</dt><dd>0.0396786699328498</dd><dt>7</dt><dd>0.0104817714159228</dd><dt>8</dt><dd>0.058761909130355</dd><dt>9</dt><dd>0.041341551797343</dd><dt>10</dt><dd>-0.0179374241117825</dd><dt>11</dt><dd>-0.0469001924856937</dd><dt>12</dt><dd>0.0220859206216802</dd></dl>
+</div>
+</div>
+<div id="6cc87e2b-a6b2-4c4a-b383-fce36a733374" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>St <span class="ot">=</span> <span class="fu">rep</span>(seasonal, <span class="dv">12</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(St)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="불규칙-성분-hati_t-z_t---hatt_t---hats_t" class="level3">
+<h3 class="anchored" data-anchor-id="불규칙-성분-hati_t-z_t---hatt_t---hats_t">3. 불규칙 성분: <span class="math inline">\(\hat{I}_t = Z_t - \hat{T}_t - \hat{S}_t\)</span></h3>
+<div id="759625e7-84f6-4b48-872e-5f8f108cd9ff" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>irregular <span class="ot">&lt;-</span> log_food <span class="sc">-</span> trend <span class="sc">-</span> St</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(irregular)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>몇개의 이상점은 있지만 이분산성은 없어 보인다.</li>
+</ul>
+<div id="59842257-03f5-4d0e-86ee-9edd5feaf48f" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(irregular)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  irregular
+t = -0.21173, df = 131, p-value = 0.8326
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.007108577  0.005734014
+sample estimates:
+    mean of x 
+-0.0006872817 </code></pre>
+</div>
+</div>
+<div id="2715881d-32ff-4d94-b246-3fdcfdfaa3cc" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(<span class="fu">lm</span>(irregular<span class="sc">~</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(irregular ~ 1)
+DW = 1.7816, p-value = 0.1031
+alternative hypothesis: true autocorrelation is greater than 0</code></pre>
+</div>
+</div>
+<ul>
+<li>독립이다.</li>
+</ul>
+</section>
+<section id="추정-hatz_t-hatt_t-hats_t" class="level3">
+<h3 class="anchored" data-anchor-id="추정-hatz_t-hatt_t-hats_t">4. 추정: <span class="math inline">\(\hat{Z}_t = \hat{T}_t + \hat{S}_t\)</span></h3>
+<div id="798ae24c-b21d-4659-9809-e25ae41096e4" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fit_ <span class="ot">&lt;-</span> trend <span class="sc">+</span> St</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(log_food, fit_, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="bf850bc0-5098-49e5-8003-71490a6e4560" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((fit_<span class="sc">$</span>residuals)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ERROR: Error in fit_$residuals: $ operator is invalid for atomic vectors</code></pre>
+</div>
+</div>
+<div id="7b81fb7e-63bf-45a8-b464-791ea47dbb97" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((food <span class="sc">-</span> <span class="fu">exp</span>(fit_))<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+&lt;NA&gt;
+</div>
+</div>
+</section>
+</section>
+<section id="decompose-함수를-이용한-분해법" class="level2">
+<h2 class="anchored" data-anchor-id="decompose-함수를-이용한-분해법">decompose 함수를 이용한 분해법</h2>
+<ul>
+<li>위에서 설명한 평활법을 이용한 분해법과 동일함</li>
+</ul>
+<div id="38b9a4d1-b5e4-49c4-b0b1-f09603c279c1" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dec_fit <span class="ot">&lt;-</span> <span class="fu">decompose</span>(log_food, <span class="st">'additive'</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>dec_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>$x
+          Jan      Feb      Mar      Apr      May      Jun      Jul      Aug
+1981 3.790985 3.688879 3.735286 3.772761 3.828641 3.808882 3.781914 3.795489
+1982 3.683867 3.586293 3.777348 3.887730 3.919991 3.871201 3.845883 3.931826
+1983 3.634951 3.660994 3.839452 3.943522 4.003690 3.968403 3.918005 3.949319
+1984 3.848018 3.860730 3.964615 4.048301 4.149464 4.112512 4.077537 4.122284
+1985 4.000034 3.899950 4.053523 4.105944 4.189655 4.136765 4.123903 4.194190
+1986 4.056989 4.043051 4.143135 4.169761 4.223910 4.139955 4.147885 4.197202
+1987 4.186620 4.096010 4.266896 4.289089 4.350278 4.259859 4.302713 4.316154
+1988 4.251348 4.209160 4.337291 4.401829 4.447346 4.439116 4.410371 4.398146
+1989 4.420045 4.366913 4.495355 4.511958 4.565389 4.555980 4.493121 4.548600
+1990 4.502029 4.357990 4.552824 4.564348 4.607168 4.577799 4.508659 4.659658
+1991 4.473922 4.435567 4.497585 4.583947 4.648230 4.625953 4.598146 4.693181
+1992 4.595120 4.488636 4.624973 4.711330 4.741448 4.670958 4.708629 4.786658
+          Sep      Oct      Nov      Dec
+1981 3.768153 3.781914 3.756538 3.867026
+1982 3.852273 3.775057 3.728100 3.850148
+1983 4.046554 3.910021 3.899950 3.998201
+1984 4.135167 4.046554 3.998201 4.099332
+1985 4.136765 4.091006 4.077537 4.172848
+1986 4.244200 4.169761 4.165114 4.283587
+1987 4.328098 4.304065 4.259859 4.369448
+1988 4.279440 4.436752 4.417635 4.492001
+1989 4.543295 4.486387 4.454347 4.396915
+1990 4.598146 4.516339 4.502029 4.550714
+1991 4.752728 4.591071 4.608166 4.620059
+1992 4.730921 4.717606 4.663439 4.711330
+
+$seasonal
+             Jan         Feb         Mar         Apr         May         Jun
+1981 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1982 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1983 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1984 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1985 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1986 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1987 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1988 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1989 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1990 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1991 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+1992 -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+             Jul         Aug         Sep         Oct         Nov         Dec
+1981  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1982  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1983  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1984  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1985  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1986  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1987  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1988  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1989  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1990  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1991  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+1992  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+
+$trend
+          Jan      Feb      Mar      Apr      May      Jun      Jul      Aug
+1981       NA       NA       NA       NA       NA       NA 3.776909 3.768171
+1982 3.792454 3.800800 3.809986 3.813205 3.811735 3.809846 3.807105 3.808179
+1983 3.839197 3.842931 3.851755 3.865473 3.878257 3.891586 3.906633 3.923833
+1984 3.982121 3.995975 4.006874 4.016255 4.026038 4.034346 4.044893 4.052862
+1985 4.074011 4.078939 4.082001 4.083920 4.089078 4.095447 4.100883 4.109219
+1986 4.132087 4.133212 4.137813 4.145571 4.152502 4.160765 4.170780 4.178388
+1987 4.227826 4.239234 4.247686 4.256777 4.266321 4.273846 4.280121 4.287533
+1988 4.335021 4.342923 4.344312 4.347814 4.359916 4.371597 4.383732 4.397334
+1989 4.449280 4.458997 4.476260 4.489322 4.492920 4.490487 4.489941 4.492986
+1990 4.507716 4.512991 4.519904 4.523437 4.526672 4.535067 4.540304 4.542365
+1991 4.553791 4.558916 4.566754 4.576309 4.583845 4.591157 4.599096 4.606357
+1992 4.645921 4.654420 4.657406 4.661770 4.669345 4.675451       NA       NA
+          Sep      Oct      Nov      Dec
+1981 3.765650 3.772193 3.780789 3.787192
+1982 3.813880 3.818792 3.824604 3.832142
+1983 3.937371 3.946951 3.957391 3.969470
+1984 4.058200 4.064307 4.068383 4.071068
+1985 4.118915 4.125308 4.129394 4.130955
+1986 4.185752 4.195880 4.206118 4.216379
+1987 4.295180 4.302811 4.311553 4.323067
+1988 4.410493 4.421668 4.431175 4.440963
+1989 4.495008 4.499586 4.503510 4.506159
+1990 4.543296 4.541811 4.544339 4.548056
+1991 4.613876 4.624492 4.633683 4.639443
+1992       NA       NA       NA       NA
+
+$random
+               Jan           Feb           Mar           Apr           May
+1981            NA            NA            NA            NA            NA
+1982 -2.868508e-02 -6.846347e-02 -1.989281e-02  3.402840e-02  1.757482e-02
+1983 -1.243435e-01 -3.589262e-02  4.426514e-04  3.755177e-02  3.475130e-02
+1984 -5.420150e-02  1.079818e-02 -2.951402e-02 -8.451628e-03  3.274391e-02
+1985  5.925294e-03 -3.294445e-02 -1.573387e-02 -1.847322e-02  9.894901e-03
+1986  4.804114e-03  5.588356e-02  1.806619e-02 -1.630698e-02 -1.927397e-02
+1987  3.869574e-02  2.819972e-03  3.195551e-02 -8.185632e-03 -6.725121e-03
+1988 -3.770958e-03  1.228057e-02  5.723298e-03  1.351894e-02 -3.251897e-03
+1989  5.066679e-02  5.395998e-02  3.184058e-02 -1.786072e-02 -1.821209e-02
+1990  7.421549e-02 -8.957053e-03  4.566484e-02  4.141535e-04 -1.018569e-02
+1991  3.299354e-05  2.269483e-02 -5.642417e-02 -3.285907e-02 -2.629720e-02
+1992  2.910053e-02 -1.973959e-02 -1.968829e-02  9.063904e-03 -1.857906e-02
+               Jun           Jul           Aug           Sep           Oct
+1981            NA -5.476607e-03 -3.144419e-02 -3.883854e-02  2.765913e-02
+1982  2.167599e-02  2.829650e-02  6.488439e-02 -2.948120e-03 -2.579731e-02
+1983  3.713832e-02  8.903010e-04 -3.327621e-02  6.784182e-02 -1.899302e-02
+1984  3.848752e-02  2.216218e-02  1.066032e-02  3.562465e-02  1.847060e-04
+1985  1.639766e-03  1.253848e-02  2.620922e-02 -2.349141e-02 -1.636496e-02
+1986 -6.048862e-02 -3.337689e-02 -3.994831e-02  1.710708e-02 -8.181771e-03
+1987 -5.366616e-02  1.210999e-02 -3.014070e-02 -8.423644e-03  1.919151e-02
+1988  2.784037e-02  1.615736e-02 -5.794992e-02 -1.723946e-01  3.302117e-02
+1989  2.581396e-02 -7.302501e-03 -3.147727e-03  6.944851e-03  4.738246e-03
+1990  3.053252e-03 -4.212669e-02  5.853102e-02  1.350780e-02 -7.534808e-03
+1991 -4.882692e-03 -1.143223e-02  2.806200e-02  9.751001e-02 -1.548298e-02
+1992 -4.417181e-02            NA            NA            NA            NA
+               Nov           Dec
+1981  2.264905e-02  5.774762e-02
+1982 -4.960362e-02 -4.079858e-03
+1983 -1.054053e-02  6.645212e-03
+1984 -2.328214e-02  6.177973e-03
+1985 -4.956761e-03  1.980710e-02
+1986  5.896112e-03  4.512159e-02
+1987 -4.793851e-03  2.429536e-02
+1988  3.336031e-02  2.895280e-02
+1989 -2.262059e-03 -1.313301e-01
+1990  4.590922e-03 -1.942792e-02
+1991  2.138247e-02 -4.146985e-02
+1992            NA            NA
+
+$figure
+ [1] -0.07990209 -0.14604380 -0.01274493  0.04049678  0.09068184  0.03967867
+ [7]  0.01048177  0.05876191  0.04134155 -0.01793742 -0.04690019  0.02208592
+
+$type
+[1] "additive"
+
+attr(,"class")
+[1] "decomposed.ts"</code></pre>
+</div>
+</div>
+<div id="5226bc63-5b4a-48bb-8948-5e0b52bd3d2b" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 비교 - Trend</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>trend[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>]</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>dec_fit<span class="sc">$</span>trend[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>3.77690915526943</li><li>3.76817147387211</li><li>3.76564962747204</li><li>3.77219261288612</li><li>3.78078924427581</li><li>3.78719210023363</li><li>3.79245408553536</li><li>3.80080014080181</li><li>3.80998584120039</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li><li>3.77690915526943</li><li>3.76817147387211</li><li>3.76564962747204</li><li>3.77219261288612</li><li>3.78078924427581</li><li>3.78719210023363</li><li>3.79245408553536</li><li>3.80080014080181</li><li>3.80998584120039</li></ol>
+</div>
+</div>
+<div id="c63beaea-55f8-410c-8ef1-0483c76edfe1" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 비교 - Seasonal</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>St[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>dec_fit<span class="sc">$</span>seasonal[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.dl-inline {width: auto; margin:0; padding: 0}
+.dl-inline>dt, .dl-inline>dd {float: none; width: auto; display: inline-block}
+.dl-inline>dt::after {content: ":\0020"; padding-right: .5ex}
+.dl-inline>dt:not(:first-of-type) {padding-left: .5ex}
+</style><dl class="dl-inline"><dt>1</dt><dd>-0.0799020938844753</dd><dt>2</dt><dd>-0.146043800620445</dd><dt>3</dt><dd>-0.0127449318360131</dd><dt>4</dt><dd>0.0404967761446012</dd><dt>5</dt><dd>0.0906818438956577</dd><dt>6</dt><dd>0.0396786699328498</dd><dt>7</dt><dd>0.0104817714159228</dd><dt>8</dt><dd>0.058761909130355</dd><dt>9</dt><dd>0.041341551797343</dd><dt>10</dt><dd>-0.0179374241117825</dd><dt>11</dt><dd>-0.0469001924856937</dd><dt>12</dt><dd>0.0220859206216802</dd></dl>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-0.0799020938844753</li><li>-0.146043800620445</li><li>-0.0127449318360131</li><li>0.0404967761446012</li><li>0.0906818438956577</li><li>0.0396786699328498</li><li>0.0104817714159228</li><li>0.058761909130355</li><li>0.041341551797343</li><li>-0.0179374241117825</li><li>-0.0469001924856937</li><li>0.0220859206216802</li></ol>
+</div>
+</div>
+<div id="8200f75a-dc57-4aaf-aabe-bb511b835bb1" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dec_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="6585ccec-0e56-41ad-93c0-2fdb8bed99e8" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dec_fit2 <span class="ot">&lt;-</span> <span class="fu">decompose</span>(food, <span class="at">type =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>dec_fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>$x
+       Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec
+1981  44.3  40.0  41.9  43.5  46.0  45.1  43.9  44.5  43.3  43.9  42.8  47.8
+1982  39.8  36.1  43.7  48.8  50.4  48.0  46.8  51.0  47.1  43.6  41.6  47.0
+1983  37.9  38.9  46.5  51.6  54.8  52.9  50.3  51.9  57.2  49.9  49.4  54.5
+1984  46.9  47.5  52.7  57.3  63.4  61.1  59.0  61.7  62.5  57.2  54.5  60.3
+1985  54.6  49.4  57.6  60.7  66.0  62.6  61.8  66.3  62.6  59.8  59.0  64.9
+1986  57.8  57.0  63.0  64.7  68.3  62.8  63.3  66.5  69.7  64.7  64.4  72.5
+1987  65.8  60.1  71.3  72.9  77.5  70.8  73.9  74.9  75.8  74.0  70.8  79.0
+1988  70.2  67.3  76.5  81.6  85.4  84.7  82.3  81.3  72.2  84.5  82.9  89.3
+1989  83.1  78.8  89.6  91.1  96.1  95.2  89.4  94.5  94.0  88.8  86.0  81.2
+1990  90.2  78.1  94.9  96.0 100.2  97.3  90.8 105.6  99.3  91.5  90.2  94.7
+1991  87.7  84.4  89.8  97.9 104.4 102.1  99.3 109.2 115.9  98.6 100.3 101.5
+1992  99.0  89.0 102.0 111.2 114.6 106.8 110.9 119.9 113.4 111.9 106.0 111.2
+
+$seasonal
+           Jan       Feb       Mar       Apr       May       Jun       Jul
+1981 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1982 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1983 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1984 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1985 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1986 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1987 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1988 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1989 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1990 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1991 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+1992 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+           Aug       Sep       Oct       Nov       Dec
+1981 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1982 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1983 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1984 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1985 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1986 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1987 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1988 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1989 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1990 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1991 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+1992 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+
+$trend
+           Jan       Feb       Mar       Apr       May       Jun       Jul
+1981        NA        NA        NA        NA        NA        NA  43.72917
+1982  44.53750  44.92917  45.35833  45.50417  45.44167  45.35833  45.24583
+1983  46.78750  46.97083  47.42917  48.11250  48.70000  49.33750  50.02500
+1984  53.87083  54.64167  55.27083  55.79583  56.31250  56.76667  57.32917
+1985  58.95833  59.26667  59.46250  59.57500  59.87083  60.25000  60.57500
+1986  62.39583  62.46667  62.77083  63.27083  63.70000  64.24167  64.89167
+1987  68.73333  69.52500  70.12917  70.77083  71.42500  71.96250  72.41667
+1988  76.52500  77.14167  77.25833  77.54583  78.48750  79.42083  80.38750
+1989  85.82917  86.67500  88.13333  89.22083  89.52917  89.32083  89.27917
+1990  90.94167  91.46250  92.14583  92.47917  92.76667  93.50417  93.96250
+1991  95.22083  95.72500  96.56667  97.55417  98.27083  98.97500  99.72917
+1992 104.43333 105.36250 105.70417 106.15417 106.94583 107.58750        NA
+           Aug       Sep       Oct       Nov       Dec
+1981  43.37917  43.29167  43.58750  43.99167  44.29583
+1982  45.28333  45.51667  45.75000  46.05000  46.43750
+1983  50.75833  51.37500  51.87083  52.46667  53.16667
+1984  57.72917  58.01250  58.35833  58.60833  58.77917
+1985  61.02500  61.56667  61.95833  62.22083  62.32500
+1986  65.35417  65.82917  66.51667  67.24167  67.95833
+1987  72.90000  73.41667  73.99583  74.68750  75.59583
+1988  81.40417  82.42917  83.37083  84.21250  85.09583
+1989  89.54583  89.73750  90.16250  90.53750  90.79583
+1990  94.12083  94.17083  94.03750  94.29167  94.66667
+1991 100.39167 101.09167 102.15417 103.13333 103.75417
+1992        NA        NA        NA        NA        NA
+
+$random
+           Jan       Feb       Mar       Apr       May       Jun       Jul
+1981        NA        NA        NA        NA        NA        NA 0.9959362
+1982 0.9693080 0.9319883 0.9786116 1.0331647 1.0159976 1.0196372 1.0261373
+1983 0.8786460 0.9606229 0.9958490 1.0332197 1.0307847 1.0330945 0.9975142
+1984 0.9443299 1.0083267 0.9685022 0.9893586 1.0313376 1.0370730 1.0209738
+1985 1.0045048 0.9668254 0.9839326 0.9815796 1.0098224 1.0011031 1.0121229
+1986 1.0047935 1.0584202 1.0194565 0.9851483 0.9821949 0.9418990 0.9677273
+1987 1.0383961 1.0026863 1.0327064 0.9923711 0.9939576 0.9479567 1.0123813
+1988 0.9950350 1.0119467 1.0057780 1.0137540 0.9967213 1.0275678 1.0156628
+1989 1.0501968 1.0545422 1.0326516 0.9836781 0.9832755 1.0269415 0.9934033
+1990 1.0758413 0.9904660 1.0461080 1.0000650 0.9894461 1.0026362 0.9586708
+1991 0.9990154 1.0227010 0.9445721 0.9668025 0.9731779 0.9939436 0.9877915
+1992 1.0282545 0.9797957 0.9801535 1.0091800 0.9816058 0.9564691        NA
+           Aug       Sep       Oct       Nov       Dec
+1981 0.9685292 0.9591835 1.0269284 1.0215555 1.0570432
+1982 1.0633242 0.9923585 0.9717018 0.9485327 0.9914178
+1983 0.9653703 1.0677321 0.9808779 0.9886261 1.0041180
+1984 1.0090758 1.0331813 0.9993803 0.9763954 1.0048971
+1985 1.0257456 0.9750947 0.9840997 0.9956456 1.0200234
+1986 0.9606878 1.0153892 0.9917710 1.0056248 1.0450161
+1987 0.9700368 0.9901310 1.0196757 0.9953457 1.0236628
+1988 0.9429265 0.8399906 1.0334279 1.0336335 1.0279473
+1989 0.9963693 1.0045510 1.0042102 0.9973752 0.8760277
+1990 1.0592832 1.0112324 0.9921050 1.0044350 0.9798974
+1991 1.0269727 1.0994771 0.9841436 1.0211522 0.9582707
+1992        NA        NA        NA        NA        NA
+
+$figure
+ [1] 0.9219246 0.8621213 0.9844960 1.0380042 1.0916505 1.0378593 1.0080029
+ [8] 1.0591710 1.0427540 0.9807592 0.9523825 1.0208744
+
+$type
+[1] "multiplicative"
+
+attr(,"class")
+[1] "decomposed.ts"</code></pre>
+</div>
+</div>
+<div id="64082064-9bde-4248-8d04-7537a9327b5f" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dec_fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="b393a003-a941-45e7-8269-66ab9e63c87a" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 가법모형 vs. 승법모형</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pred_dec <span class="ot">&lt;-</span>dec_fit<span class="sc">$</span>trend<span class="sc">+</span>dec_fit<span class="sc">$</span>seasonal</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>pred_dec2 <span class="ot">&lt;-</span>dec_fit2<span class="sc">$</span>trend<span class="sc">*</span>dec_fit2<span class="sc">$</span>seasonal</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(<span class="fu">exp</span>(pred_dec), pred_dec2, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">ylab=</span><span class="st">"food"</span>, <span class="at">xlab=</span><span class="st">"time"</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="st">"가법모형"</span>, <span class="st">"승법모형"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="18947357-c83b-47cd-895a-919c233cf6f1" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((food<span class="sc">-</span><span class="fu">exp</span>(pred_dec))<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T) <span class="co">#SSE - 가법</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((food<span class="sc">-</span>pred_dec2)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T) <span class="co">#SSE - 승법</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+1023.54847457354
+</div>
+<div class="cell-output cell-output-display">
+1018.60297817558
+</div>
+</div>
+</section>
+<section id="stl-함수를-이용한-분해법" class="level2">
+<h2 class="anchored" data-anchor-id="stl-함수를-이용한-분해법">stl 함수를 이용한 분해법</h2>
+<div id="9c96ddea-18da-4421-982b-84522246368f" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>stl_fit1 <span class="ot">&lt;-</span> <span class="fu">stl</span>(log_food, <span class="at">s.window=</span><span class="dv">12</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>stl_fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code> Call:
+ stl(x = log_food, s.window = 12)
+
+Components
+             seasonal    trend     remainder
+Jan 1981 -0.090355040 3.789108  0.0922314967
+Feb 1981 -0.147931392 3.787232  0.0495793240
+Mar 1981 -0.019896144 3.785355 -0.0301728541
+Apr 1981  0.038295797 3.783478 -0.0490129862
+May 1981  0.094538719 3.782254 -0.0481517327
+Jun 1981  0.043787287 3.781031 -0.0159357336
+Jul 1981  0.016322459 3.779807 -0.0142151139
+Aug 1981  0.054057673 3.779134 -0.0377023021
+Sep 1981  0.039065446 3.778461 -0.0493734719
+Oct 1981 -0.017797397 3.777788  0.0219242129
+Nov 1981 -0.051814854 3.783126  0.0252270946
+Dec 1981  0.040229276 3.788464  0.0383321435
+Jan 1982 -0.089173122 3.793803 -0.0207625430
+Feb 1982 -0.147042503 3.798761 -0.0654256842
+Mar 1982 -0.018690332 3.803720 -0.0076810928
+Apr 1982  0.038138951 3.808678  0.0409133606
+May 1982  0.094194552 3.809407  0.0163898255
+Jun 1982  0.043112958 3.810136  0.0179524600
+Jul 1982  0.015984650 3.810864  0.0190341639
+Aug 1982  0.053498710 3.813796  0.0645310601
+Sep 1982  0.037846447 3.816727 -0.0023007819
+Oct 1982 -0.017452956 3.819659 -0.0271487028
+Nov 1982 -0.051324746 3.825650 -0.0462255807
+Dec 1982  0.039260799 3.831642 -0.0207553771
+Jan 1983 -0.087966826 3.837634 -0.1147159270
+Feb 1983 -0.146135888 3.847433 -0.0403029418
+Mar 1983 -0.017473449 3.857232 -0.0003065345
+Apr 1983  0.037980073 3.867032  0.0385100873
+May 1983  0.093835251 3.880566  0.0292887865
+Jun 1983  0.042403358 3.894101  0.0318991805
+Jul 1983  0.015591436 3.907635 -0.0052218029
+Aug 1983  0.052859624 3.920708 -0.0242492985
+Sep 1983  0.036522608 3.933781  0.0762498060
+Oct 1983 -0.017238715 3.946855 -0.0195947865
+Nov 1983 -0.050990199 3.958519 -0.0075781870
+Dec 1983  0.038115435 3.970183 -0.0100978487
+Jan 1984 -0.087481925 3.981847 -0.0463478200
+Feb 1984 -0.145147847 3.993190  0.0126872193
+Mar 1984 -0.015006854 4.004533 -0.0249109472
+Apr 1984  0.038408184 4.015876 -0.0059837345
+May 1984  0.094031062 4.025158  0.0302743166
+Jun 1984  0.041902931 4.034441  0.0361681428
+Jul 1984  0.015065465 4.043723  0.0187488780
+Aug 1984  0.052311137 4.050097  0.0198760582
+Sep 1984  0.035466668 4.056470  0.0432295181
+Oct 1984 -0.017102070 4.062844  0.0008119634
+Nov 1984 -0.050592001 4.066767 -0.0179738394
+Dec 1984  0.035312067 4.070689 -0.0066690422
+Jan 1985 -0.087083944 4.074612  0.0125062112
+Feb 1985 -0.144276449 4.078371 -0.0341438171
+Mar 1985 -0.012686626 4.082130 -0.0159205713
+Apr 1985  0.038638257 4.085889 -0.0185833996
+May 1985  0.093977165 4.091587  0.0040904694
+Jun 1985  0.041093790 4.097285 -0.0016138861
+Jul 1985  0.014171772 4.102984  0.0067479515
+Aug 1985  0.051340125 4.109317  0.0335332416
+Sep 1985  0.033933401 4.115649 -0.0128175430
+Oct 1985 -0.017478830 4.121982 -0.0134978193
+Nov 1985 -0.050743286 4.125710  0.0025704884
+Dec 1985  0.031962787 4.129438  0.0114466647
+Jan 1986 -0.079400189 4.133166  0.0032228621
+Feb 1986 -0.139761420 4.137633  0.0451800036
+Mar 1986 -0.008787686 4.142099  0.0098231472
+Apr 1986  0.036156856 4.146566 -0.0129615009
+May 1986  0.090867314 4.154163 -0.0211203692
+Jun 1986  0.038419133 4.161760 -0.0602238561
+Jul 1986  0.011119587 4.169357 -0.0325910292
+Aug 1986  0.051269774 4.178394 -0.0324613899
+Sep 1986  0.031546346 4.187430  0.0252236149
+Oct 1986 -0.016407480 4.196467 -0.0102984691
+Nov 1986 -0.047807235 4.206828  0.0060924438
+Dec 1986  0.024904443 4.217190  0.0414924216
+Jan 1987 -0.071537745 4.227551  0.0306066122
+Feb 1987 -0.135015578 4.237186 -0.0061601224
+Mar 1987 -0.004605810 4.246820  0.0246820251
+Apr 1987  0.034019101 4.256455 -0.0013851446
+May 1987  0.088161821 4.264375 -0.0022592469
+Jun 1987  0.036215394 4.272296 -0.0486524350
+Jul 1987  0.008604879 4.280217  0.0138912271
+Aug 1987  0.051796799 4.288290 -0.0239329035
+Sep 1987  0.029816567 4.296363  0.0019184563
+Oct 1987 -0.014645693 4.304437  0.0142742433
+Nov 1987 -0.044147588 4.313453 -0.0094460131
+Dec 1987  0.018551419 4.322469  0.0284277726
+Jan 1988 -0.066994887 4.331485 -0.0131415217
+Feb 1988 -0.135273209 4.338849  0.0055846249
+Mar 1988 -0.006606944 4.346213 -0.0023152381
+Apr 1988  0.033601814 4.353577  0.0146504240
+May 1988  0.085304609 4.363699 -0.0016577354
+Jun 1988  0.034088493 4.373821  0.0312056785
+Jul 1988  0.007913946 4.383944  0.0185135283
+Aug 1988  0.056440814 4.395809 -0.0541040930
+Sep 1988  0.033186744 4.407675 -0.1614216558
+Oct 1988 -0.013340634 4.419541  0.0305515492
+Nov 1988 -0.042517441 4.430522  0.0296309463
+Dec 1988  0.014012406 4.441502  0.0364865885
+Jan 1989 -0.062874173 4.452483  0.0304354435
+Feb 1989 -0.135926089 4.462095  0.0407441050
+Mar 1989 -0.008976429 4.471707  0.0326252190
+Apr 1989  0.032869012 4.481318 -0.0022292877
+May 1989  0.082184719 4.484957 -0.0017519729
+Jun 1989  0.031759209 4.488595  0.0356256737
+Jul 1989  0.007080924 4.492234 -0.0061937910
+Aug 1989  0.060995286 4.494502 -0.0068971080
+Sep 1989  0.036519923 4.496770  0.0100050953
+Oct 1989 -0.012033563 4.499038 -0.0006176589
+Nov 1989 -0.040846269 4.502620 -0.0074266290
+Dec 1989  0.009541407 4.506203 -0.1188286780
+Jan 1990 -0.061489653 4.509785  0.0537342391
+Feb 1990 -0.136191947 4.514472 -0.0202904056
+Mar 1990 -0.009503303 4.519160  0.0431670300
+Apr 1990  0.032626857 4.523848  0.0078737868
+May 1990  0.081047138 4.528378 -0.0022568624
+Jun 1990  0.031248182 4.532908  0.0136425285
+Jul 1990  0.006748128 4.537439 -0.0355274861
+Aug 1990  0.062187615 4.539692  0.0577783594
+Sep 1990  0.036749420 4.541946  0.0194500023
+Oct 1990 -0.011470114 4.544200 -0.0163908155
+Nov 1990 -0.040301079 4.547645 -0.0053144959
+Dec 1990  0.007540353 4.551090 -0.0079164542
+Jan 1991 -0.059868140 4.554535 -0.0207451618
+Feb 1991 -0.136245151 4.561404  0.0104087459
+Mar 1991 -0.009841859 4.568272 -0.0608455768
+Apr 1991  0.032547982 4.575141 -0.0237424488
+May 1991  0.080047800 4.583198 -0.0150158979
+Jun 1991  0.030850586 4.591255  0.0038476084
+Jul 1991  0.006503948 4.599311 -0.0076696659
+Aug 1991  0.063449649 4.607518  0.0222136339
+Sep 1991  0.037029708 4.615724  0.0999737700
+Oct 1991 -0.010864347 4.623931 -0.0219951548
+Nov 1991 -0.039722044 4.631183  0.0167042648
+Dec 1991  0.005573334 4.638436 -0.0239507203
+Jan 1992 -0.058789565 4.645689  0.0082205189
+Feb 1992 -0.136344021 4.652149 -0.0271690668
+Mar 1992 -0.010165681 4.658610 -0.0234715256
+Apr 1992  0.032432742 4.665071  0.0138270581
+May 1992  0.079342676 4.671422 -0.0093164248
+Jun 1992  0.030772591 4.677773 -0.0375871882
+Jul 1992  0.006178394 4.684123  0.0183270058
+Aug 1992  0.064582720 4.690835  0.0312406115
+Sep 1992  0.037697263 4.697546 -0.0043218381
+Oct 1992 -0.010643402 4.704257  0.0239918153
+Nov 1992 -0.039355534 4.711239 -0.0084445332
+Dec 1992  0.003929109 4.718221 -0.0108198469</code></pre>
+</div>
+</div>
+<div id="ef9455cc-d832-4b37-bec6-7b0d53f96423" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stl_fit1<span class="sc">$</span>time.series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">seasonal</th>
+<th data-quarto-table-cell-role="th" scope="col">trend</th>
+<th data-quarto-table-cell-role="th" scope="col">remainder</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">Jan 1981</td>
+<td>-0.09035504</td>
+<td>3.789108</td>
+<td>0.09223150</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Feb 1981</td>
+<td>-0.14793139</td>
+<td>3.787232</td>
+<td>0.04957932</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">Mar 1981</td>
+<td>-0.01989614</td>
+<td>3.785355</td>
+<td>-0.03017285</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Apr 1981</td>
+<td>0.03829580</td>
+<td>3.783478</td>
+<td>-0.04901299</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">May 1981</td>
+<td>0.09453872</td>
+<td>3.782254</td>
+<td>-0.04815173</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">Jun 1981</td>
+<td>0.04378729</td>
+<td>3.781031</td>
+<td>-0.01593573</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="9969e63b-4698-4275-9bc6-4e7db056b52e" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(stl_fit1<span class="sc">$</span>time.series[,<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  stl_fit1$time.series[, 3]
+t = -0.18, df = 143, p-value = 0.8574
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.006341435  0.005282903
+sample estimates:
+    mean of x 
+-0.0005292661 </code></pre>
+</div>
+</div>
+<div id="67fcd8bf-8b44-41c3-9ce7-7c6be2bc6585" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(<span class="fu">lm</span>(stl_fit1<span class="sc">$</span>time.series[,<span class="dv">3</span>]<span class="sc">~</span><span class="dv">1</span>), <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Durbin-Watson test
+
+data:  lm(stl_fit1$time.series[, 3] ~ 1)
+DW = 1.64, p-value = 0.02962
+alternative hypothesis: true autocorrelation is not 0</code></pre>
+</div>
+</div>
+<div id="1004f8d3-be51-4027-abdf-ca8f2d51696e" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stl_fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="955941e3-dd49-423e-b9c7-dc6fa6a84be0" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## stl vs. decompose</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>pred_stl <span class="ot">&lt;-</span> stl_fit1<span class="sc">$</span>time.series[,<span class="dv">1</span>]<span class="sc">+</span>stl_fit1<span class="sc">$</span>time.series[,<span class="dv">2</span>]</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(pred_stl, pred_dec, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">ylab=</span><span class="st">"food"</span>, <span class="at">xlab=</span><span class="st">"time"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"stl vs. decomse"</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="st">"stl"</span>, <span class="st">"decomse"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 04_02_files/figure-html/cell-39-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="6d229f51-5cdb-4ec0-bd2e-2a3fa5bec787" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">### SSE : 1-시차 후 예측 오차 제곱합</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((log_food<span class="sc">-</span>pred_stl)<span class="sc">^</span><span class="dv">2</span>) <span class="co">#144</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((log_food<span class="sc">-</span>pred_dec)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T) <span class="co">#144-12=132</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.178071880323909
+</div>
+<div class="cell-output cell-output-display">
+0.182256001685046
+</div>
+</div>
+<div id="94659a48-f3c7-45b4-ab40-12f0976e90a2" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="do">### MSE : 1-시차 후 예측 오차 제곱합의 평균</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((log_food<span class="sc">-</span>pred_stl)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">144</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((log_food<span class="sc">-</span>pred_dec)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)<span class="sc">/</span><span class="dv">132</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.00123661028002714
+</div>
+<div class="cell-output cell-output-display">
+0.00138072728549277
+</div>
+</div>
+<div id="06dfba40-e483-401d-bac9-66133c1b6d30" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="do">### MSE : 1-시차 후 예측 오차 제곱합의 평균</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((log_food<span class="sc">-</span>pred_stl)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((log_food<span class="sc">-</span>pred_dec)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.00123661028002714
+</div>
+<div class="cell-output cell-output-display">
+0.00138072728549277
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

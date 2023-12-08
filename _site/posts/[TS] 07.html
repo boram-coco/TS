@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-11-23">
+
+<title>TS - [TS] CH07. ARIMA 실습</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] CH07. ARIMA 실습</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 23, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="분산이-일정하지-않은-경우" class="level1">
+<h1>분산이 일정하지 않은 경우</h1>
+<div id="f38a73c5-9a75-4e22-9831-eeace110abb9" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> AirPassengers</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 12 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1949</td>
+<td>112</td>
+<td>118</td>
+<td>132</td>
+<td>129</td>
+<td>121</td>
+<td>135</td>
+<td>148</td>
+<td>148</td>
+<td>136</td>
+<td>119</td>
+<td>104</td>
+<td>118</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1950</td>
+<td>115</td>
+<td>126</td>
+<td>141</td>
+<td>135</td>
+<td>125</td>
+<td>149</td>
+<td>170</td>
+<td>170</td>
+<td>158</td>
+<td>133</td>
+<td>114</td>
+<td>140</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1951</td>
+<td>145</td>
+<td>150</td>
+<td>178</td>
+<td>163</td>
+<td>172</td>
+<td>178</td>
+<td>199</td>
+<td>199</td>
+<td>184</td>
+<td>162</td>
+<td>146</td>
+<td>166</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1952</td>
+<td>171</td>
+<td>180</td>
+<td>193</td>
+<td>181</td>
+<td>183</td>
+<td>218</td>
+<td>230</td>
+<td>242</td>
+<td>209</td>
+<td>191</td>
+<td>172</td>
+<td>194</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1953</td>
+<td>196</td>
+<td>196</td>
+<td>236</td>
+<td>235</td>
+<td>229</td>
+<td>243</td>
+<td>264</td>
+<td>272</td>
+<td>237</td>
+<td>211</td>
+<td>180</td>
+<td>201</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1954</td>
+<td>204</td>
+<td>188</td>
+<td>235</td>
+<td>227</td>
+<td>234</td>
+<td>264</td>
+<td>302</td>
+<td>293</td>
+<td>259</td>
+<td>229</td>
+<td>203</td>
+<td>229</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1955</td>
+<td>242</td>
+<td>233</td>
+<td>267</td>
+<td>269</td>
+<td>270</td>
+<td>315</td>
+<td>364</td>
+<td>347</td>
+<td>312</td>
+<td>274</td>
+<td>237</td>
+<td>278</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1956</td>
+<td>284</td>
+<td>277</td>
+<td>317</td>
+<td>313</td>
+<td>318</td>
+<td>374</td>
+<td>413</td>
+<td>405</td>
+<td>355</td>
+<td>306</td>
+<td>271</td>
+<td>306</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1957</td>
+<td>315</td>
+<td>301</td>
+<td>356</td>
+<td>348</td>
+<td>355</td>
+<td>422</td>
+<td>465</td>
+<td>467</td>
+<td>404</td>
+<td>347</td>
+<td>305</td>
+<td>336</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1958</td>
+<td>340</td>
+<td>318</td>
+<td>362</td>
+<td>348</td>
+<td>363</td>
+<td>435</td>
+<td>491</td>
+<td>505</td>
+<td>404</td>
+<td>359</td>
+<td>310</td>
+<td>337</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1959</td>
+<td>360</td>
+<td>342</td>
+<td>406</td>
+<td>396</td>
+<td>420</td>
+<td>472</td>
+<td>548</td>
+<td>559</td>
+<td>463</td>
+<td>407</td>
+<td>362</td>
+<td>405</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1960</td>
+<td>417</td>
+<td>391</td>
+<td>419</td>
+<td>461</td>
+<td>472</td>
+<td>535</td>
+<td>622</td>
+<td>606</td>
+<td>508</td>
+<td>461</td>
+<td>390</td>
+<td>432</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="a9df32b4-13e0-4f1f-b22f-4682dafb74dc" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+'ts'
+</div>
+</div>
+<div id="b9c3b9a0-a46e-470a-a768-0f3604514b43" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z, <span class="at">main =</span> <span class="st">"Time series plot for Airpassengers data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>추세, 이분산, 계절성분이 있다.</li>
+</ul>
+<p><code>-</code> Box-Cox transformation</p>
+<p><span class="math display">\[f_\lambda(Z_t) = \begin{cases}
+\dfrac{Z_t^\lambda-1}{\lambda}, &amp; Z_t \geq 0, \lambda&gt;0 \\
+log(Z_t), &amp; \lambda=0
+\end{cases}\]</span></p>
+<div id="4ac19beb-0320-420b-a041-48d38429d113" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z, <span class="at">method=</span><span class="st">'loglik'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+0.2
+</div>
+</div>
+<ul>
+<li>최적의 람다를 찾아줌</li>
+</ul>
+<div id="9cde01fc-fddb-49fb-9396-95adc91f709c" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z, <span class="at">method =</span> <span class="st">"guerrero"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.294715585559316
+</div>
+</div>
+<p><code>-</code> ts객체가 들어가야함</p>
+<div id="fff28991-cbbc-4503-b6f0-d85b8224ccec" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox</span>(z,<span class="at">lambda=</span> forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z, <span class="at">method=</span><span class="st">'loglik'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 12 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1949</td>
+<td>7.847352</td>
+<td>7.982144</td>
+<td>8.276536</td>
+<td>8.215632</td>
+<td>8.047493</td>
+<td>8.336343</td>
+<td>8.583833</td>
+<td>8.583833</td>
+<td>8.356042</td>
+<td>8.004073</td>
+<td>7.658338</td>
+<td>7.982144</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1950</td>
+<td>7.915451</td>
+<td>8.153584</td>
+<td>8.452835</td>
+<td>8.336343</td>
+<td>8.132639</td>
+<td>8.602141</td>
+<td>8.965606</td>
+<td>8.965606</td>
+<td>8.762630</td>
+<td>8.296592</td>
+<td>7.892911</td>
+<td>8.433699</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1951</td>
+<td>8.528312</td>
+<td>8.620350</td>
+<td>9.094641</td>
+<td>8.848653</td>
+<td>8.998313</td>
+<td>9.094641</td>
+<td>9.412543</td>
+<td>9.412543</td>
+<td>9.188405</td>
+<td>8.831619</td>
+<td>8.546920</td>
+<td>8.899258</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1952</td>
+<td>8.981998</td>
+<td>9.126173</td>
+<td>9.324566</td>
+<td>9.141833</td>
+<td>9.172949</td>
+<td>9.677811</td>
+<td>9.835957</td>
+<td>9.987634</td>
+<td>9.554566</td>
+<td>9.294754</td>
+<td>8.998313</td>
+<td>9.339379</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1953</td>
+<td>9.368824</td>
+<td>9.368824</td>
+<td>9.912567</td>
+<td>9.899908</td>
+<td>9.823034</td>
+<td>10.000000</td>
+<td>10.250736</td>
+<td>10.342064</td>
+<td>9.925183</td>
+<td>9.582316</td>
+<td>9.126173</td>
+<td>9.441397</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1954</td>
+<td>9.484251</td>
+<td>9.249564</td>
+<td>9.899908</td>
+<td>9.797051</td>
+<td>9.887205</td>
+<td>10.250736</td>
+<td>10.666479</td>
+<td>10.571969</td>
+<td>10.192525</td>
+<td>9.823034</td>
+<td>9.470023</td>
+<td>9.823034</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1955</td>
+<td>9.987634</td>
+<td>9.874459</td>
+<td>10.285240</td>
+<td>10.308071</td>
+<td>10.319435</td>
+<td>10.799092</td>
+<td>11.262611</td>
+<td>11.107788</td>
+<td>10.768883</td>
+<td>10.364560</td>
+<td>9.925183</td>
+<td>10.409160</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1956</td>
+<td>10.475107</td>
+<td>10.398058</td>
+<td>10.819103</td>
+<td>10.778978</td>
+<td>10.829071</td>
+<td>11.351000</td>
+<td>11.678616</td>
+<td>11.613495</td>
+<td>11.181384</td>
+<td>10.707761</td>
+<td>10.330766</td>
+<td>10.707761</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1957</td>
+<td>10.799092</td>
+<td>10.656090</td>
+<td>11.190490</td>
+<td>11.117061</td>
+<td>11.181384</td>
+<td>11.750682</td>
+<td>12.078927</td>
+<td>12.093594</td>
+<td>11.605283</td>
+<td>11.107788</td>
+<td>10.697481</td>
+<td>11.004343</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1958</td>
+<td>11.042269</td>
+<td>10.829071</td>
+<td>11.244701</td>
+<td>11.117061</td>
+<td>11.253666</td>
+<td>11.852637</td>
+<td>12.265784</td>
+<td>12.363141</td>
+<td>11.605283</td>
+<td>11.217686</td>
+<td>10.748614</td>
+<td>11.013858</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1959</td>
+<td>11.226711</td>
+<td>11.061098</td>
+<td>11.621691</td>
+<td>11.538992</td>
+<td>11.734774</td>
+<td>12.130041</td>
+<td>12.649244</td>
+<td>12.719537</td>
+<td>12.064211</td>
+<td>11.629871</td>
+<td>11.244701</td>
+<td>11.613495</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1960</td>
+<td>11.710799</td>
+<td>11.497014</td>
+<td>11.726798</td>
+<td>12.049443</td>
+<td>12.130041</td>
+<td>12.564701</td>
+<td>13.102063</td>
+<td>13.007960</td>
+<td>12.383721</td>
+<td>12.049443</td>
+<td>11.488567</td>
+<td>11.829327</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="e7cf11b5-1e52-4799-9fcf-cf86108ecd0a" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox</span>(z,<span class="at">lambda=</span> <span class="st">'auto'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A Time Series: 12 × 12</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">Jan</th>
+<th data-quarto-table-cell-role="th" scope="col">Feb</th>
+<th data-quarto-table-cell-role="th" scope="col">Mar</th>
+<th data-quarto-table-cell-role="th" scope="col">Apr</th>
+<th data-quarto-table-cell-role="th" scope="col">May</th>
+<th data-quarto-table-cell-role="th" scope="col">Jun</th>
+<th data-quarto-table-cell-role="th" scope="col">Jul</th>
+<th data-quarto-table-cell-role="th" scope="col">Aug</th>
+<th data-quarto-table-cell-role="th" scope="col">Sep</th>
+<th data-quarto-table-cell-role="th" scope="col">Oct</th>
+<th data-quarto-table-cell-role="th" scope="col">Nov</th>
+<th data-quarto-table-cell-role="th" scope="col">Dec</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1949</td>
+<td>2.548535</td>
+<td>2.561426</td>
+<td>2.588461</td>
+<td>2.582990</td>
+<td>2.567558</td>
+<td>2.593773</td>
+<td>2.615143</td>
+<td>2.615143</td>
+<td>2.595510</td>
+<td>2.563492</td>
+<td>2.529884</td>
+<td>2.561426</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1950</td>
+<td>2.555089</td>
+<td>2.577352</td>
+<td>2.603953</td>
+<td>2.593773</td>
+<td>2.575434</td>
+<td>2.616686</td>
+<td>2.646282</td>
+<td>2.646282</td>
+<td>2.629992</td>
+<td>2.590249</td>
+<td>2.552929</td>
+<td>2.602296</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1951</td>
+<td>2.610433</td>
+<td>2.618215</td>
+<td>2.656336</td>
+<td>2.636968</td>
+<td>2.648852</td>
+<td>2.656336</td>
+<td>2.680161</td>
+<td>2.680161</td>
+<td>2.663501</td>
+<td>2.635595</td>
+<td>2.612017</td>
+<td>2.641022</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1952</td>
+<td>2.647572</td>
+<td>2.658759</td>
+<td>2.673698</td>
+<td>2.659957</td>
+<td>2.662328</td>
+<td>2.699069</td>
+<td>2.709945</td>
+<td>2.720109</td>
+<td>2.690390</td>
+<td>2.671486</td>
+<td>2.648852</td>
+<td>2.674793</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1953</td>
+<td>2.676962</td>
+<td>2.676962</td>
+<td>2.715111</td>
+<td>2.714262</td>
+<td>2.709067</td>
+<td>2.720927</td>
+<td>2.737151</td>
+<td>2.742897</td>
+<td>2.715955</td>
+<td>2.692360</td>
+<td>2.658759</td>
+<td>2.682259</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1954</td>
+<td>2.685357</td>
+<td>2.668111</td>
+<td>2.714262</td>
+<td>2.707296</td>
+<td>2.713408</td>
+<td>2.737151</td>
+<td>2.762643</td>
+<td>2.756996</td>
+<td>2.733443</td>
+<td>2.709067</td>
+<td>2.684331</td>
+<td>2.709067</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1955</td>
+<td>2.720109</td>
+<td>2.712549</td>
+<td>2.739332</td>
+<td>2.740768</td>
+<td>2.741481</td>
+<td>2.770427</td>
+<td>2.796406</td>
+<td>2.787934</td>
+<td>2.768668</td>
+<td>2.744300</td>
+<td>2.715955</td>
+<td>2.747066</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1956</td>
+<td>2.751119</td>
+<td>2.746379</td>
+<td>2.771588</td>
+<td>2.769257</td>
+<td>2.772164</td>
+<td>2.801154</td>
+<td>2.818211</td>
+<td>2.814887</td>
+<td>2.791987</td>
+<td>2.765084</td>
+<td>2.742191</td>
+<td>2.765084</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1957</td>
+<td>2.770427</td>
+<td>2.762027</td>
+<td>2.792485</td>
+<td>2.788447</td>
+<td>2.791987</td>
+<td>2.821853</td>
+<td>2.837961</td>
+<td>2.838662</td>
+<td>2.814466</td>
+<td>2.787934</td>
+<td>2.764478</td>
+<td>2.782161</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1958</td>
+<td>2.784288</td>
+<td>2.772164</td>
+<td>2.795437</td>
+<td>2.788447</td>
+<td>2.795922</td>
+<td>2.826939</td>
+<td>2.846793</td>
+<td>2.851301</td>
+<td>2.814466</td>
+<td>2.793969</td>
+<td>2.767483</td>
+<td>2.782696</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1959</td>
+<td>2.794460</td>
+<td>2.785340</td>
+<td>2.815307</td>
+<td>2.811044</td>
+<td>2.821052</td>
+<td>2.840400</td>
+<td>2.864196</td>
+<td>2.867286</td>
+<td>2.837255</td>
+<td>2.815726</td>
+<td>2.795437</td>
+<td>2.814887</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1960</td>
+<td>2.819842</td>
+<td>2.808860</td>
+<td>2.820650</td>
+<td>2.836545</td>
+<td>2.840400</td>
+<td>2.860440</td>
+<td>2.883580</td>
+<td>2.879651</td>
+<td>2.852247</td>
+<td>2.836545</td>
+<td>2.808419</td>
+<td>2.825783</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="56c705d0-b395-4452-813b-ad0c744d90c5" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>-</code> linear model이 들어가야함</p>
+<div id="e951cdad-c30f-4c40-a377-6b9d46bc28ae" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>MASS<span class="sc">::</span><span class="fu">boxcox</span>(z<span class="sc">~</span>t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>가능도함수를 가장 크게 해주는 람다를 찾아줌</li>
+</ul>
+<div id="fa60a2ca-2aa0-416e-b729-33175039ec47" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bc <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">boxcox</span>(z<span class="sc">~</span>t)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="dc224395-1069-4394-9494-0eb689e5257a" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$x</dt>
+        <dd><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-2</li><li>-1.95959595959596</li><li>-1.91919191919192</li><li>-1.87878787878788</li><li>-1.83838383838384</li><li>-1.7979797979798</li><li>-1.75757575757576</li><li>-1.71717171717172</li><li>-1.67676767676768</li><li>-1.63636363636364</li><li>-1.5959595959596</li><li>-1.55555555555556</li><li>-1.51515151515152</li><li>-1.47474747474747</li><li>-1.43434343434343</li><li>-1.39393939393939</li><li>-1.35353535353535</li><li>-1.31313131313131</li><li>-1.27272727272727</li><li>-1.23232323232323</li><li>-1.19191919191919</li><li>-1.15151515151515</li><li>-1.11111111111111</li><li>-1.07070707070707</li><li>-1.03030303030303</li><li>-0.98989898989899</li><li>-0.949494949494949</li><li>-0.909090909090909</li><li>-0.868686868686869</li><li>-0.828282828282828</li><li>-0.787878787878788</li><li>-0.747474747474747</li><li>-0.707070707070707</li><li>-0.666666666666667</li><li>-0.626262626262626</li><li>-0.585858585858586</li><li>-0.545454545454545</li><li>-0.505050505050505</li><li>-0.464646464646465</li><li>-0.424242424242424</li><li>-0.383838383838384</li><li>-0.343434343434343</li><li>-0.303030303030303</li><li>-0.262626262626263</li><li>-0.222222222222222</li><li>-0.181818181818182</li><li>-0.141414141414141</li><li>-0.101010101010101</li><li>-0.0606060606060606</li><li>-0.0202020202020201</li><li>0.0202020202020203</li><li>0.060606060606061</li><li>0.101010101010101</li><li>0.141414141414141</li><li>0.181818181818182</li><li>0.222222222222222</li><li>0.262626262626263</li><li>0.303030303030303</li><li>0.343434343434343</li><li>0.383838383838384</li><li>0.424242424242424</li><li>0.464646464646465</li><li>0.505050505050505</li><li>0.545454545454546</li><li>0.585858585858586</li><li>0.626262626262626</li><li>0.666666666666667</li><li>0.707070707070707</li><li>0.747474747474748</li><li>0.787878787878788</li><li>0.828282828282829</li><li>0.868686868686869</li><li>0.909090909090909</li><li>0.94949494949495</li><li>0.98989898989899</li><li>1.03030303030303</li><li>1.07070707070707</li><li>1.11111111111111</li><li>1.15151515151515</li><li>1.19191919191919</li><li>1.23232323232323</li><li>1.27272727272727</li><li>1.31313131313131</li><li>1.35353535353535</li><li>1.39393939393939</li><li>1.43434343434343</li><li>1.47474747474747</li><li>1.51515151515152</li><li>1.55555555555556</li><li>1.5959595959596</li><li>1.63636363636364</li><li>1.67676767676768</li><li>1.71717171717172</li><li>1.75757575757576</li><li>1.7979797979798</li><li>1.83838383838384</li><li>1.87878787878788</li><li>1.91919191919192</li><li>1.95959595959596</li><li>2</li></ol>
+</dd>
+    <dt>$y</dt>
+        <dd><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-198.799073449348</li><li>-195.37039950111</li><li>-191.94968992843</li><li>-188.537493633138</li><li>-185.134338095595</li><li>-181.740730731914</li><li>-178.357219945539</li><li>-174.984497973015</li><li>-171.623294248388</li><li>-168.274441727843</li><li>-164.938858510347</li><li>-161.617523276341</li><li>-158.311587211365</li><li>-155.022246206941</li><li>-151.750870096316</li><li>-148.498954283398</li><li>-145.268092393427</li><li>-142.06012344218</li><li>-138.876948334787</li><li>-135.720727426085</li><li>-132.593785460871</li><li>-129.498596427508</li><li>-126.437961568566</li><li>-123.414763422835</li><li>-120.432235059637</li><li>-117.493804438979</li><li>-114.603099888283</li><li>-111.764134954901</li><li>-108.981017342337</li><li>-106.258254630603</li><li>-103.600549284161</li><li>-101.012815323948</li><li>-98.5003233041335</li><li>-96.0684242249103</li><li>-93.722782423167</li><li>-91.4691951449285</li><li>-89.3135682143162</li><li>-87.2619677902398</li><li>-85.3204701215757</li><li>-83.4951346102045</li><li>-81.7920100099495</li><li>-80.2169681784438</li><li>-78.7756511898379</li><li>-77.4735695142388</li><li>-76.315650880116</li><li>-75.3066206646679</li><li>-74.4506111638586</li><li>-73.7510789691647</li><li>-73.2111844477151</li><li>-72.8329692383655</li><li>-72.6181345825874</li><li>-72.5674858952699</li><li>-72.6809327642697</li><li>-72.9580133738323</li><li>-73.3970321104162</li><li>-73.9959619454446</li><li>-74.7519438462799</li><li>-75.6613884991687</li><li>-76.7204216050323</li><li>-77.9243367495376</li><li>-79.2682324587806</li><li>-80.7467723383356</li><li>-82.3542850745746</li><li>-84.0850062620454</li><li>-85.9329380987263</li><li>-87.892044167354</li><li>-89.9563047616737</li><li>-92.1197117342045</li><li>-94.3763431162309</li><li>-96.7204827466603</li><li>-99.1464739467718</li><li>-101.648962801429</li><li>-104.222775173309</li><li>-106.862922356751</li><li>-109.564796705531</li><li>-112.323883247451</li><li>-115.136059766643</li><li>-117.997408428711</li><li>-120.904219103619</li><li>-123.853155375878</li><li>-126.840969011805</li><li>-129.864771826518</li><li>-132.921839900135</li><li>-136.009634355363</li><li>-139.125908387669</li><li>-142.268485619794</li><li>-145.435470690635</li><li>-148.625080760812</li><li>-151.835678635438</li><li>-155.065828872171</li><li>-158.3141482545</li><li>-161.579455664176</li><li>-164.860640976599</li><li>-168.156694471724</li><li>-171.466728508306</li><li>-174.78989955717</li><li>-178.125534851951</li><li>-181.473010287635</li><li>-184.83167793835</li><li>-188.200864446038</li></ol>
+</dd>
+</dl>
+</div>
+</div>
+<div id="ccc7f742-791b-4c54-9ab4-f694349049fc" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(bc<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+52
+</div>
+</div>
+<div id="afa15e91-cda9-4993-85b4-246ca74cf136" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>bc<span class="sc">$</span>x[<span class="fu">which.max</span>(bc<span class="sc">$</span>y)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.060606060606061
+</div>
+</div>
+<div id="ca1455ea-13b4-4c1e-8f57-73987baac872" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>z_boxcox <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">BoxCox</span>(z, <span class="at">lambda=</span>bc<span class="sc">$</span>x[<span class="fu">which.max</span>(bc<span class="sc">$</span>y)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="5e228d0e-64b3-4345-9bce-7fb615a34b34" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z, <span class="at">main =</span> <span class="st">"Original"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(<span class="fu">log</span>(z), <span class="at">main =</span> <span class="st">"log(z)"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(<span class="fu">sqrt</span>(z),, <span class="at">main =</span> <span class="st">"sqrt(z)"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z_boxcox, <span class="at">main =</span> <span class="st">"Boxcox_lambda=0.06"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">graphics.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>로그변환을 수행한다.</li>
+</ul>
+</section>
+<section id="확률적-추세-제거" class="level1">
+<h1>확률적 추세 제거</h1>
+<p><code>-</code> 확률보행과정의 정상화</p>
+<p><span class="math inline">\(Z_t = Z_{t−1} + ϵ_t, ϵ_t ∼ WN(0, σ^2)\)</span> - AR(1) with <span class="math inline">\(ϕ = 1\)</span></p>
+<div id="01923b76-daf4-4b8f-86b2-561b32d43778" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>),<span class="dv">2</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(e)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="55db1d6b-18ec-42e0-a96c-c7f210627769" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>),<span class="dv">2</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(e)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>추세라기 보단 분산이 커짐.. —&gt; 확률적 추세</p></li>
+<li><p>ACF가 아주 천천히 감소하므로 확률적 추세가 있다고 할 수 있다</p></li>
+<li><p>1차 차분을 수행한다</p></li>
+</ul>
+<p><span class="math inline">\(ΔZ_t = Z_t − Z_{t−1} = ϵ_t\)</span></p>
+<ul>
+<li>차분한 확률보행과정의 시도표 및 ACF/PACF 그림</li>
+</ul>
+<p><code>-</code> diff:차분함수</p>
+<p>예시</p>
+<div id="4beaa73d-1a80-41a5-9c70-eeeb9fe3f075" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="7d2233fe-397e-410d-b826-0eb8bf099def" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>4</li><li>-5</li><li>7</li></ol>
+</div>
+</div>
+<p>4: 7-3 : a[2]-a[1]</p>
+<p>-5: 2-7 : a[3] - a[2]</p>
+<p>7: 9-2 : a[4] - a[3]</p>
+<div id="51fe9344-31ac-415c-88ba-9ad0ce653719" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span>(a,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-1</li><li>2</li></ol>
+</div>
+</div>
+<p>-1: 2-3 : a[3] - a[1]</p>
+<p>2: 9-7: a[4] - a[2]</p>
+<div id="5cc01c64-c818-49ea-aa25-92b7832417cc" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">10</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z), <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>차분을 했더니 정상 시계열이 됨.</li>
+</ul>
+<p><span class="math inline">\(ΔZ_t ∼ WN = ARMA(0, 0) ⇒ Z_t ∼ ARIMA(0, 1, 0)\)</span></p>
+<ul>
+<li>로그변환한 Airpassengers data 에 대한 확률적 추세 확인</li>
+</ul>
+<div id="0e877425-f55b-466a-85d2-bddd55fbd3f5" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>logz <span class="ot">&lt;-</span> <span class="fu">log</span>(AirPassengers)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">6</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(logz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>추세가 있다. 결정적 추세로 해도 될거 같기도 하고…</li>
+</ul>
+<div id="0bd7a855-49bd-47e0-953e-6dc23233a770" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(logz)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(logz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>계절성분 떄문에 acf그래프가 중간에 내려오다가 볼록 튀어 나온 것</li>
+</ul>
+<div id="8add57be-93ab-4594-8c7c-13855fde1d20" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(logz, <span class="at">lag.max=</span><span class="dv">72</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>차분을 진행한다.</p>
+<p><span class="math inline">\(ΔZ_t = (1 − B)Z_t = Z_t − Z_{t−1}\)</span></p>
+<div id="78deb47a-407f-462d-bd2a-f6eeb927a238" class="cell" data-tags="[]" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>d_log_z <span class="ot">=</span> <span class="fu">diff</span>(logz)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(d_log_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="5b7906ec-a746-4e4c-9225-4ed9b4f8c171" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(d_log_z, <span class="at">lag.max=</span><span class="dv">36</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>여전히 계절성분이 남아있으므로, 계절차분 진행</p>
+<p><span class="math inline">\(Δ_{12}ΔZ_t = (1 − B^{12})(1 − B)Z_t = (1 − B^{12})(Z_t − Z_{t−1}) = Z_t − Z_{t−1} − Z_{t−12} − Z_{t−1}\)</span></p>
+<div id="e19df8e7-46a6-40bd-adfd-419346c36671" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ds_d_log_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(d_log_z, <span class="dv">12</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(ds_d_log_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="f8b87549-4ff1-4542-8375-346c78ab2b59" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(ds_d_log_z, <span class="at">lag.max=</span><span class="dv">36</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>하지만, 일반적으로 계절성분과 추세가 동시에 있는 경우 계절차분을 먼저 진행한다</li>
+</ul>
+<div id="f02549a4-71ad-4a04-a6aa-6703ec7cc8ce" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ds_log_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(logz, <span class="dv">12</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(ds_log_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="61986c82-0dd7-4be1-82f0-ff1cdbe88e34" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(ds_log_z, <span class="at">lag.max=</span><span class="dv">36</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>확률적추세가 있어 보이지만, AR 모형에서 ACF가 감소하는 형태라고 할 수도 있다. 이 경우에는 추세를 제거하기 위한 차분을 더 진행하는 것을 결정하는 것이 어렵다.</p>
+</section>
+<section id="depart-data" class="level1">
+<h1>depart data</h1>
+<div id="85a2e92e-cf7d-4260-8b3f-e7cc0ebc4fb5" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span><span class="fu">scan</span>(<span class="st">"depart.txt"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="822d32b8-e5f8-4e54-ac69-6eb6b60b38dd" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>log_z <span class="ot">&lt;-</span> <span class="fu">log</span>(z)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(log_z, <span class="at">lag.max=</span><span class="dv">36</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-36-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="계절차분을-먼저-진행" class="level1">
+<h1>계절차분을 먼저 진행</h1>
+<div id="56163c89-5e74-4ea7-92ae-d7e3155af5e8" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ds_log_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(log_z, <span class="dv">12</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(ds_log_z, <span class="at">lag.max=</span><span class="dv">36</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-37-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>이 데이터 시도표 상으로는 확률적인 추세가 있어보이지만, 역시 ACF만 보고 차분이 필 요한 가에 대한 결정을 하는 것이 쉽지 않다.</li>
+</ul>
+</section>
+<section id="여러가지-simulation" class="level1">
+<h1>여러가지 Simulation</h1>
+<div id="bd9f9258-3e30-46f9-ae72-87083ad4d95f" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">ar=</span><span class="fl">0.5</span>)) <span class="co">#AR(1)</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">ar=</span><span class="fl">0.5</span>)) <span class="co">#ARIMA(1,1,0)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0fc69723-a0b6-4f63-8248-8b5899d047aa" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"AR(1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-39-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="550dd700-27ad-4b5a-ae98-da003a706637" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(1,1,0)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-40-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>acf가 지수적으로 감소하고 있다. 차분이 필요하다.</p></li>
+<li><p>ARIMA(1,1,0)모형은 차분하면 AR(1)모형이 된다.</p></li>
+</ul>
+<div id="1189ab6b-19a2-4c1f-8e6e-4e752c47ba1b" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z), <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"(1-B)z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-42-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="2c13c4b8-64d7-44ad-80ab-0d85309286a5" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ma=</span><span class="sc">-</span><span class="fl">0.8</span>)) <span class="co">#MA(1)</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">ma=</span><span class="sc">-</span><span class="fl">0.8</span>)) <span class="co">#ARIMA(0,1,1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="8e3c8190-bd51-4a65-8f95-1b19a4219af4" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"MA(1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-44-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="335ac35b-c626-452e-bfc2-2a067c37abef" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(0,1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-45-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="47f3dd7b-7460-4a9f-941a-d0c00f539d5b" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z), <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"(1-B)z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="26627096-5aa6-4553-84bf-ccd3bace9a56" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ar=</span><span class="fl">0.5</span>, <span class="at">ma=</span><span class="sc">-</span><span class="fl">0.8</span>)) <span class="co">#ARMA(1,1)</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span>n, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">ar=</span><span class="fl">0.5</span>, <span class="at">ma=</span><span class="sc">-</span><span class="fl">0.8</span>)) <span class="co">#ARIMA(1,1,1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6044b2ed-0204-46e0-a2c2-1c7c03ed60c9" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARMA(1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="169d34b4-c4b4-4137-baf6-6979cf233667" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(1,1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="1e7e5cda-3886-4d37-b761-93d5ca33ebfb" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(<span class="fu">diff</span>(z), <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"(1-B)z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-50-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="과대차분" class="level1">
+<h1>과대차분</h1>
+<div id="28913cc0-5d82-4c5b-865e-bef7b74090d7" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ARIMA(0,1,1)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">ma=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4da1762c-fcba-4d25-8a9d-b01666c6e734" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(0,1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-52-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="560c6a5d-75d6-44fe-b542-6821b717d96f" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#한 번 차분</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>d_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(z)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(d_z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(0,1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-53-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="7ffd35d3-d857-4c19-9cf3-d824108270a5" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 한 번 더 차분</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>d2_z <span class="ot">&lt;-</span> <span class="fu">diff</span>(d_z)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(d2_z, <span class="at">lag.max=</span><span class="dv">36</span>, <span class="at">main =</span> <span class="st">"ARIMA(0,1,1)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 07_files/figure-html/cell-54-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>한 번 차분을 하면 정상시계열이 된다. 그리고 한 번 더 차분해도 마찬가지로 정상시계 열이다</li>
+</ul>
+<div id="19b517dd-3723-4094-9f8f-bf331e8833ff" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(z)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(<span class="fu">diff</span>(z))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(<span class="fu">diff</span>(<span class="fu">diff</span>(z)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+8.72895467185367
+</div>
+<div class="cell-output cell-output-display">
+1.18251197758341
+</div>
+<div class="cell-output cell-output-display">
+1.2484612507557
+</div>
+</div>
+<ul>
+<li>차분을 두번 하고 나면 분산이 커진다. 이를 과대차분이라고 한다</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

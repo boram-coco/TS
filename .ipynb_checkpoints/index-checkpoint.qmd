@@ -1,5 +1,5 @@
 ---
-title: "TS"
+title: "Time Series"
 listing:
   contents: posts
   sort: 
@@ -14,3 +14,6 @@ title-block-banner: true
 ---
 
 
+- Professor Youngmi Lee, Department of Statistics, Jeonbuk National University
+
+- 2nd semester, 2023

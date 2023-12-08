@@ -76,9 +76,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -143,13 +143,13 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
+    <div class="quarto-title column-page">
       <h1 class="title">TS</h1>
                       </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta column-page">
 
       
     
@@ -160,11 +160,9 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="analysis">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(2)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
 
@@ -173,85 +171,233 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="news,code,analysis" data-listing-date-sort="1701874800000" data-listing-file-modified-sort="1701943343070" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<div class="thumbnail">
-<p><a href="./posts/post-with-code/index.html"> <img src="./posts/post-with-code/image.jpg" class="thumbnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/post-with-code/index.html">
-<h3 class="no-anchor listing-title">
-Post With Code
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<a href="./posts/post-with-code/index.html">
-<div class="listing-description">
-This is a post with executable code.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/post-with-code/index.html">
-<div class="listing-date">
-Dec 7, 2023
-</div>
-<div class="listing-author">
-Harlow Malloc
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="news" data-listing-date-sort="1701615600000" data-listing-file-modified-sort="1701943343070" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<div class="thumbnail">
-<p><a href="./posts/welcome/index.html"> <p class="card-img-top"><img src="posts/welcome/thumbnail.jpg"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/welcome/index.html">
-<h3 class="no-anchor listing-title">
-Welcome To My Blog
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-</div>
-<a href="./posts/welcome/index.html">
-<div class="listing-description">
-This is the first post in a Quarto blog. Welcome!
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/welcome/index.html">
-<div class="listing-date">
-Dec 4, 2023
-</div>
-<div class="listing-author">
-Tristan O’Malley
-</div>
-</a>
-</div>
-</div>
-</div>
+<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+Date
+</th>
+<th>
+Title
+</th>
+<th>
+Author
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="Time Series" data-listing-date-sort="1701615600000" data-listing-file-modified-sort="1701676086000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] 10. Seasonal ARIMA 실습" data-listing-filename-sort="[TS] 10.ipynb">
+<td>
+<span class="listing-date">Dec 4, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 10.html" class="title listing-title">[TS] 10. Seasonal ARIMA 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="1" data-categories="Time Series" data-listing-date-sort="1701615600000" data-listing-file-modified-sort="1701674175000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] 09. Forecast 실습" data-listing-filename-sort="[TS] 09.ipynb">
+<td>
+<span class="listing-date">Dec 4, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 09.html" class="title listing-title">[TS] 09. Forecast 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="2" data-categories="Time Series" data-listing-date-sort="1701270000000" data-listing-file-modified-sort="1701333927000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] HW03_Answer" data-listing-filename-sort="[TS] HW03_A.ipynb">
+<td>
+<span class="listing-date">Nov 30, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW03_A.html" class="title listing-title">[TS] HW03_Answer</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="3" data-categories="Time Series" data-listing-date-sort="1701097200000" data-listing-file-modified-sort="1701264156000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-title-sort="[TS] HW04" data-listing-filename-sort="[TS] HW04.ipynb">
+<td>
+<span class="listing-date">Nov 28, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW04.html" class="title listing-title">[TS] HW04</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="4" data-categories="Time Series" data-listing-date-sort="1700665200000" data-listing-file-modified-sort="1701181204000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-title-sort="[TS] CH07. ARIMA 실습" data-listing-filename-sort="[TS] 07.ipynb">
+<td>
+<span class="listing-date">Nov 23, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 07.html" class="title listing-title">[TS] CH07. ARIMA 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="5" data-categories="Time Series" data-listing-date-sort="1700492400000" data-listing-file-modified-sort="1701181184000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-title-sort="[TS] CH08. Fit ARIMA 실습" data-listing-filename-sort="[TS] 08.ipynb">
+<td>
+<span class="listing-date">Nov 21, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 08.html" class="title listing-title">[TS] CH08. Fit ARIMA 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="6" data-categories="Time Series" data-listing-date-sort="1698937200000" data-listing-file-modified-sort="1698998800000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] CH06. ARMA 실습" data-listing-filename-sort="[TS] 06.ipynb">
+<td>
+<span class="listing-date">Nov 3, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 06.html" class="title listing-title">[TS] CH06. ARMA 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="7" data-categories="Time Series" data-listing-date-sort="1698850800000" data-listing-file-modified-sort="1699856637000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-title-sort="[TS] HW03" data-listing-filename-sort="[TS] HW03.ipynb">
+<td>
+<span class="listing-date">Nov 2, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW03.html" class="title listing-title">[TS] HW03</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="8" data-categories="Time Series" data-listing-date-sort="1698678000000" data-listing-file-modified-sort="1698747788000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-title-sort="[TS] CH05. 확률과정 실습" data-listing-filename-sort="[TS] 05.ipynb">
+<td>
+<span class="listing-date">Oct 31, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 05.html" class="title listing-title">[TS] CH05. 확률과정 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="9" data-categories="Time Series" data-listing-date-sort="1698246000000" data-listing-file-modified-sort="1701333036000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-title-sort="[TS] HW02_Answer" data-listing-filename-sort="[TS] HW02_A.ipynb">
+<td>
+<span class="listing-date">Oct 26, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW02_A.html" class="title listing-title">[TS] HW02_Answer</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="10" data-categories="Time Series" data-listing-date-sort="1698073200000" data-listing-file-modified-sort="1698294793000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-title-sort="[TS] HW02" data-listing-filename-sort="[TS] HW02.ipynb">
+<td>
+<span class="listing-date">Oct 24, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW02.html" class="title listing-title">[TS] HW02</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="11" data-categories="Time Series" data-listing-date-sort="1697727600000" data-listing-file-modified-sort="1698285193000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-title-sort="[TS] HW01_Answer" data-listing-filename-sort="[TS] HW01_A.ipynb">
+<td>
+<span class="listing-date">Oct 20, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW01_A.html" class="title listing-title">[TS] HW01_Answer</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="12" data-categories="Time Series" data-listing-date-sort="1697295600000" data-listing-file-modified-sort="1698153408000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] CH04_02. 평활에 의한 분할법 실습" data-listing-filename-sort="[TS] 04_02.ipynb">
+<td>
+<span class="listing-date">Oct 15, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 04_02.html" class="title listing-title">[TS] CH04_02. 평활에 의한 분할법 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="13" data-categories="Time Series" data-listing-date-sort="1697295600000" data-listing-file-modified-sort="1697343498000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-title-sort="[TS] CH04_01. 추세에 의한 분할법 실습" data-listing-filename-sort="[TS] 04_01.ipynb">
+<td>
+<span class="listing-date">Oct 15, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 04_01.html" class="title listing-title">[TS] CH04_01. 추세에 의한 분할법 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="14" data-categories="Time Series" data-listing-date-sort="1697209200000" data-listing-file-modified-sort="1698040132000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-title-sort="[TS] CH03. 평활법 실습" data-listing-filename-sort="[TS] 03.ipynb">
+<td>
+<span class="listing-date">Oct 14, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 03.html" class="title listing-title">[TS] CH03. 평활법 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="15" data-categories="Time Series" data-listing-date-sort="1696863600000" data-listing-file-modified-sort="1697823058000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-title-sort="[TS] HW01" data-listing-filename-sort="[TS] HW01.ipynb">
+<td>
+<span class="listing-date">Oct 10, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] HW01.html" class="title listing-title">[TS] HW01</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="16" data-categories="Time Series" data-listing-date-sort="1696172400000" data-listing-file-modified-sort="1697341425000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-title-sort="[TS] CH02. 실습2(추세모형)" data-listing-filename-sort="[TS] 02_2.ipynb">
+<td>
+<span class="listing-date">Oct 2, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 02_2.html" class="title listing-title">[TS] CH02. 실습2(추세모형)</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="17" data-categories="Time Series" data-listing-date-sort="1695999600000" data-listing-file-modified-sort="1696499943000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] CH02. 실습1(추세모형)" data-listing-filename-sort="[TS] 02_1.ipynb">
+<td>
+<span class="listing-date">Sep 30, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 02_1.html" class="title listing-title">[TS] CH02. 실습1(추세모형)</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+<tr data-index="18" data-categories="Time Series" data-listing-date-sort="1694876400000" data-listing-file-modified-sort="1697341419000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-title-sort="[TS] CH01. 실습" data-listing-filename-sort="[TS] 01.ipynb">
+<td>
+<span class="listing-date">Sep 17, 2023</span>
+</td>
+<td>
+<a href="./posts/[TS] 01.html" class="title listing-title">[TS] CH01. 실습</a>
+</td>
+<td>
+<span class="listing-author">김보람 </span>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="listing-no-matching d-none">
 No matching items
 </div>

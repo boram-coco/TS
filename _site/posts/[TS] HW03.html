@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-11-02">
+
+<title>TS - [TS] HW03</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] HW03</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 2, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<blockquote class="blockquote">
+<p>해당 자료는 전북대학교 이영미 교수님 2023고급시계열분석 자료임</p>
+</blockquote>
+<section id="ch-05-06" class="level1">
+<h1>CH 05, 06</h1>
+</section>
+<section id="section" class="level1">
+<h1>1</h1>
+<p>다음의 시계열 자료 ${7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5 }$에 대하여, SACF, <span class="math inline">\(\hat ρ_h (h = 1, 2, 3)\)</span>과 SPACF, <span class="math inline">\(\hatϕ_{kk} (k = 1, 2)\)</span>을 직접 계산하여라. 그리고 유의수준 <span class="math inline">\(α = 0.05\)</span>에서</p>
+<p><span class="math inline">\(H_0 : ρ_h = 0 \text{vs.} H_1 : ρ_h ̸= 0\)</span></p>
+<p>대하여에 대한 가설검정으로 하여라.</p>
+<p><code>-</code> <span class="math inline">\(\hat \rho_k\)</span> 구하기</p>
+<p><code>h=0</code></p>
+<p><span class="math inline">\(Z_t= \{7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5 \}\)</span></p>
+<p><span class="math inline">\(Z_{t+h}= \{7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5 \}\)</span></p>
+<div id="dd943c17-fa70-4c62-8c1f-9f5ad8c656a8" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+6
+</div>
+</div>
+<p><span class="math inline">\(\bar Z_t = \bar Z_{t+h} = 6\)</span></p>
+<div id="6ec96120-0994-41c2-85dc-0da250103680" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z<span class="sc">-</span><span class="fu">mean</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>1</li><li>0</li><li>1</li><li>4</li><li>9</li><li>4</li><li>1</li><li>1</li><li>4</li><li>0</li><li>1</li><li>4</li><li>1</li><li>0</li><li>1</li></ol>
+</div>
+</div>
+<div id="3cab5e19-4c6e-4a4f-99d5-01f6481e0a64" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z<span class="sc">-</span><span class="fu">mean</span>(z)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+32
+</div>
+</div>
+<div id="29e2ca75-3102-4769-9af4-7946115f1f32" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z<span class="sc">-</span><span class="fu">mean</span>(z)))<span class="sc">/</span><span class="fu">length</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+2.13333333333333
+</div>
+</div>
+<p><span class="math inline">\(\hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+h}) = \hat Cov(Z_t- \bar Z, Z_{t} - \bar Z_{t}) = \dfrac{32}{15} = 2.1333333\)</span></p>
+<p><code>h=1</code></p>
+<p><span class="math inline">\(Z_t= \{7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6 \}\)</span></p>
+<p><span class="math inline">\(Z_{t+1}= \{6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6, 7\}\)</span></p>
+<div id="942b476d-4008-4756-907f-23c3b1a49958" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>z1 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4805419a-d501-4e04-807d-2b460d253921" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">-</span><span class="fu">mean</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>1</li><li>0</li><li>-1</li><li>2</li><li>3</li><li>-2</li><li>-1</li><li>-1</li><li>-2</li><li>0</li><li>1</li><li>2</li><li>-1</li><li>0</li><li>-1</li></ol>
+</div>
+</div>
+<div id="4d42991f-c8ec-4e09-af74-8a65fc50004c" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>z1<span class="sc">-</span><span class="fu">mean</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>0</li><li>-1</li><li>2</li><li>3</li><li>-2</li><li>-1</li><li>-1</li><li>-2</li><li>0</li><li>1</li><li>2</li><li>-1</li><li>0</li><li>-1</li><li>1</li></ol>
+</div>
+</div>
+<div id="2cd42ec1-f5ff-477f-a644-3df3cddf970e" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z1<span class="sc">-</span><span class="fu">mean</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>0</li><li>0</li><li>-2</li><li>6</li><li>-6</li><li>2</li><li>1</li><li>2</li><li>0</li><li>0</li><li>2</li><li>-2</li><li>0</li><li>0</li><li>-1</li></ol>
+</div>
+</div>
+<div id="e4d4d779-bebd-49c2-88f6-92edfc5a901f" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z1<span class="sc">-</span><span class="fu">mean</span>(z)))<span class="sc">+</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+3
+</div>
+</div>
+<p><span class="math inline">\(\hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+h}) = \hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+1})= \dfrac{3}{15}\)</span></p>
+<p><code>h=2</code></p>
+<p><span class="math inline">\(Z_t= \{7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6 \}\)</span></p>
+<p><span class="math inline">\(Z_{t+2}= \{5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6, 7, 6\}\)</span></p>
+<div id="0f3c2e14-4eca-4ac6-8d4a-1a936b2f76a4" class="cell" data-execution_count="125">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>z2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c1e3cc32-eaa5-456c-b957-a7b4914658bd" class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z2<span class="sc">-</span><span class="fu">mean</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>-1</li><li>0</li><li>-3</li><li>-4</li><li>-3</li><li>2</li><li>2</li><li>0</li><li>-2</li><li>0</li><li>-1</li><li>0</li><li>1</li><li>0</li><li>0</li></ol>
+</div>
+</div>
+<div id="da80f027-9658-4dba-9f77-1a30b3dc38d0" class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z2<span class="sc">-</span><span class="fu">mean</span>(z)))<span class="sc">+</span><span class="dv">0</span><span class="sc">+</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-9
+</div>
+</div>
+<p><span class="math inline">\(\hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+h}) = \hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+2})= -\dfrac{9}{15}\)</span></p>
+<p><code>h=3</code></p>
+<p><span class="math inline">\(Z_t= \{7, 6, 5, 8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6 \}\)</span></p>
+<p><span class="math inline">\(Z_{t+3}= \{8, 9, 4, 5, 5, 4, 6, 7, 8, 5, 6, 5, 6, 7, 6, 5\}\)</span></p>
+<div id="0791dca9-faac-408c-bf8e-6245324c2d38" class="cell" data-execution_count="275">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>z3 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="9b5b10bc-eb09-461c-a00f-3f3a0cd091d1" class="cell" data-execution_count="276">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z3<span class="sc">-</span><span class="fu">mean</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>2</li><li>0</li><li>2</li><li>-2</li><li>-3</li><li>4</li><li>0</li><li>-1</li><li>-4</li><li>0</li><li>0</li><li>-2</li><li>-1</li><li>0</li><li>1</li></ol>
+</div>
+</div>
+<div id="95b7f3da-de6c-4a8c-adc9-da6338600da6" class="cell" data-execution_count="277">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((z<span class="sc">-</span><span class="fu">mean</span>(z))<span class="sc">*</span>(z3<span class="sc">-</span><span class="fu">mean</span>(z)))<span class="sc">+</span><span class="dv">1</span><span class="sc">+</span><span class="dv">0-1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-4
+</div>
+</div>
+<p><span class="math inline">\(\hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+h}) = \hat Cov(Z_t- \bar Z, Z_{t+h} - \bar Z_{t+3})= -\dfrac{4}{15}\)</span></p>
+<p><span class="math inline">\(\hat acf(1) = \dfrac{\hat Cov(Z_t- \bar Z, Z_{t+1} - \bar Z_{t+h})}{\hat Cov(Z_t- \bar Z, Z_{t} - \bar Z_{t+h})}=\dfrac{3/15}{32/15}=\dfrac{3}{32}\)</span></p>
+<p><span class="math inline">\(\hat acf(2) = \dfrac{\hat Cov(Z_t- \bar Z, Z_{t+2} - \bar Z_{t+h})}{\hat Cov(Z_t- \bar Z, Z_{t} - \bar Z_{t+h})}=\dfrac{-9/15}{32/15}=-\dfrac{9}{32}\)</span></p>
+<p><span class="math inline">\(\hat acf(3) = \dfrac{\hat Cov(Z_t- \bar Z, Z_{t+3} - \bar Z_{t+h})}{\hat Cov(Z_t- \bar Z, Z_{t} - \bar Z_{t+h})}=\dfrac{-4/15}{32/15}=\dfrac{-4}{32}\)</span></p>
+<div id="96ddd37d-9a0d-416d-a844-a6f8fad6f8af" class="cell" data-execution_count="106">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rho1 <span class="ot">=</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">32</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>rho2 <span class="ot">=</span> <span class="sc">-</span><span class="dv">9</span><span class="sc">/</span><span class="dv">32</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rho3 <span class="ot">=</span> <span class="sc">-</span><span class="dv">4</span><span class="sc">/</span><span class="dv">32</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>-</code> pacf를 구하자</p>
+<p><span class="math inline">\(\widehat{pacf(1)} = \widehat{acf(1)} = \dfrac{3}{32}\)</span></p>
+<p><span class="math inline">\(\widehat{pacf(2)} = \dfrac{\rho_2 - \rho_1^2}{1-\rho_1^2}=-0.292610837438424\)</span></p>
+<div id="da77baf7-8a7a-4a3d-a8db-1230f32f5c86" class="cell" data-execution_count="107">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pi1<span class="ot">=</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">32</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d4e90173-fa4f-48d7-a6ae-b02352b597e2" class="cell" data-execution_count="108">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pi2<span class="ot">=</span>(<span class="sc">-</span><span class="dv">9</span><span class="sc">/</span><span class="dv">32</span> <span class="sc">-</span> (<span class="dv">3</span><span class="sc">/</span><span class="dv">32</span>)<span class="sc">**</span><span class="dv">2</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>(<span class="dv">3</span><span class="sc">/</span><span class="dv">32</span>)<span class="sc">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><span class="math inline">\(\widehat{pacf(3)} = \dfrac{\rho_3 - \sum_{j=1}^2 \hat ϕ_{kj} \hat \rho_{3-j} }{1- \sum_{j=1}^2 \hat ϕ_{2j}\hat \rho_j}=-0.0700455193966982\)</span></p>
+<p>분자: <span class="math inline">\(\rho_3 - \sum_{j=1}^2 \hat ϕ_{kj} \hat \rho_{3-j} = \rho_3 - \hat ϕ_{21} \hat \rho_2 - \hat ϕ_{22} \rho_1\)</span></p>
+<p><span class="math inline">\(\hat ϕ_{21} = \hat ϕ_{11} - \hat ϕ_{22} \hat ϕ_{11}=0.121182266009852\)</span></p>
+<div id="ef9da572-3746-4c9e-9eaa-3f1a18aae962" class="cell" data-execution_count="115">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pi21 <span class="ot">=</span> pi1<span class="sc">-</span>pi2<span class="sc">*</span>pi1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e5f1bce8-3793-4aa1-b4a2-1f3c5296e1a1" class="cell" data-execution_count="116">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rho3 <span class="sc">-</span> pi21<span class="sc">*</span>rho2 <span class="sc">-</span> pi2<span class="sc">*</span>rho1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.0634852216748769
+</div>
+</div>
+<p>분모: <span class="math inline">\(1- \sum_{j=1}^2 \hat ϕ_{2j}\hat \rho_j= 1- \hat ϕ_{21} \hat \rho_1 - \hat ϕ_{22} \hat \rho_2\)</span></p>
+<div id="cfe50c72-401f-42bd-a04f-ac486c8ec581" class="cell" data-execution_count="117">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span> pi21<span class="sc">*</span>rho1 <span class="sc">-</span> pi2 <span class="sc">*</span> rho2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.90634236453202
+</div>
+</div>
+<div id="5503e61b-cb02-4628-9fd6-97ca74a3882a" class="cell" data-execution_count="119">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">0.0634852216748769</span><span class="sc">/</span><span class="fl">0.90634236453202</span> <span class="co"># rho3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.0700455193966982
+</div>
+</div>
+<p><code>-</code> 유의수준 검정</p>
+<p><span class="math inline">\(α = 0.05\)</span>에서</p>
+<p><span class="math inline">\(H_0 : ρ_h = 0 \text{vs.} H_1 : ρ_h ̸= 0\)</span></p>
+<p><span class="math inline">\(\hat \rho_h &gt; 1.96 \times \dfrac{1}{\sqrt{n}}\)</span> 이면 기각</p>
+<div id="d715e336-fa4d-4575-acb3-181adf2628f2" class="cell" data-execution_count="126">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="bf8ed6d0-8ff7-4547-ad14-82ebcbb560f5" class="cell" data-execution_count="121">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">15</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.506069823904436
+</div>
+</div>
+<div id="b3a9d1a0-5c2e-426c-a63c-812b4ea42fea" class="cell" data-execution_count="278">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rho1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.09375
+</div>
+</div>
+<div id="f55a9910-d7f3-4fae-865c-b97c14a08d50" class="cell" data-execution_count="122">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>rho1 <span class="sc">&gt;</span> <span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+FALSE
+</div>
+</div>
+<div id="ffc0d225-b285-41e4-8176-924e2ab1c9ec" class="cell" data-execution_count="279">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rho2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.28125
+</div>
+</div>
+<div id="a7495557-6aaa-4f77-86f9-456d3721990a" class="cell" data-execution_count="123">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rho2 <span class="sc">&gt;</span> <span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+FALSE
+</div>
+</div>
+<div id="a9fe8947-6ab4-427a-ade4-9c1b1261cc9a" class="cell" data-execution_count="280">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rho3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+-0.125
+</div>
+</div>
+<div id="56c8a5e6-e8a8-4117-835c-9f4ac67ea565" class="cell" data-execution_count="124">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rho3 <span class="sc">&gt;</span> <span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+FALSE
+</div>
+</div>
+<p>rho1, rho2, rho3가 값보다 작으므로 기각할수 없다. 즉, rho=0이다.</p>
+</section>
+<section id="section-1" class="level1">
+<h1>2</h1>
+<p>다음의 모형들에 의해 설명되는 확률과정 <span class="math inline">\(\{Z_t\}\)</span>는 정상성을 갖는가? 단 <span class="math inline">\(ε_t ∼ W N(0, 1)\)</span>.</p>
+<p><code>-</code> 정상성 만족하기 위해서는</p>
+<p><span class="math inline">\(E(Z_t) = \mu\)</span></p>
+<p><span class="math inline">\(Var(Z_t) = \sigma^2\)</span></p>
+<p><span class="math inline">\(Cov(Z_t,Z_{t+h}) = \gamma_h\)</span></p>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2">(1)</h2>
+<p><span class="math inline">\(Z_t = ε_t − ε_{t−1} − ε_{t−2}\)</span></p>
+<p><span class="math inline">\(E(Z_t) = E(ε_t − ε_{t−1} − ε_{t−2}) = E(ε_t)-E(ε_{t-1}) - E(ε_{t-2}) = 0\)</span></p>
+<p><span class="math inline">\(Var(Z_t) = Var(ε_t − ε_{t−1} − ε_{t−2}) = Var(ε_t)+Var(\epsilon_{t-1}) + Var(ε_{t−2}) = 1+1+1=3\)</span></p>
+<ul>
+<li><span class="math inline">\(\epsilon_t\)</span>는 WN이므로 <span class="math inline">\(Cov(\epsilon_t, \epsilon_{t+h})=0\)</span></li>
+</ul>
+<p><span class="math inline">\(Cov(Z_t,Z_{t-h}) = Cov(ε_t - ε_{t-1} - ε_{t-2}, ε_{t-h} - ε_{t-h-1} - ε_{t-h-2})\)</span></p>
+<ul>
+<li><span class="math inline">\(\epsilon\)</span>은 WN이므로 각각 COV취해줄 수 있꼬,, 상수값 나오니까 정상 시계열 조건을 만족한다.</li>
+</ul>
+</section>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3">(2)</h2>
+<p><span class="math inline">\(Z_t = ε_tε_{t−1} + ε_{t−2}\)</span></p>
+<p>-&gt; 정상시계열</p>
+<p><span class="math inline">\(E(Z_t) = 0\)</span></p>
+<p><span class="math inline">\(Var(Z_t) = V(\epsilon_t \epsilon_{t-1} + \epsilon_{t-2}) = Var(\epsilon_{t-1} \epsilon_{t-2} + \epsilon_{t-3}) = V(Z_{t-1})\)</span></p>
+<p><span class="math inline">\(Var(Z_t) = Var(Z_{t-1}) = Var(Z_{t-2})= \dots\)</span></p>
+<p><span class="math inline">\(cov(Z_t, Z_{t-1}) = cov(Z_{t-1}, Z_{t-2})\)</span></p>
+</section>
+<section id="section-4" class="level2">
+<h2 class="anchored" data-anchor-id="section-4">(3)</h2>
+<p><span class="math inline">\(Z_t = A sin \left( \dfrac{2}{3} πt + U \right)\)</span>, 단 A는 평균이 0이고 분산이 1인 확률변수이고, <span class="math inline">\(U\)</span> 는 상수이다.</p>
+<div id="8d4cab20-09b9-464e-b54e-407d87d234ef" class="cell" data-execution_count="146">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 필요한 라이브러리 불러오기</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션을 위한 난수 시드 설정</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션 횟수</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># A는 평균이 0이고 분산이 1인 확률변수</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># U는 상수</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션된 데이터 생성</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, n, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> A <span class="sc">*</span> <span class="fu">sin</span>((<span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>) <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">+</span> U)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 생성된 데이터 시각화</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(t, Z), <span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> Z)) <span class="sc">+</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Simulation of Z_t"</span>, <span class="at">x =</span> <span class="st">"Time (t)"</span>, <span class="at">y =</span> <span class="st">"Z_t"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>제시된 시계열 모형인 [Z_t = A (t + U)]에 대해서 정상성을 검토해보겠습니다.</p>
+<p>주어진 모형에서 (A)는 평균이 0이고 분산이 1인 확률변수이고, (U)는 상수입니다.</p>
+<ol type="1">
+<li><strong>평균 확인:</strong> [E(Z_t) = E(A (t + U))]</li>
+</ol>
+<p>확률변수 (A)의 평균은 0이므로, [E(Z_t) = 0]</p>
+<p>평균이 0이므로 평균 조건은 만족합니다.</p>
+<ol start="2" type="1">
+<li><strong>분산 확인:</strong> [Var(Z_t) = Var(A (t + U))]</li>
+</ol>
+<p>확률변수 (A)의 분산이 1이므로, [Var(Z_t) = Var((t + U))]</p>
+<p>사인 함수의 범위는 -1에서 1이므로 분산은 1을 초과하지 않습니다.</p>
+<p>[Var(Z_t) ]</p>
+<p>분산이 상수인 경우이므로 분산 조건도 만족합니다.</p>
+<ol start="3" type="1">
+<li><strong>공분산 확인:</strong> [Cov(Z_t, Z_{t-h}) = Cov(A (t + U), A ((t-h) + U))]</li>
+</ol>
+<p>두 사인 함수는 서로 독립적이므로 공분산은 0입니다.</p>
+<p>[Cov(Z_t, Z_{t-h}) = 0]</p>
+<p>결론적으로, 주어진 시계열 모형도 평균과 분산이 상수이고, 공분산이 시간에 독립적이므로 정상성을 만족합니다.</p>
+</section>
+<section id="section-5" class="level2">
+<h2 class="anchored" data-anchor-id="section-5">(4)</h2>
+<p><span class="math inline">\(Z_t = A sin (πt + U)\)</span>, 단 <span class="math inline">\(A\)</span>는 평균이 0이고 분산이 1인 확률변수이고, <span class="math inline">\(U\)</span> 는 <span class="math inline">\([−π, π]\)</span>에서의 균등분포(uniform distribution)을 따르는 확률변수이다. <span class="math inline">\(A, U\)</span> 는 서로 독립.</p>
+<div id="bc120a12-04d6-463f-b72f-ff878e829a76" class="cell" data-execution_count="152">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 필요한 라이브러리 불러오기</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션을 위한 난수 시드 설정</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션 횟수</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># A는 평균이 0이고 분산이 1인 확률변수</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># U는 [-π, π]에서 균등분포를 따르는 확률변수</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> <span class="sc">-</span>pi, <span class="at">max =</span> pi)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션된 데이터 생성</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, n, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> A <span class="sc">*</span> <span class="fu">sin</span>(pi <span class="sc">*</span> t <span class="sc">+</span> U)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="8c57607a-27ee-4bc8-b37d-69d181cb4b6a" class="cell" data-execution_count="286">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A는 평균이 0이고 분산이 1인 확률변수</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># U는 [-π, π]에서 균등분포를 따르는 확률변수</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> <span class="sc">-</span>pi, <span class="at">max =</span> pi)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션된 데이터 생성</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, n, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> A <span class="sc">*</span> <span class="fu">sin</span>(pi <span class="sc">*</span> (t) <span class="sc">+</span> U)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>Z1 <span class="ot">&lt;-</span> A <span class="sc">*</span> <span class="fu">sin</span>(pi <span class="sc">*</span> (t<span class="sc">+</span><span class="dv">4</span>) <span class="sc">+</span> U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="98b58352-1346-4119-b682-ec9938cc37d4" class="cell" data-execution_count="285">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(Z, Z1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.303403332248496
+</div>
+</div>
+<div id="c7be5586-e077-45a5-9e3f-3be127560ee5" class="cell" data-execution_count="287">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(Z, Z1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.303403332248496
+</div>
+</div>
+</section>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6">(5)</h2>
+<p><span class="math inline">\(\begin{cases} Z_{t} = \epsilon_t &amp; t: \text{짝수} \\ Z_{t}=\epsilon_t + 1 &amp;t: \text{홀수} \end{cases}\)</span></p>
+<p>평균 0 분산 1</p>
+<div id="50cd932b-818d-4e12-bb18-e662d66be4e1" class="cell" data-execution_count="289">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 공분산을 계산할 함수 정의</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>calculate_covariance <span class="ot">&lt;-</span> <span class="cf">function</span>(t) {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (t <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 짝수 시점</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    cov_result <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># 독립이므로 공분산은 0</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 홀수 시점</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    cov_result <span class="ot">&lt;-</span> <span class="fu">cov</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>), <span class="fu">rnorm</span>(<span class="dv">1000</span>))  <span class="co"># 예시로 1000개의 샘플을 이용해 공분산 계산</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(cov_result)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co"># t가 홀수일 때</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>t_odd <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>cov_odd <span class="ot">&lt;-</span> <span class="fu">calculate_covariance</span>(t_odd)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Cov(Z_"</span>, t_odd, <span class="st">", Z_"</span>, t_odd<span class="dv">-1</span>, <span class="st">"):"</span>, cov_odd))</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># t가 짝수일 때</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>t_even <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>cov_even <span class="ot">&lt;-</span> <span class="fu">calculate_covariance</span>(t_even)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Cov(Z_"</span>, t_even, <span class="st">", Z_"</span>, t_even<span class="dv">-1</span>, <span class="st">"):"</span>, cov_even))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Cov(Z_ 3 , Z_ 2 ): 0.0114340797519376"
+[1] "Cov(Z_ 4 , Z_ 3 ): 0"</code></pre>
+</div>
+</div>
+<div id="bc52c1b0-6360-4ccd-9791-f48e0540c192" class="cell" data-execution_count="290">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션을 위한 함수 정의</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>simulate_Z <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  epsilon <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  Z <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (t <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>      Z[t] <span class="ot">&lt;-</span> epsilon[t]</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>      Z[t] <span class="ot">&lt;-</span> epsilon[t] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(Z)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 시뮬레이션 데이터 생성</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">simulate_Z</span>(n)</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 시계열 그래프 그리기</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>n, Z, <span class="at">type =</span> <span class="st">"o"</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="st">"Z_t"</span>, <span class="at">main =</span> <span class="st">"Time Series: Z_t"</span>)</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"red"</span>)  <span class="co"># y = 0에 대한 가로선</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"green"</span>)  <span class="co"># y = 1에 대한 가로선</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Z_t"</span>), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a><span class="co"># epsilon(Z_t)를 표시</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="dv">1</span><span class="sc">:</span>n, Z, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">pch =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-43-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="45132ef7-2a18-4f21-817e-afd582ee53dc" class="cell" data-execution_count="293">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(Z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-44-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="515eb848-7810-47a9-9cb9-3bc3ce6179bb" class="cell" data-execution_count="294">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(Z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-45-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="section-7" class="level1">
+<h1>3</h1>
+<p><span class="math inline">\(ε_t\)</span>가 <span class="math inline">\(WN(0, σ^2)\)</span>를 따를 때, 다음과 같은 확률과정 모형에 대하여 각 물음에 답하여라</p>
+<p><span class="math display">\[Z_t − 0.8Z_{t−1} = ε_t\]</span></p>
+<section id="section-8" class="level2">
+<h2 class="anchored" data-anchor-id="section-8">(1)</h2>
+<p>모형을 <span class="math inline">\(ϕ(B)(Z_t − µ) = θ(B)ε_t\)</span>로 표현하고, <span class="math inline">\(ϕ(B), θ(B)\)</span> 그리고 <span class="math inline">\(µ\)</span>를 명시하여라.</p>
+<p><span class="math inline">\((1-0.8B)Z_t = \epsilon_t\)</span></p>
+<p><span class="math inline">\(\mu-0.8\mu = 0 \rightarrow \mu = 0\)</span></p>
+<p><span class="math inline">\(ϕ(B)=1-0.8B\)</span></p>
+<p><span class="math inline">\(\theta(B) = 1\)</span></p>
+<p><span class="math inline">\(\mu=0\)</span></p>
+</section>
+<section id="section-9" class="level2">
+<h2 class="anchored" data-anchor-id="section-9">(2)</h2>
+<p>모형은 AR(p), MA(q) 혹은 ARMA(p, q)모형 중 어느 것인가? p와 q도 함께 명시하여라.</p>
+<p>AR(1)</p>
+</section>
+<section id="section-10" class="level2">
+<h2 class="anchored" data-anchor-id="section-10">(3)</h2>
+<p>ACF <span class="math inline">\(ρ_k, k = 1, . . . , 5\)</span>를 계산하여라.</p>
+<p><span class="math inline">\(lag=0, Cov(Z_t,Z_t)\)</span> 를 구하자.</p>
+<p><span class="math inline">\(\gamma_0 = [1+0.8^2 +0.8^4 +\dots ] \sigma^2=\dfrac{\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(lag=1\)</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(\epsilon_t\)</span></th>
+<th><span class="math inline">\(\epsilon_{t-1}\)</span></th>
+<th><span class="math inline">\(\epsilon_{t-2}\)</span></th>
+<th><span class="math inline">\(\dots\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(Z_t\)</span></td>
+<td>1</td>
+<td>0.8</td>
+<td><span class="math inline">\(0.8^2\)</span></td>
+<td><span class="math inline">\(\dots\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Z_{t-1}\)</span></td>
+<td>0</td>
+<td>1</td>
+<td>0.8</td>
+<td><span class="math inline">\(\dots\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\gamma_1 = [0+0.8 + 0.8^3 + \dots] \sigma^2 = \dfrac{0.8 \sigma^2}{1-0.8^2}\)</span></p>
+<p>즉</p>
+<p><span class="math inline">\(\gamma_0 = \dfrac{\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\gamma_1 = \dfrac{0.8\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\gamma_2 = \dfrac{0.8^2\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\gamma_3 = \dfrac{0.8^3\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\gamma_4 = \dfrac{0.8^4\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\gamma_5 = \dfrac{0.8^5\sigma^2}{1-0.8^2}\)</span></p>
+<p><span class="math inline">\(\rho_k = \dfrac{\gamma_k}{\gamma_0}\)</span></p>
+<p><span class="math inline">\(\rho_1 = \dfrac{\gamma_1}{\gamma_0}=0.8\)</span></p>
+<p><span class="math inline">\(\rho_2 = \dfrac{\gamma_2}{\gamma_0}=0.8^2\)</span></p>
+<p><span class="math inline">\(\rho_3 = \dfrac{\gamma_3}{\gamma_0}=0.8^3\)</span></p>
+<p><span class="math inline">\(\rho_4 = \dfrac{\gamma_4}{\gamma_0}=0.8^4\)</span></p>
+<p><span class="math inline">\(\rho_5 = \dfrac{\gamma_5}{\gamma_0}=0.8^5\)</span></p>
+</section>
+<section id="section-11" class="level2">
+<h2 class="anchored" data-anchor-id="section-11">(4)</h2>
+<p>PACF <span class="math inline">\(ϕ_{kk}, k = 1, . . . , 5\)</span>를 계산하여라.</p>
+<p><span class="math inline">\(ϕ_{11}=\rho_1 = 0.8\)</span></p>
+<p>AR(1)모형이므로 <span class="math inline">\(k \geq 2\)</span>이면 <span class="math inline">\(ϕ_{kk}=0\)</span>이다.</p>
+</section>
+<section id="다시" class="level2">
+<h2 class="anchored" data-anchor-id="다시">(5) 다시…</h2>
+<p>위에서 구한 <span class="math inline">\(ρ_k, ϕ_{kk}\)</span> 의 상관도표를 그려라</p>
+<div id="0a0b39e8-88b2-4b9e-84c4-7421bcd3c465" class="cell" data-execution_count="298">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">##AR(1) phi=0.8</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="do">##order=c(p,d,q) ARMA : d=0, AR : d=q=0</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">ar=</span> <span class="fl">0.8</span>), <span class="co">#ar=ϕ1</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a> <span class="at">rand.gen =</span> rnorm,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a> <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span>)) <span class="co">#분산</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>ACF그림은 지수적으로 감소하는 형태이고.</p></li>
+<li><p>PACF는 h=1에서만 값이 존재하고 나머지는 다 0이다</p></li>
+</ul>
+</section>
+</section>
+<section id="section-12" class="level1">
+<h1>4</h1>
+<p>다음의 모형에 대하여 다음 물음에 답하여라.</p>
+<p><span class="math display">\[Z_t = ε_t − θ_1ε_{t−1} − θ_2ε_{t−2}, ε_t ∼ W N(0, σ^2)\]</span></p>
+<section id="section-13" class="level2">
+<h2 class="anchored" data-anchor-id="section-13">(1)</h2>
+<p>자기상관함수(ACF) <span class="math inline">\(ρ_h, h = 1, 2, . . .\)</span>를 구하시오.</p>
+<p><span class="math inline">\(\gamma_k = Cov(Z_t, Z_{t-k}) = E[(ε_t − θ_1ε_{t−1} − θ_2ε_{t−2})(ε_{t-1} − θ_1ε_{t−2} − θ_2ε_{t−3})]\)</span></p>
+<p>lag=0</p>
+<p><span class="math inline">\(\gamma_0 = (1+\theta_1^2 + \theta_2^2)\)</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>1</th>
+<th>- theta_1</th>
+<th>- theta_2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>- theta_1</td>
+<td>- theta_2</td>
+</tr>
+</tbody>
+</table>
+<p>lag=1</p>
+<p><span class="math inline">\(\gamma_1 =-\theta_1 + \theta_1 \theta_2\)</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>1</th>
+<th>- theta_1</th>
+<th>- theta_2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>–</td>
+<td>1</td>
+<td>- theta_1</td>
+</tr>
+</tbody>
+</table>
+<p>lag2</p>
+<p><span class="math inline">\(\gamma_2 = -\theta_2\)</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>1</th>
+<th>-theta_1</th>
+<th>- theta_2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>–</td>
+<td>–</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\rho_1 = \dfrac{\rho_1}{\rho_0} = \dfrac{-\theta_1 + \theta_1 \theta_2}{1+\theta_1^2 + \theta_2^2}\)</span></p>
+<p><span class="math inline">\(\rho_2 = \dfrac{\rho_2}{\rho_0} = \dfrac{-\theta_2}{1+\theta_1^2 + \theta_2^2}\)</span></p>
+<ul>
+<li>MA(2)모형이므로 k가 3이상이면 acf값은 다 0이다</li>
+</ul>
+</section>
+<section id="section-14" class="level2">
+<h2 class="anchored" data-anchor-id="section-14">(2)</h2>
+<p>부분자기상관함수(PACF) <span class="math inline">\(ϕ_{11}, ϕ_{22}\)</span>를 구하시오.</p>
+<p><span class="math inline">\(ϕ_{11}=\rho_1 = \dfrac{-\theta_1 + \theta_1 \theta_2}{1+\theta_1^2 + \theta_2^2}\)</span></p>
+<p><span class="math inline">\(ϕ_{22} = \dfrac{\rho_2 - \rho_1^2}{1-\rho_1^2}\)</span></p>
+<p>계싼복잡…생략..</p>
+</section>
+</section>
+<section id="section-15" class="level1">
+<h1>5</h1>
+<p><span class="math inline">\(ε_t\)</span> 가 <span class="math inline">\(WN(0, σ^2)\)</span>를 따를 때, 다음과 같은 확률과정의 모형들에 대하여 각 물음에 답하여라. (단, (3)-(5)는 R을 이용하여, 각 모형을 따르는 10000개의 데이터를 생성한 후, acf, pacf 함수를 이용 한다.)</p>
+<p>모형 1 : <span class="math inline">\(Z_t − 9.5 = ε_t − 1.3ε_{t−1} + 0.6ε_{t−2}\)</span></p>
+<p>모형 2 : <span class="math inline">\(Z_t − 0.6Z_{t−1} = 38 + ε_t + 0.9ε_{t−1}\)</span></p>
+<p>모형 3 : <span class="math inline">\(Z_t = 26 + 0.6Z_{t−1} + ε_t + 0.2ε_{t−1} + 0.5ε_{t−2}\)</span></p>
+<p>모형 4 : <span class="math inline">\(Z_t − 1.5Z_{t−1} + 0.7Z_{t−2} = 100 + ε_t − 0.5ε_{t−1}\)</span></p>
+<section id="section-16" class="level2">
+<h2 class="anchored" data-anchor-id="section-16">(1)</h2>
+<p>모형을 <span class="math inline">\(ϕ(B)(Z_t − µ) = θ(B)ε_t\)</span>로 표현하고, <span class="math inline">\(ϕ(B), θ(B)\)</span> 그리고 <span class="math inline">\(µ\)</span>를 명시하여라.</p>
+<p><code>모형1</code></p>
+<p><span class="math inline">\((Z_t-9.5) = (1-1.3B + 0.6 B^2)\epsilon_t\)</span></p>
+<p><span class="math inline">\(ϕ(B)=1, θ(B)=(1-1.3B + 0.6 B^2), \mu=9.5\)</span></p>
+<p><code>모형2</code></p>
+<p><span class="math inline">\((1-0.6B)(Z_t - \mu) = (1+0.9B)\epsilon_t\)</span></p>
+<p><span class="math inline">\(\mu - 0.6 \mu = 38 \rightarrow \mu=38/0.4\)</span></p>
+<p><code>모형3</code></p>
+<p><span class="math inline">\((1-0.6B)(Z_t-\mu) = (1+0.2B +0.8B^2)\epsilon_t\)</span></p>
+<p><span class="math inline">\(ϕ(B)=1-0.6B, θ(B)=(1+0.2B +0.8B^2)\)</span></p>
+<p><span class="math inline">\(\mu-0.6\mu = 26 \rightarrow 0.4\mu = 26 \rightarrow \mu = 26/0.4=65\)</span></p>
+<p><code>모형4</code></p>
+<p><span class="math inline">\((1-1.5B+0.7B^2)(Z_t-\mu) = (1-0.5B)\epsilon_t\)</span></p>
+<p><span class="math inline">\(\mu - 1.5\mu + 0.7 \mu =100\)</span></p>
+<p><span class="math inline">\(\mu=500\)</span></p>
+</section>
+<section id="section-17" class="level2">
+<h2 class="anchored" data-anchor-id="section-17">(2)</h2>
+<p>모형은 AR(p), MA(q) 혹은 ARMA(p, q)모형 중 어느 것인가? p와 q도 함께 명시하여라.</p>
+<p><code>모형1</code> : MA(2)</p>
+<p><code>모형2</code> : ARMA(1,1)</p>
+<p><code>모형3</code> : ARMA(1,2)</p>
+<p><code>모형4</code> : ARMA(2,1)</p>
+</section>
+<section id="section-18" class="level2">
+<h2 class="anchored" data-anchor-id="section-18">(5)</h2>
+<p>위에서 구한 <span class="math inline">\(ρ_k, ϕ_{kk}\)</span> 의 상관도표를 그려라</p>
+<p><code>모형1</code></p>
+<div id="aeacbbdf-e9a5-4cda-a1a9-d821de3c2268" class="cell" data-execution_count="249">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>z1 <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">10000</span>,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>), <span class="at">ma=</span><span class="fu">c</span>(<span class="fl">1.3</span>, <span class="sc">-</span><span class="fl">0.6</span>)))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z1, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>모형2</code></p>
+<div id="4df05fc7-ef3b-4c5f-afcf-d8dac38a793d" class="cell" data-execution_count="248">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>z2 <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">10000</span>,</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ar=</span><span class="fl">0.6</span>, <span class="at">ma=</span><span class="fl">0.9</span>),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a> <span class="at">rand.gen =</span> rnorm)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z2, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-50-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>모형3</code></p>
+<div id="0423908d-9c7d-44e4-9d7e-c4b46ea79ea4" class="cell" data-execution_count="246">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>z3 <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">10000</span>,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>), <span class="at">ar=</span><span class="fl">0.6</span>, <span class="at">ma=</span><span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.5</span>)),</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a> <span class="at">rand.gen =</span> rnorm)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z3, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>모형4</code></p>
+<div id="94e8be40-5c66-4ca6-8a6c-da71e8d871fa" class="cell" data-execution_count="247">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>z4 <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="at">n=</span><span class="dv">10000</span>,</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">list</span>(<span class="at">order=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">ar=</span><span class="fu">c</span>(<span class="fl">1.5</span>,<span class="sc">-</span><span class="fl">0.7</span>), <span class="at">ma=</span><span class="sc">-</span><span class="fl">0.5</span>),</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a> <span class="at">rand.gen =</span> rnorm)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z4, <span class="at">lag.max=</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-52-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-19" class="level2">
+<h2 class="anchored" data-anchor-id="section-19">(3)</h2>
+<p>ACF <span class="math inline">\(ρ_k, k = 1, . . . , 10\)</span>를 계산하여라.</p>
+<p><code>모형1</code></p>
+<div id="177c4fd5-a84d-485c-903e-81ad6aad68c1" class="cell" data-execution_count="265">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>acf_z1<span class="ot">&lt;-</span><span class="fu">acf</span>(z1,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>acf_z1[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Autocorrelations of series ‘z1’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.158 -0.207 -0.014 -0.015  0.001  0.017  0.013  0.008 -0.014 -0.024 </code></pre>
+</div>
+</div>
+<p><code>모형2</code></p>
+<div id="eaacfc7c-f477-4784-93fb-b221fa2529c9" class="cell" data-execution_count="266">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>acf_z2<span class="ot">&lt;-</span><span class="fu">acf</span>(z2,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>acf_z2[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Autocorrelations of series ‘z2’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.807  0.495  0.302  0.183  0.107  0.051  0.015  0.002 -0.003 -0.009 </code></pre>
+</div>
+</div>
+<p><code>모형3</code></p>
+<div id="5cfcab0b-2df3-45e2-b0b5-a7253fefb0ca" class="cell" data-execution_count="267">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>acf_z3<span class="ot">&lt;-</span><span class="fu">acf</span>(z3,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>acf_z3[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Autocorrelations of series ‘z3’, by lag
+
+    1     2     3     4     5     6     7     8     9    10 
+0.796 0.637 0.382 0.229 0.138 0.086 0.059 0.038 0.027 0.016 </code></pre>
+</div>
+</div>
+<p><code>모형4</code></p>
+<div id="993a9511-63fa-497e-ade8-ac4b0de8de74" class="cell" data-execution_count="269">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>acf_z4<span class="ot">&lt;-</span><span class="fu">acf</span>(z4,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>acf_z4[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Autocorrelations of series ‘z4’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.791  0.488  0.189 -0.057 -0.219 -0.288 -0.281 -0.227 -0.143 -0.060 </code></pre>
+</div>
+</div>
+</section>
+<section id="section-20" class="level2">
+<h2 class="anchored" data-anchor-id="section-20">(4)</h2>
+<p>PACF <span class="math inline">\(ϕ_{kk}, k = 1, . . . , 10\)</span>를 계산하여라.</p>
+<p><code>모형1</code></p>
+<div id="88930127-5948-4d6b-82ba-473c774d1c4d" class="cell" data-execution_count="270">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>pacf_z1<span class="ot">&lt;-</span><span class="fu">pacf</span>(z1,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>pacf_z1[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Partial autocorrelations of series ‘z1’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.158 -0.238  0.070 -0.082  0.035 -0.011  0.021  0.002 -0.010 -0.017 </code></pre>
+</div>
+</div>
+<p><code>모형2</code></p>
+<div id="badf231c-5bb7-419a-914c-57a787edefa2" class="cell" data-execution_count="271">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>pacf_z2<span class="ot">&lt;-</span><span class="fu">pacf</span>(z2,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>pacf_z2[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Partial autocorrelations of series ‘z2’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.807 -0.443  0.296 -0.221  0.158 -0.163  0.135 -0.105  0.082 -0.083 </code></pre>
+</div>
+</div>
+<p><code>모형3</code></p>
+<div id="fb1e081a-775b-4aa0-bcf4-2828bec0972f" class="cell" data-execution_count="272">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>pacf_z3<span class="ot">&lt;-</span><span class="fu">pacf</span>(z3,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>pacf_z3[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Partial autocorrelations of series ‘z3’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.796  0.010 -0.349  0.071  0.158 -0.059 -0.052  0.026  0.023 -0.019 </code></pre>
+</div>
+</div>
+<p><code>모형4</code></p>
+<div id="16f10a35-0774-4282-98c3-a7c3f9cc3b02" class="cell" data-execution_count="273">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>pacf_z4<span class="ot">&lt;-</span><span class="fu">pacf</span>(z4,<span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>pacf_z4[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Partial autocorrelations of series ‘z4’, by lag
+
+     1      2      3      4      5      6      7      8      9     10 
+ 0.791 -0.365 -0.153 -0.099 -0.052 -0.016 -0.017 -0.021  0.013 -0.017 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="section-21" class="level1">
+<h1>6</h1>
+<p>다음과 같은 ACF를 갖는 가역성 조건을 만족하는 MA(1)과정의 모형을 구하라.</p>
+<p><span class="math display">\[ρ_0 = 0, ρ_1 = \dfrac{1}{9} , ρ_k = 0, k ≥ 0\]</span></p>
+<p><span class="math inline">\(Z_t = \epsilon_t + \theta \epsilon_{t-1}\)</span></p>
+<p><span class="math inline">\(acf(1) = \dfrac{\gamma_1}{\gamma_2} = \dfrac{\theta}{1+\theta^2} = \dfrac{1}{9}\)</span></p>
+<p><span class="math inline">\(\theta^2 - 9 \theta + 1 = 0\)</span></p>
+<p><span class="math inline">\(\theta = \dfrac{9 +- \sqrt{77}}{2}\)</span></p>
+<p><span class="math inline">\(\therefore \theta = \dfrac{9 - \sqrt{77}}{2}\)</span></p>
+</section>
+<section id="section-22" class="level1">
+<h1>7</h1>
+<p>(R실습). 확률과정 <span class="math inline">\(Z_t = 1 + 0.9Z_{t−1} + ε_t, t = 1, 2, . . . , 100\)</span>으로부터 시계열 자료를 생성한 후 다음을 수행하라. 단 <span class="math inline">\(Z_0 = 10\)</span>의 값을 주고 <span class="math inline">\(ε_t\)</span>는 <span class="math inline">\(ε_t\)</span> <span class="math inline">\(∼_{i.i.d.} N(0, 1)\)</span>이다.</p>
+<section id="section-23" class="level2">
+<h2 class="anchored" data-anchor-id="section-23">(1)</h2>
+<p><span class="math inline">\(\{Z_t\}\)</span>의 시계열그림을 그려라.</p>
+<div id="85be0478-0fea-4eb7-aade-0467aaa4e5d6" class="cell" data-execution_count="231">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>zt<span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>zt[<span class="dv">1</span>]<span class="ot">&lt;-</span><span class="dv">1</span><span class="fl">+0.9</span><span class="sc">*</span><span class="dv">10</span><span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>) zt[i]<span class="ot">&lt;-</span><span class="dv">1</span><span class="fl">+0.9</span><span class="sc">*</span>zt[i<span class="dv">-1</span>]<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>zt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>11.6339448027521</li><li>10.0297491611439</li><li>10.48063483597</li><li>9.93642780128935</li><li>12.10806261555</li><li>10.2152209396991</li><li>13.7460677185397</li><li>12.4263586349121</li><li>14.2456440350337</li><li>13.8729153099666</li><li>13.8890374145228</li><li>13.9096357199169</li><li>11.8863371309684</li><li>12.9440758775657</li><li>13.5247886391223</li><li>12.7296586313629</li><li>11.4648254531922</li><li>11.283064858838</li><li>11.8156929303286</li><li>11.7448658878451</li><li>12.32448262803</li><li>13.1115048005427</li><li>13.8239208468079</li><li>11.3770837195393</li><li>12.3094831568635</li><li>12.7681316908829</li><li>11.1969801637485</li><li>11.7850096742986</li><li>12.0017396538599</li><li>10.6792160011758</li><li>11.2148693275543</li><li>10.6308609660893</li><li>9.91138476326052</li><li>10.621892845388</li><li>10.4522213240463</li><li>9.20987208077002</li><li>9.58604819929471</li><li>10.1583427398488</li><li>10.2700295381873</li><li>9.71201245009552</li><li>9.44366007729987</li><li>10.4158409321234</li><li>8.5872299494766</li><li>9.78917635247713</li><li>10.8963137494163</li><li>12.2103678903036</li><li>9.86578693146142</li><li>9.22172683986994</li><li>9.25190651171671</li><li>9.77490401630087</li><li>8.39829231775574</li><li>8.02288161790795</li><li>9.33096801713232</li><li>10.5626886258504</li><li>12.2178435406066</li><li>10.8323714373393</li><li>9.33311061289182</li><li>8.75520751151145</li><li>6.99380448839169</li><li>8.30691924800892</li><li>7.31415617895965</li><li>8.60162312019057</li><li>8.66022818106746</li><li>8.80057388980463</li><li>9.0651181702265</li><li>10.3675019024102</li><li>10.459871851365</li><li>9.48213366411919</li><li>10.4384121274965</li><li>11.2615099419654</li><li>11.4697170638735</li><li>10.0056820675572</li><li>10.2359996396427</li><li>11.4242893053008</li><li>12.6602103679228</li><li>12.7574603409234</li><li>11.8908574765488</li><li>11.1575316713236</li><li>12.0110929132003</li><li>11.9939485154955</li><li>12.4728230524616</li><li>10.2075419571772</li><li>9.38962144084908</li><li>10.4548676710282</li><li>9.72979326504712</li><li>11.2340144963607</li><li>11.3405372075702</li><li>9.80425419934968</li><li>8.20459976095349</li><li>8.20525882325441</li><li>7.26026421509633</li><li>5.76925419364217</li><li>6.41193936626902</li><li>6.62448446575856</li><li>7.46042237514119</li><li>5.42011565691056</li><li>6.02517355061036</li><li>6.41190471763322</li><li>7.87428239163398</li><li>8.70956639743375</li></ol>
+</div>
+</div>
+<div id="543cb284-5a25-4b69-9b3a-89395d69ab66" class="cell" data-execution_count="232">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-63-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-24" class="level2">
+<h2 class="anchored" data-anchor-id="section-24">(2)</h2>
+<p>SACF, <span class="math inline">\(\hatρ_h, h = 1, 2, . . . , 10\)</span>을 구하여 표본상관도표를 그려라</p>
+<div id="ac956445-f8f8-4bdd-a912-c5afe28ef3b7" class="cell" data-execution_count="233">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(zt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-64-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="6bb0c705-17c1-49e8-a319-5c42eaee6a99" class="cell" data-execution_count="234">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(zt)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>1</li><li>0.830045823110411</li><li>0.735129876073393</li><li>0.62619795113663</li><li>0.577356281418996</li><li>0.490427164682597</li><li>0.42649296433039</li><li>0.370321611649739</li><li>0.306248799055932</li><li>0.254412017586095</li><li>0.193156199329482</li><li>0.150250566238672</li><li>0.0713563901629154</li><li>0.029639995485257</li><li>0.0121346208843998</li><li>-0.0325772325466221</li><li>-0.0533571962757925</li><li>-0.112886388416267</li><li>-0.128414978937425</li><li>-0.119157092402368</li><li>-0.0926266728203544</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-65-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-25" class="level2">
+<h2 class="anchored" data-anchor-id="section-25">(3)</h2>
+<p>SPACF, <span class="math inline">\(\hat ϕ_{kk}, k = 1, 2, . . . , 10\)</span>을 구하여 표본상관도표를 그려라</p>
+<div id="a820fb08-bd09-4315-bf54-65ba2f88b9ff" class="cell" data-execution_count="235">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(zt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-66-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="78d9fbc3-a5a1-409d-b51c-1f467ebebca6" class="cell" data-execution_count="236">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(zt)<span class="sc">$</span>acf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>0.830045823110411</li><li>0.148393107187214</li><li>-0.0546343362957735</li><li>0.123678558628976</li><li>-0.0883551477937624</li><li>-0.013798929554003</li><li>0.0286016292581917</li><li>-0.0769841241329633</li><li>0.00263703156357633</li><li>-0.0513306551749866</li><li>-0.012079285174621</li><li>-0.1246153113177</li><li>0.0108296561187292</li><li>0.0859635380334657</li><li>-0.124685817267623</li><li>0.0483698221700843</li><li>-0.128411011143925</li><li>0.00942969415608426</li><li>0.153161608224047</li><li>0.0205013651615918</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-67-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="section-26" class="level2">
+<h2 class="anchored" data-anchor-id="section-26">(4)</h2>
+<p><span class="math inline">\(\{Z_t, Z_{t−1} \}\)</span>의 산점도를 그리고, 이 산점도와 <span class="math inline">\(\hatρ_1\)</span>의 관계를 설명하여라</p>
+<div id="f5bf77c6-b2c3-4bbd-aee9-e8e09389f79b" class="cell" data-execution_count="322">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zt,data.table<span class="sc">::</span><span class="fu">shift</span>(zt,<span class="sc">-</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-68-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="a7c9b5db-a6b1-48e5-a2e7-fc7de0bb4a87" class="cell" data-execution_count="323">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(zt,data.table<span class="sc">::</span><span class="fu">shift</span>(zt,<span class="sc">-</span><span class="dv">1</span>), <span class="at">use =</span> <span class="st">'pairwise.complete.obs'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.834848419327365
+</div>
+</div>
+</section>
+<section id="section-27" class="level2">
+<h2 class="anchored" data-anchor-id="section-27">(5)</h2>
+<p><span class="math inline">\(\{Z_t, Z_{t−2} \}\)</span>의 산점도를 그리고, 이 산점도와 <span class="math inline">\(\hatρ_2\)</span>의 관계를 설명하여라</p>
+<div id="53ac3b91-73a7-49c8-9fe6-00533d369f2d" class="cell" data-execution_count="319">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>10.48063483597</li><li>9.93642780128935</li><li>12.10806261555</li><li>10.2152209396991</li><li>13.7460677185397</li><li>12.4263586349121</li><li>14.2456440350337</li><li>13.8729153099666</li><li>13.8890374145228</li><li>13.9096357199169</li><li>11.8863371309684</li><li>12.9440758775657</li><li>13.5247886391223</li><li>12.7296586313629</li><li>11.4648254531922</li><li>11.283064858838</li><li>11.8156929303286</li><li>11.7448658878451</li><li>12.32448262803</li><li>13.1115048005427</li><li>13.8239208468079</li><li>11.3770837195393</li><li>12.3094831568635</li><li>12.7681316908829</li><li>11.1969801637485</li><li>11.7850096742986</li><li>12.0017396538599</li><li>10.6792160011758</li><li>11.2148693275543</li><li>10.6308609660893</li><li>9.91138476326052</li><li>10.621892845388</li><li>10.4522213240463</li><li>9.20987208077002</li><li>9.58604819929471</li><li>10.1583427398488</li><li>10.2700295381873</li><li>9.71201245009552</li><li>9.44366007729987</li><li>10.4158409321234</li><li>8.5872299494766</li><li>9.78917635247713</li><li>10.8963137494163</li><li>12.2103678903036</li><li>9.86578693146142</li><li>9.22172683986994</li><li>9.25190651171671</li><li>9.77490401630087</li><li>8.39829231775574</li><li>8.02288161790795</li><li>9.33096801713232</li><li>10.5626886258504</li><li>12.2178435406066</li><li>10.8323714373393</li><li>9.33311061289182</li><li>8.75520751151145</li><li>6.99380448839169</li><li>8.30691924800892</li><li>7.31415617895965</li><li>8.60162312019057</li><li>8.66022818106746</li><li>8.80057388980463</li><li>9.0651181702265</li><li>10.3675019024102</li><li>10.459871851365</li><li>9.48213366411919</li><li>10.4384121274965</li><li>11.2615099419654</li><li>11.4697170638735</li><li>10.0056820675572</li><li>10.2359996396427</li><li>11.4242893053008</li><li>12.6602103679228</li><li>12.7574603409234</li><li>11.8908574765488</li><li>11.1575316713236</li><li>12.0110929132003</li><li>11.9939485154955</li><li>12.4728230524616</li><li>10.2075419571772</li><li>9.38962144084908</li><li>10.4548676710282</li><li>9.72979326504712</li><li>11.2340144963607</li><li>11.3405372075702</li><li>9.80425419934968</li><li>8.20459976095349</li><li>8.20525882325441</li><li>7.26026421509633</li><li>5.76925419364217</li><li>6.41193936626902</li><li>6.62448446575856</li><li>7.46042237514119</li><li>5.42011565691056</li><li>6.02517355061036</li><li>6.41190471763322</li><li>7.87428239163398</li><li>8.70956639743375</li><li>&lt;NA&gt;</li><li>&lt;NA&gt;</li></ol>
+</div>
+</div>
+<div id="b8c568ee-3297-498b-ae1d-f291a01807ad" class="cell" data-execution_count="320">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(zt,data.table<span class="sc">::</span><span class="fu">shift</span>(zt,<span class="sc">-</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] HW03_files/figure-html/cell-71-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="102773c8-3eb5-4aef-87e3-a250956ebb95" class="cell" data-execution_count="321">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(zt,data.table<span class="sc">::</span><span class="fu">shift</span>(zt,<span class="sc">-</span><span class="dv">2</span>), <span class="at">use =</span> <span class="st">'pairwise.complete.obs'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.745816184226449
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
