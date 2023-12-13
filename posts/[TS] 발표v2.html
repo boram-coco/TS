@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.283">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="김보람">
+<meta name="dcterms.date" content="2023-12-14">
+
+<title>TS - [TS] (발표) 카카오 주식 시계열분석</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[TS] (발표) 카카오 주식 시계열분석</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>김보람 </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 14, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><code>-</code> 데이터 source: http://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020203</p>
+<p>참고 https://velog.io/<span class="citation" data-cites="isitcake_yes/mlarimastockprediction">@isitcake_yes/mlarimastockprediction</span></p>
+<section id="import" class="level1">
+<h1>import</h1>
+<div id="1a0bc202-9fe3-4ca9-95cd-fbb05646220a" class="cell" data-execution_count="187">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(zoo)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data" class="level1">
+<h1>data</h1>
+<div id="da18a6fc-cf14-4bb3-89f5-436dd7313b45" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>kakao <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"kakaodata_1206.csv"</span>, <span class="at">fileEncoding =</span> <span class="st">"ISO-8859-1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="be117075-2ac8-4382-8805-7629030e39aa" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 11</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">ÀÏÀÚ</th>
+<th data-quarto-table-cell-role="th" scope="col">Á...</th>
+<th data-quarto-table-cell-role="th" scope="col">X.ëºñ</th>
+<th data-quarto-table-cell-role="th" scope="col">µî.ô.ü</th>
+<th data-quarto-table-cell-role="th" scope="col">X.Ã..</th>
+<th data-quarto-table-cell-role="th" scope="col">X.í..</th>
+<th data-quarto-table-cell-role="th" scope="col">Àú..</th>
+<th data-quarto-table-cell-role="th" scope="col">X.Å....</th>
+<th data-quarto-table-cell-role="th" scope="col">X.Å...ë.Ý</th>
+<th data-quarto-table-cell-role="th" scope="col">X.Ã..ÃÑ..</th>
+<th data-quarto-table-cell-role="th" scope="col">X.óÀåÁÖ.Ä.ö</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2023/12/06</td>
+<td>50900</td>
+<td>100</td>
+<td>0.20</td>
+<td>50700</td>
+<td>51100</td>
+<td>50200</td>
+<td>735503</td>
+<td>37302792200</td>
+<td>2.262484e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2023/12/05</td>
+<td>50800</td>
+<td>0</td>
+<td>0.00</td>
+<td>50700</td>
+<td>51200</td>
+<td>50200</td>
+<td>1142447</td>
+<td>57992282100</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2023/12/04</td>
+<td>50800</td>
+<td>1100</td>
+<td>2.21</td>
+<td>49800</td>
+<td>51300</td>
+<td>49750</td>
+<td>1785113</td>
+<td>90624610300</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2023/12/01</td>
+<td>49700</td>
+<td>-800</td>
+<td>-1.58</td>
+<td>50400</td>
+<td>50400</td>
+<td>49650</td>
+<td>1105367</td>
+<td>55174771850</td>
+<td>2.209145e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2023/11/30</td>
+<td>50500</td>
+<td>0</td>
+<td>0.00</td>
+<td>50200</td>
+<td>50900</td>
+<td>50000</td>
+<td>1613598</td>
+<td>81271347200</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2023/11/29</td>
+<td>50500</td>
+<td>-600</td>
+<td>-1.17</td>
+<td>50800</td>
+<td>51300</td>
+<td>50100</td>
+<td>1284120</td>
+<td>65153113600</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="c4365138-5ee7-40c7-8857-fbf89f8306ef" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kakao) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>,<span class="st">"대비"</span>,<span class="st">"등락률"</span>,<span class="st">"시가"</span>,<span class="st">"고가"</span>,<span class="st">"저가"</span>,<span class="st">"거래량"</span>,<span class="st">"거래대금"</span>,<span class="st">"시가총액"</span>,<span class="st">"상장주식수"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="25856606-4296-45f0-9a9c-0b2040350115" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kakao <span class="ot">&lt;-</span> kakao[<span class="fu">order</span>(kakao<span class="sc">$</span>일자),]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kakao) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 11</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">일자</th>
+<th data-quarto-table-cell-role="th" scope="col">종가</th>
+<th data-quarto-table-cell-role="th" scope="col">대비</th>
+<th data-quarto-table-cell-role="th" scope="col">등락률</th>
+<th data-quarto-table-cell-role="th" scope="col">시가</th>
+<th data-quarto-table-cell-role="th" scope="col">고가</th>
+<th data-quarto-table-cell-role="th" scope="col">저가</th>
+<th data-quarto-table-cell-role="th" scope="col">거래량</th>
+<th data-quarto-table-cell-role="th" scope="col">거래대금</th>
+<th data-quarto-table-cell-role="th" scope="col">시가총액</th>
+<th data-quarto-table-cell-role="th" scope="col">상장주식수</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2023/01/02</td>
+<td>52700</td>
+<td>-400</td>
+<td>-0.75</td>
+<td>53600</td>
+<td>53800</td>
+<td>52400</td>
+<td>887667</td>
+<td>46979376500</td>
+<td>2.347313e+13</td>
+<td>445410387</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2023/01/03</td>
+<td>53300</td>
+<td>600</td>
+<td>1.14</td>
+<td>52400</td>
+<td>53500</td>
+<td>51400</td>
+<td>1420569</td>
+<td>74588286800</td>
+<td>2.374037e+13</td>
+<td>445410387</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2023/01/04</td>
+<td>55700</td>
+<td>2400</td>
+<td>4.50</td>
+<td>53200</td>
+<td>56000</td>
+<td>53100</td>
+<td>2241411</td>
+<td>123346180300</td>
+<td>2.480936e+13</td>
+<td>445410387</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2023/01/05</td>
+<td>57700</td>
+<td>2000</td>
+<td>3.59</td>
+<td>55800</td>
+<td>58200</td>
+<td>55700</td>
+<td>3046064</td>
+<td>175103778900</td>
+<td>2.570018e+13</td>
+<td>445410387</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2023/01/06</td>
+<td>57200</td>
+<td>-500</td>
+<td>-0.87</td>
+<td>57200</td>
+<td>58000</td>
+<td>56500</td>
+<td>1420345</td>
+<td>81326211100</td>
+<td>2.547747e+13</td>
+<td>445410387</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2023/01/09</td>
+<td>61100</td>
+<td>3900</td>
+<td>6.82</td>
+<td>58700</td>
+<td>61200</td>
+<td>58300</td>
+<td>3482961</td>
+<td>208443993900</td>
+<td>2.721457e+13</td>
+<td>445410387</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="6bb2facd-6962-4bd9-a91a-470d7b70f06b" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 11</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">일자</th>
+<th data-quarto-table-cell-role="th" scope="col">종가</th>
+<th data-quarto-table-cell-role="th" scope="col">대비</th>
+<th data-quarto-table-cell-role="th" scope="col">등락률</th>
+<th data-quarto-table-cell-role="th" scope="col">시가</th>
+<th data-quarto-table-cell-role="th" scope="col">고가</th>
+<th data-quarto-table-cell-role="th" scope="col">저가</th>
+<th data-quarto-table-cell-role="th" scope="col">거래량</th>
+<th data-quarto-table-cell-role="th" scope="col">거래대금</th>
+<th data-quarto-table-cell-role="th" scope="col">시가총액</th>
+<th data-quarto-table-cell-role="th" scope="col">상장주식수</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">225</td>
+<td>2023/11/29</td>
+<td>50500</td>
+<td>-600</td>
+<td>-1.17</td>
+<td>50800</td>
+<td>51300</td>
+<td>50100</td>
+<td>1284120</td>
+<td>65153113600</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">226</td>
+<td>2023/11/30</td>
+<td>50500</td>
+<td>0</td>
+<td>0.00</td>
+<td>50200</td>
+<td>50900</td>
+<td>50000</td>
+<td>1613598</td>
+<td>81271347200</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">227</td>
+<td>2023/12/01</td>
+<td>49700</td>
+<td>-800</td>
+<td>-1.58</td>
+<td>50400</td>
+<td>50400</td>
+<td>49650</td>
+<td>1105367</td>
+<td>55174771850</td>
+<td>2.209145e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">228</td>
+<td>2023/12/04</td>
+<td>50800</td>
+<td>1100</td>
+<td>2.21</td>
+<td>49800</td>
+<td>51300</td>
+<td>49750</td>
+<td>1785113</td>
+<td>90624610300</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">229</td>
+<td>2023/12/05</td>
+<td>50800</td>
+<td>0</td>
+<td>0.00</td>
+<td>50700</td>
+<td>51200</td>
+<td>50200</td>
+<td>1142447</td>
+<td>57992282100</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">230</td>
+<td>2023/12/06</td>
+<td>50900</td>
+<td>100</td>
+<td>0.20</td>
+<td>50700</td>
+<td>51100</td>
+<td>50200</td>
+<td>735503</td>
+<td>37302792200</td>
+<td>2.262484e+13</td>
+<td>444495970</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li><p>해당 데이터를 다운받을 때는, 12/6까지 있었는데, 원활한 데이터 분석을 위해서 1~11월의 데이터만 사용 5개의 12월 데이터는 빼고..</p></li>
+<li><p>1 ~ 10월에서 1 ~ 8월은 train data, 9~10월은 test data로 해볼까?</p></li>
+<li><p>11월은 예측해보고.. 비교해보자</p></li>
+</ul>
+<p><code>-</code> kakao는 주식 데이터이기 때문에 공휴일은 거래 값이 없다.</p>
+<p>엑셀 데이터에는 아예 그 값이 비어진 상태로 구성되어 있음.</p>
+<p>예를 들어</p>
+<ol type="1">
+<li><p>1/2</p></li>
+<li><p>1/3</p></li>
+<li><p>1/4</p></li>
+<li><p>1/5</p></li>
+<li><p>1/6</p></li>
+<li><p>1/9</p></li>
+<li><p>1/10</p></li>
+</ol>
+<p>이렇게 구성되어 있다. 음… 일단 결측값은 없는 거니까 1)그냥 돌리기(ㅎㅎ사실 이게 맞긴한듯) 2) 비어있는 공휴일에 대체 값을 집어넣기.. MA값을 집어 넣어도 괜찮을 것 같고 전날의 종가와 다음날의 시작값의 평균값을 넣어도 될거같기도 하다.</p>
+<div id="ed46bd9a-feda-4ebb-8f54-73a39bbe3130" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>calendar <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2023-01-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2023-11-30"</span>), <span class="at">by =</span> <span class="st">"days"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="8ca89d84-fd3b-45ce-8f94-19a0d1c0e4df" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>date_na <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">setdiff</span>(calendar, <span class="fu">as.Date</span>(kakao<span class="sc">$</span>일자)), <span class="at">origin=</span> <span class="st">"1970-01-01"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4a48d4a8-57df-4923-a14c-8ee66d75841f" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(date_na)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+108
+</div>
+</div>
+<p>1월 1일부터 11월 30일까지 108개의 결측값이 있음. 정말 많군!</p>
+<p><code>-</code> 3년의 카카오 데이터 봉차트</p>
+<p><img src="[TS] 발표v2_files/figure-html/5a602e0c-7f73-467e-ac7b-a0056edb3726-1-90acc2d3-b904-435e-86e6-0c45fed7793a.png" class="img-fluid"></p>
+<ul>
+<li>내가 있는 곳은…. 일봉 주봉 월봉 1년봉으로도 보이지 않는다. 3년을 해야 보이는 고점…</li>
+</ul>
+<div id="f48d693b-7b55-428d-8f83-df05cdb5aa2c" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">head</span>(kakao, <span class="dv">226</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="03290e57-3bd9-4c1b-8ec8-714524afa131" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> df<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>-</code> 시계열 분석 시작~!</p>
+<div id="fecd00ff-c051-47a1-801c-7bffb0fd4e2b" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>kakao의 종가를 기준으로, 시도표를 그려보았다.</p></li>
+<li><p>kakao의 하락세…^^ 로 인해서 추세가 있어보인다!</p></li>
+<li><p>ACF가 천천히 감소하고 있어서, 확률적 추세가 있어보인다. 차분이 필요할 것 같다.</p></li>
+<li><p>PACF는 1차시에만 유효하고 그 이후에는 다 절단이다. AR(1)모형을 생각해 볼 수 있을 것 같다.</p></li>
+<li><p>일자에 NA값 적용이 되지않아서 그런가? 그래서 계절성분이 보이지 않는 것도 같다.</p></li>
+<li><p>분산이 크다. 변환이 필요할 듯 보인다. 분산안정화를 진행하자.</p></li>
+</ul>
+<section id="변수변환" class="level2">
+<h2 class="anchored" data-anchor-id="변수변환">변수변환</h2>
+<div id="6cd4e621-bb2f-43d0-a2db-23a511fb4241" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>log_df <span class="ot">=</span> <span class="fu">log</span>(df2)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sqrt_df <span class="ot">=</span> <span class="fu">sqrt</span>(df2)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>boxcox_df <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">BoxCox</span>(df2,<span class="at">lambda=</span> forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(df2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="28580f17-4ab4-4d0f-b5db-ac397d8e87c2" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.416556423030854
+</div>
+</div>
+<div id="19606926-d487-4f81-95d7-1d7d7e1f7d1c" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(df2, <span class="at">main =</span> <span class="st">"original"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(log_df, <span class="at">main =</span> <span class="st">'log'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(sqrt_df, <span class="at">main =</span> <span class="st">'sqrt'</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(boxcox_df, <span class="at">main =</span> <span class="st">'Boxcox'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="1901054b-5da7-460f-8be9-ad1d2fe9b21a" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(df2)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(df2<span class="sc">~</span>t)) <span class="co">#H0 : 등분산이다</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(log_df<span class="sc">~</span>t))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(sqrt_df<span class="sc">~</span>t))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(boxcox_df<span class="sc">~</span>t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(df2 ~ t)
+BP = 2.7869, df = 1, p-value = 0.09504</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(log_df ~ t)
+BP = 15.269, df = 1, p-value = 9.323e-05</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(sqrt_df ~ t)
+BP = 8.2031, df = 1, p-value = 0.004182</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(boxcox_df ~ t)
+BP = 9.3125, df = 1, p-value = 0.002276</code></pre>
+</div>
+</div>
+<ul>
+<li><p>반전.. 값이 작긴 하지만 원본데이터가 등분산으로 나왔다.</p></li>
+<li><p>원본 데이터로 분석을 진행해보겠다.</p></li>
+</ul>
+</section>
+<section id="차분" class="level2">
+<h2 class="anchored" data-anchor-id="차분">차분</h2>
+<ul>
+<li>확률적 추세가 존재해 보였으므로 차분을 진행하자.</li>
+</ul>
+<div id="5f8f839d-c296-4d0c-894e-dddf0da2e1ac" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(df2, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(df2, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(df2, <span class="at">lags =</span> <span class="dv">3</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -1.14
+  P VALUE:
+    0.6323 
+
+Description:
+ Wed Dec 13 22:57:07 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 2
+  STATISTIC:
+    Dickey-Fuller: -1.1591
+  P VALUE:
+    0.6252 
+
+Description:
+ Wed Dec 13 22:57:07 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 3
+  STATISTIC:
+    Dickey-Fuller: -1.2014
+  P VALUE:
+    0.6095 
+
+Description:
+ Wed Dec 13 22:57:07 2023 by user: </code></pre>
+</div>
+</div>
+<ul>
+<li>adf test에서도 pvalue값이 크다. 즉 h0기각! 차분이 필요하다.</li>
+</ul>
+<div id="994a94b6-ce70-4a09-a30d-b03df0545927" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>diff_df2 <span class="ot">=</span> <span class="fu">diff</span>(df2)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_df2, <span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="ffee8e08-5446-421b-872c-bad5d5088bb3" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(diff_df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  diff_df2
+t = -0.12607, df = 224, p-value = 0.8998
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -162.6208  143.0652
+sample estimates:
+mean of x 
+-9.777778 </code></pre>
+</div>
+</div>
+<ul>
+<li><p>평균은 0이다</p></li>
+<li><p>1월 1일부터 11월 30일까지 108개의 결측값이 있음. 정말 많군!</p></li>
+<li><p>차분을 진행하였더니, 확률적 추세가 사라졌다.</p></li>
+<li><p>시도표에서 계절성분이 따로 보이진 않는다.</p></li>
+<li><p>ACF와 PACF도 1개 정도가 유효해 보인다..</p></li>
+</ul>
+<div id="deb69d8d-a49b-4a8a-9d65-a533aa2311b1" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(diff_df2, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(diff_df2, <span class="at">lags =</span> <span class="dv">2</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(diff_df2, <span class="at">lags =</span> <span class="dv">3</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(diff_df2, <span class="at">lags =</span> <span class="dv">6</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning message in fUnitRoots::adfTest(diff_df2, lags = 1, type = "nc"):
+“p-value smaller than printed p-value”
+Warning message in fUnitRoots::adfTest(diff_df2, lags = 2, type = "nc"):
+“p-value smaller than printed p-value”
+Warning message in fUnitRoots::adfTest(diff_df2, lags = 3, type = "nc"):
+“p-value smaller than printed p-value”
+Warning message in fUnitRoots::adfTest(diff_df2, lags = 6, type = "nc"):
+“p-value smaller than printed p-value”</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -10.5198
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Dec 13 23:03:49 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 2
+  STATISTIC:
+    Dickey-Fuller: -8.6005
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Dec 13 23:03:49 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 3
+  STATISTIC:
+    Dickey-Fuller: -7.0735
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Dec 13 23:03:49 2023 by user: </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 6
+  STATISTIC:
+    Dickey-Fuller: -5.8189
+  P VALUE:
+    0.01 
+
+Description:
+ Wed Dec 13 23:03:49 2023 by user: </code></pre>
+</div>
+</div>
+<ul>
+<li><p>단위근 검정을 진행하음. 차분은 더이상 하지 않겠다.</p></li>
+<li><p>카카오가 계속 하락장이라^^ 안타깝게도 모형적합이 잘될 거 같다.</p></li>
+</ul>
+</section>
+<section id="모형식별" class="level2">
+<h2 class="anchored" data-anchor-id="모형식별">모형식별</h2>
+<div id="0036f73d-bc14-4550-b422-519d6b4ba78a" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_df2, <span class="at">lag.max=</span><span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="7aeb40c1-3a42-41c1-aa0a-9f5187b33384" class="cell" data-execution_count="175">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">arima</span>(diff_df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">include.mean=</span>F)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = diff_df2, order = c(1, 0, 0), include.mean = F)
+
+Coefficients:
+          ar1
+      -0.0115
+s.e.   0.0666
+
+sigma^2 estimated as 1347443:  log likelihood = -1907.05,  aic = 3818.11
+
+Training set error measures:
+                    ME     RMSE      MAE MPE MAPE     MASE         ACF1
+Training set -9.890129 1160.794 867.0039 NaN  Inf 0.701115 9.321406e-05</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+     Estimate Std. Error z value Pr(&gt;|z|)
+ar1 -0.011473   0.066555 -0.1724   0.8631</code></pre>
+</div>
+</div>
+<ul>
+<li>하나도~ 유의하지 않아</li>
+</ul>
+<div id="9dedc0c5-ea1d-4577-82df-241d0fe4d975" class="cell" data-execution_count="173">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fit112 <span class="ot">=</span> <span class="fu">arima</span>(df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit112)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit112)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = df2, order = c(1, 0, 0))
+
+Coefficients:
+         ar1  intercept
+      0.9843   52948.58
+s.e.  0.0096    3929.22
+
+sigma^2 estimated as 1334129:  log likelihood = -1916.14,  aic = 3838.28
+
+Training set error measures:
+                   ME     RMSE      MAE       MPE     MAPE      MASE
+Training set 2.352975 1155.045 862.7188 -0.049621 1.611583 0.9949345
+                     ACF1
+Training set -0.001427749</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+            Estimate Std. Error z value  Pr(&gt;|z|)    
+ar1       9.8426e-01 9.5836e-03 102.703 &lt; 2.2e-16 ***
+intercept 5.2949e+04 3.9292e+03  13.476 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<p>음……………………….</p>
+<div id="1a74f34e-434c-47b9-8df9-5e8ec753818d" class="cell" data-execution_count="182">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fit33 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(df2, <span class="at">frequency=</span><span class="dv">1</span>),</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit33)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co">#lmtest::coeftest(fit33)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Fitting models using approximations to speed things up...
+
+ ARIMA(2,1,2) with drift         : 3802.643
+ ARIMA(0,1,0) with drift         : 3804.063
+ ARIMA(1,1,0) with drift         : 3806.812
+ ARIMA(0,1,1) with drift         : 3806.089
+ ARIMA(0,1,0)                    : 3802.043
+ ARIMA(1,1,1) with drift         : Inf
+
+ Now re-fitting the best model(s) without approximations...
+
+ ARIMA(0,1,0)                    : 3816.157
+
+ Best model: ARIMA(0,1,0)                    
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Series: ts(df2, frequency = 1) 
+ARIMA(0,1,0) 
+
+sigma^2 = 1347635:  log likelihood = -1907.07
+AIC=3816.14   AICc=3816.16   BIC=3819.56
+
+Training set error measures:
+                    ME     RMSE      MAE         MPE     MAPE      MASE
+Training set -9.501328 1158.305 863.5075 -0.04156467 1.609105 0.9958441
+                   ACF1
+Training set -0.0114756</code></pre>
+</div>
+</div>
+</section>
+<section id="잔차분석" class="level2">
+<h2 class="anchored" data-anchor-id="잔차분석">잔차분석</h2>
+<section id="fit1" class="level3">
+<h3 class="anchored" data-anchor-id="fit1">fit1</h3>
+<div id="16a2aabb-e042-493a-abcc-cfc095901449" class="cell" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit1)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="1fd58ab1-f9e5-4548-a99f-571dfb945cff" class="cell" data-execution_count="88">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal distribution</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Jarque Bera Test
+
+data:  resid
+X-squared = 22.4, df = 2, p-value = 1.368e-05</code></pre>
+</div>
+</div>
+<div id="5f9c3f11-0c9b-4f67-bc82-37e2c0511028" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>정규분포가 아니다. 주식 데이터 특성상.. 중간에 튀어나오는 몇개의 점들로 인해서 ..</li>
+</ul>
+<div id="ca9758b9-9c23-4fb2-af2c-72fb6c63ecbb" class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit1, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>8.757044</td>
+<td>5</td>
+<td>0.1191562</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>12.933738</td>
+<td>11</td>
+<td>0.2976783</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>17.311739</td>
+<td>17</td>
+<td>0.4334467</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>23.038719</td>
+<td>23</td>
+<td>0.4585117</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="a730b001-2cd2-49b4-813f-fa9a789477b0" class="cell" data-execution_count="96">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>forecast_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit1, <span class="dv">5</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>forecast_fit</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast     Lo 80    Hi 80     Lo 95    Hi 95
+226              0 -1487.618 1487.618 -2275.115 2275.115
+227              0 -1487.716 1487.716 -2275.265 2275.265
+228              0 -1487.716 1487.716 -2275.265 2275.265
+229              0 -1487.716 1487.716 -2275.265 2275.265
+230              0 -1487.716 1487.716 -2275.265 2275.265</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="77c1a8c4-aa80-4839-8b52-f9394b62aa1e" class="cell" data-execution_count="97">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(df2,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$pred</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>50538.5358209821</li><li>50576.4651645273</li><li>50613.7975753884</li><li>50650.5424481026</li><li>50686.7090293556</li></ol>
+</dd>
+    <dt>$se</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>1155.04493165446</li><li>1620.67731112801</li><li>1969.44142171338</li><li>2256.48020601875</li><li>2503.36298433091</li></ol>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-31-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="1ab360dc-338d-4f00-8d06-088e8a3663b3" class="cell" data-execution_count="101">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 11</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">일자</th>
+<th data-quarto-table-cell-role="th" scope="col">종가</th>
+<th data-quarto-table-cell-role="th" scope="col">대비</th>
+<th data-quarto-table-cell-role="th" scope="col">등락률</th>
+<th data-quarto-table-cell-role="th" scope="col">시가</th>
+<th data-quarto-table-cell-role="th" scope="col">고가</th>
+<th data-quarto-table-cell-role="th" scope="col">저가</th>
+<th data-quarto-table-cell-role="th" scope="col">거래량</th>
+<th data-quarto-table-cell-role="th" scope="col">거래대금</th>
+<th data-quarto-table-cell-role="th" scope="col">시가총액</th>
+<th data-quarto-table-cell-role="th" scope="col">상장주식수</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">225</td>
+<td>2023/11/29</td>
+<td>50500</td>
+<td>-600</td>
+<td>-1.17</td>
+<td>50800</td>
+<td>51300</td>
+<td>50100</td>
+<td>1284120</td>
+<td>65153113600</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">226</td>
+<td>2023/11/30</td>
+<td>50500</td>
+<td>0</td>
+<td>0.00</td>
+<td>50200</td>
+<td>50900</td>
+<td>50000</td>
+<td>1613598</td>
+<td>81271347200</td>
+<td>2.244705e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">227</td>
+<td>2023/12/01</td>
+<td>49700</td>
+<td>-800</td>
+<td>-1.58</td>
+<td>50400</td>
+<td>50400</td>
+<td>49650</td>
+<td>1105367</td>
+<td>55174771850</td>
+<td>2.209145e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">228</td>
+<td>2023/12/04</td>
+<td>50800</td>
+<td>1100</td>
+<td>2.21</td>
+<td>49800</td>
+<td>51300</td>
+<td>49750</td>
+<td>1785113</td>
+<td>90624610300</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">229</td>
+<td>2023/12/05</td>
+<td>50800</td>
+<td>0</td>
+<td>0.00</td>
+<td>50700</td>
+<td>51200</td>
+<td>50200</td>
+<td>1142447</td>
+<td>57992282100</td>
+<td>2.258040e+13</td>
+<td>444495970</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">230</td>
+<td>2023/12/06</td>
+<td>50900</td>
+<td>100</td>
+<td>0.20</td>
+<td>50700</td>
+<td>51100</td>
+<td>50200</td>
+<td>735503</td>
+<td>37302792200</td>
+<td>2.262484e+13</td>
+<td>444495970</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>평균 값으로 수렴쓰</li>
+</ul>
+<p>짧은 예측은.. 당연히 잘할듯.</p>
+</section>
+</section>
+</section>
+<section id="traintest-나누어서-분석-해볼까" class="level1">
+<h1>train/test 나누어서 분석 해볼까?</h1>
+<ul>
+<li><p>train: 1 ~ 8월</p></li>
+<li><p>test: 9 ~ 11월</p></li>
+</ul>
+<div id="3de68294-3454-4444-8389-c08604e0c638" class="cell" data-execution_count="105">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-01-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-08-31"</span>), ]</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-09-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-11-30"</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e66828b8-e493-410d-87ec-8a0a3cc3259e" class="cell" data-execution_count="121">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]   <span class="co"># 166개</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]    <span class="co"># 60개</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="377b79a9-ec9c-4464-a9e3-5112eae9765a" class="cell" data-execution_count="156">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data<span class="sc">$</span>종가</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0c45d974-03cb-4baa-aa68-a3c47736528e" class="cell" data-execution_count="142">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(tr, <span class="at">gamma =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Holt-Winters exponential smoothing with trend and without seasonal component.
+
+Call:
+HoltWinters(x = tr, gamma = FALSE)
+
+Smoothing parameters:
+ alpha: 0.9032017
+ beta : 0.04464006
+ gamma: FALSE
+
+Coefficients:
+        [,1]
+a 48173.0848
+b  -118.9456</code></pre>
+</div>
+</div>
+<div id="7018a0c6-0130-498b-8e65-a783b1de84cc" class="cell" data-execution_count="148">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fit2<span class="ot">=</span><span class="fu">forecast</span>(fit2, <span class="at">h=</span><span class="dv">60</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>fit2</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast    Lo 80    Hi 80      Lo 95    Hi 95
+167       48054.14 46502.28 49606.00 45680.7752 50427.50
+168       47935.19 45801.61 50068.78 44672.1578 51198.23
+169       47816.25 45192.65 50439.84 43803.8082 51828.69
+170       47697.30 44629.85 50764.76 43006.0357 52388.57
+171       47578.36 44094.38 51062.34 42250.0696 52906.64
+172       47459.41 43576.42 51342.40 41520.8951 53397.93
+173       47340.47 43070.16 51610.77 40809.5942 53871.34
+174       47221.52 42571.82 51871.22 40110.4102 54332.63
+175       47102.57 42078.82 52126.33 39419.4050 54785.74
+176       46983.63 41589.33 52377.92 38733.7668 55233.49
+177       46864.68 41102.00 52627.37 38051.4211 55677.94
+178       46745.74 40615.79 52875.68 37370.7974 56120.68
+179       46626.79 40129.92 53123.66 36690.6820 56562.90
+180       46507.85 39643.75 53371.94 36010.1211 57005.57
+181       46388.90 39156.80 53621.00 35328.3547 57449.45
+182       46269.95 38668.66 53871.25 34644.7701 57895.14
+183       46151.01 38179.00 54123.02 33958.8689 58343.15
+184       46032.06 37687.56 54376.57 33270.2424 58793.88
+185       45913.12 37194.11 54632.12 32578.5530 59247.68
+186       45794.17 36698.49 54889.86 31883.5209 59704.82
+187       45675.23 36200.52 55149.93 31184.9128 60165.54
+188       45556.28 35700.09 55412.47 30482.5338 60630.03
+189       45437.34 35197.08 55677.59 29776.2207 61098.45
+190       45318.39 34691.42 55945.36 29065.8365 61570.94
+191       45199.44 34183.01 56215.88 28351.2665 62047.62
+192       45080.50 33671.81 56489.19 27632.4145 62528.58
+193       44961.55 33157.75 56765.35 26909.2003 63013.91
+194       44842.61 32640.80 57044.41 26181.5568 63503.66
+195       44723.66 32120.92 57326.41 25449.4287 63997.89
+196       44604.72 31598.07 57611.36 24712.7703 64496.66
+197       44485.77 31072.24 57899.30 23971.5446 65000.00
+198       44366.82 30543.40 58190.25 23225.7216 65507.93
+199       44247.88 30011.54 58484.22 22475.2779 66020.48
+200       44128.93 29476.65 58781.22 21720.1955 66537.67
+201       44009.99 28938.71 59081.26 20960.4613 67059.51
+202       43891.04 28397.73 59384.35 20196.0661 67586.02
+203       43772.10 27853.70 59690.50 19427.0046 68117.19
+204       43653.15 27306.61 59999.69 18653.2745 68653.03
+205       43534.21 26756.47 60311.94 17874.8764 69193.53
+206       43415.26 26203.28 60627.24 17091.8132 69738.71
+207       43296.31 25647.05 60945.58 16304.0901 70288.54
+208       43177.37 25087.77 61266.97 15511.7139 70843.02
+209       43058.42 24525.45 61591.39 14714.6934 71402.15
+210       42939.48 23960.11 61918.85 13913.0384 71965.92
+211       42820.53 23391.74 62249.32 13106.7603 72534.30
+212       42701.59 22820.36 62582.81 12295.8715 73107.30
+213       42582.64 22245.97 62919.31 11480.3852 73684.90
+214       42463.69 21668.58 63258.81 10660.3157 74267.07
+215       42344.75 21088.21 63601.29  9835.6777 74853.82
+216       42225.80 20504.86 63946.75  9006.4868 75445.12
+217       42106.86 19918.54 64295.17  8172.7591 76040.96
+218       41987.91 19329.27 64646.55  7334.5109 76641.31
+219       41868.97 18737.05 65000.88  6491.7593 77246.17
+220       41750.02 18141.90 65358.14  5644.5214 77855.52
+221       41631.08 17543.83 65718.32  4792.8147 78469.34
+222       41512.13 16942.85 66081.41  3936.6571 79087.60
+223       41393.18 16338.97 66447.40  3076.0664 79710.30
+224       41274.24 15732.20 66816.28  2211.0606 80337.42
+225       41155.29 15122.56 67188.03  1341.6581 80968.93
+226       41036.35 14510.05 67562.64   467.8771 81604.82</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-37-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="17f8fc3b-1556-4d36-9674-d4321e0f0d55" class="cell" data-execution_count="157">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit2<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+21342401.2451419
+</div>
+</div>
+<div id="3987ddaa-2688-49cf-943b-db69e1d577d6" class="cell" data-execution_count="164">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>fore_fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(tr, <span class="at">frequency=</span><span class="dv">1</span>),</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fore_fit3,<span class="dv">60</span>)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Fitting models using approximations to speed things up...
+
+ ARIMA(2,1,2) with drift         : Inf
+ ARIMA(0,1,0) with drift         : 2798.421
+ ARIMA(1,1,0) with drift         : 2800.201
+ ARIMA(0,1,1) with drift         : 2799.537
+ ARIMA(0,1,0)                    : 2796.46
+ ARIMA(1,1,1) with drift         : Inf
+
+ Now re-fitting the best model(s) without approximations...
+
+ ARIMA(0,1,0)                    : 2810.644
+
+ Best model: ARIMA(0,1,0)                    
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-39-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="16568002-4ffe-4423-88e6-b39b140f7c46" class="cell" data-execution_count="165">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit3<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+26575333.3333333
+</div>
+</div>
+<p>어 렵 다</p>
+</section>
+<section id="data-na값.." class="level1">
+<h1>data na값..</h1>
+<div id="a5c61f05-178d-4749-83f8-048297786a1e" class="cell" data-execution_count="246">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>date_na <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(date_na, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>miss_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(일자 <span class="ot">=</span> date_na, 종가 <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">head</span>(kakao[<span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>)],<span class="dv">226</span>)</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>df3<span class="sc">$</span>일자<span class="ot">&lt;-</span> <span class="fu">as.Date</span>(df3<span class="sc">$</span>일자, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df3, miss_row)</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> df4[<span class="fu">order</span>(df4<span class="sc">$</span>일자),, drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(df4) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">일자</th>
+<th data-quarto-table-cell-role="th" scope="col">종가</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2023-01-01</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2023-01-02</td>
+<td>52700</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2023-01-03</td>
+<td>53300</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2023-01-04</td>
+<td>55700</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2023-01-05</td>
+<td>57700</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2023-01-06</td>
+<td>57200</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li><p>이제 여기서 NA값을 어떻게 할까?</p></li>
+<li><p>일단.. 1월 1일거의 초기값은 넣어주는게 좋겠다. 22년 12웖 말 53,100원</p></li>
+</ul>
+<blockquote class="blockquote">
+<p>시계열데이터에서 결측값을 처리하는 방법</p>
+<ol type="1">
+<li><code>na.locf</code>, <code>zoo::na.approx</code> 함수를 이용하여 결측값 채우기</li>
+</ol>
+<p><code>na.locf</code>: 앞쪽 값으로 결측값 채우기</p>
+<p><code>zoo::na.approx</code>: 선형 보간으로 결측값 채우기</p>
+<ol start="2" type="1">
+<li>평균값이나 중간값으로 채우기</li>
+</ol>
+<p><code>zoo::na.aggregate(ts_with_na, FUN = mean, na.rm = TRUE)</code></p>
+<p><code>zoo::na.aggregate(ts_with_na, FUN = median, na.rm = TRUE)</code></p>
+<ol start="3" type="1">
+<li><p>시계열 예측 모델 사용</p></li>
+<li><p>결측값 삭제</p></li>
+</ol>
+</blockquote>
+<section id="결측값-채우기na.locf" class="level2">
+<h2 class="anchored" data-anchor-id="결측값-채우기na.locf">1. 결측값 채우기(na.locf)</h2>
+<div id="184dda65-4041-4bbf-bee1-f17c0c9d4178" class="cell" data-execution_count="277">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>df4[<span class="dv">1</span>,]<span class="sc">$</span>종가 <span class="ot">&lt;-</span> <span class="dv">53100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b39d11cc-382b-417b-9fa9-d093d280a774" class="cell" data-execution_count="278">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>df_l <span class="ot">&lt;-</span> <span class="fu">na.locf</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="25c06b23-5e4e-4f6e-9517-f3e2ed5061b0" class="cell" data-execution_count="279">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_l,<span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>계절성분이 너무나 없다 ㅎ 그냥 일자로 하는거랑 비슷해보인다리?</li>
+</ul>
+</section>
+<section id="결측값-채우기평균값" class="level2">
+<h2 class="anchored" data-anchor-id="결측값-채우기평균값">2. 결측값 채우기(평균값!)</h2>
+<div id="6c4b55e5-8f26-46e6-975b-2fe61ab7dba7" class="cell" data-execution_count="260">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>df_m <span class="ot">&lt;-</span> df4</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>df_m<span class="sc">$</span>종가 <span class="ot">&lt;-</span>  zoo<span class="sc">::</span><span class="fu">na.aggregate</span>(df4<span class="sc">$</span>종가, <span class="at">FUN =</span> mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6c808e7d-9b66-4463-936c-d2e5f0cd2ef9" class="cell" data-execution_count="271">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>—&gt; 이건 누가 봐도 이상함 ㅎ</p>
+</section>
+<section id="결측값-채우기-nna.approx" class="level2">
+<h2 class="anchored" data-anchor-id="결측값-채우기-nna.approx">3. 결측값 채우기 (Nna.approx)</h2>
+<div id="2accb452-53de-47ff-b30c-e358081542a5" class="cell" data-execution_count="274">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df_a <span class="ot">&lt;-</span> <span class="fu">na.approx</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2740cc42-2b43-4f8a-a591-e619fb77d15f" class="cell" data-execution_count="291">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>df_aa <span class="ot">&lt;-</span> df4</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>df_aa<span class="sc">$</span>종가 <span class="ot">&lt;-</span> df_a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d5317790-64bf-4a3b-a2ca-ac107899cccf" class="cell" data-execution_count="281">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>비슷하다.</p>
+<section id="그냥-해보기..-주별월별-데이터로-바꾸기." class="level4">
+<h4 class="anchored" data-anchor-id="그냥-해보기..-주별월별-데이터로-바꾸기.">그냥 해보기.. (주별/월별 데이터로 바꾸기.)</h4>
+<div id="39430ee4-1f13-41a7-bdba-53852332d568" class="cell" data-execution_count="306">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>df_week <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">week</span>(df4<span class="sc">$</span>일자)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>weekly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_week, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(weekly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">df_week</th>
+<th data-quarto-table-cell-role="th" scope="col">df_aa$종가</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>1</td>
+<td>55457.14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2</td>
+<td>61404.76</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>3</td>
+<td>62149.52</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>4</td>
+<td>63060.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>5</td>
+<td>64176.19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>6</td>
+<td>67595.24</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="78e31e7f-b6cf-46ef-aee5-005c1d60efae" class="cell" data-execution_count="300">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weekly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-53-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="0296a4ee-d797-4af9-b695-eab513cf3665" class="cell" data-execution_count="307">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>df_month <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">month</span>(df4<span class="sc">$</span>일자)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>monthly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_month, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="53f6920d-7c5e-42e6-81db-d4ec483ef4c7" class="cell" data-execution_count="308">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(monthly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-55-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="결론" class="level1">
+<h1>결론</h1>
+<ul>
+<li>주식에서 단기예측은 그나마.. 조금 해볼만 하지만 장기예측은 택도 없을듯! 카카오 데이터가 너무나 하락세 ㅎ 여서 그나마 AR모형이 적합된거 같다. 그거 아니고서느…………..답이없어..</li>
+</ul>
+<section id="번외내-주식은-어떘을까" class="level2">
+<h2 class="anchored" data-anchor-id="번외내-주식은-어떘을까">번외(내 주식은 어떘을까?)</h2>
+<div id="3d47e935-0ffa-4279-89d4-4d3f1c68b598" class="cell" data-execution_count="309">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"kakao2021.csv"</span>, <span class="at">fileEncoding =</span> <span class="st">"ISO-8859-1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d2230f8e-7578-4ede-9694-e49f6f38bedb" class="cell" data-execution_count="311">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>,<span class="st">"대비"</span>,<span class="st">"등락률"</span>,<span class="st">"시가"</span>,<span class="st">"고가"</span>,<span class="st">"저가"</span>,<span class="st">"거래량"</span>,<span class="st">"거래대금"</span>,<span class="st">"시가총액"</span>,<span class="st">"상장주식수"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e7fb2f9d-904f-4cd2-a279-8475e24bbfd9" class="cell" data-execution_count="312">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> kakao2021[<span class="fu">order</span>(kakao2021<span class="sc">$</span>일자),]</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kakao2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 11</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">일자</th>
+<th data-quarto-table-cell-role="th" scope="col">종가</th>
+<th data-quarto-table-cell-role="th" scope="col">대비</th>
+<th data-quarto-table-cell-role="th" scope="col">등락률</th>
+<th data-quarto-table-cell-role="th" scope="col">시가</th>
+<th data-quarto-table-cell-role="th" scope="col">고가</th>
+<th data-quarto-table-cell-role="th" scope="col">저가</th>
+<th data-quarto-table-cell-role="th" scope="col">거래량</th>
+<th data-quarto-table-cell-role="th" scope="col">거래대금</th>
+<th data-quarto-table-cell-role="th" scope="col">시가총액</th>
+<th data-quarto-table-cell-role="th" scope="col">상장주식수</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2021/06/01</td>
+<td>127000</td>
+<td>4000</td>
+<td>3.25</td>
+<td>123500</td>
+<td>127000</td>
+<td>123000</td>
+<td>3573808</td>
+<td>449927782750</td>
+<td>5.636986e+13</td>
+<td>443857175</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2021/06/02</td>
+<td>127000</td>
+<td>0</td>
+<td>0.00</td>
+<td>128000</td>
+<td>129500</td>
+<td>126000</td>
+<td>2597446</td>
+<td>330839738000</td>
+<td>5.636986e+13</td>
+<td>443857175</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2021/06/03</td>
+<td>126500</td>
+<td>-500</td>
+<td>-0.39</td>
+<td>127500</td>
+<td>128500</td>
+<td>126000</td>
+<td>1737466</td>
+<td>220943599000</td>
+<td>5.614793e+13</td>
+<td>443857175</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2021/06/04</td>
+<td>124000</td>
+<td>-2500</td>
+<td>-1.98</td>
+<td>126000</td>
+<td>126000</td>
+<td>123000</td>
+<td>2668254</td>
+<td>331077517000</td>
+<td>5.503829e+13</td>
+<td>443857175</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2021/06/07</td>
+<td>126000</td>
+<td>2000</td>
+<td>1.61</td>
+<td>125000</td>
+<td>127000</td>
+<td>125000</td>
+<td>1905198</td>
+<td>239819945000</td>
+<td>5.592600e+13</td>
+<td>443857175</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2021/06/08</td>
+<td>128500</td>
+<td>2500</td>
+<td>1.98</td>
+<td>127000</td>
+<td>128500</td>
+<td>126500</td>
+<td>2248373</td>
+<td>287596903000</td>
+<td>5.703565e+13</td>
+<td>443857175</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="00b121e2-03ab-46ce-a033-16b406493b2b" class="cell" data-execution_count="313">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>df_my <span class="ot">&lt;-</span> kakao2021<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2dd579c1-7087-457a-bd38-e9bed804bd32" class="cell" data-execution_count="315">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_my)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-60-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>ㅠㅠㅠㅠ</p>
+<p><img src="[TS] 발표v2_files/figure-html/2935b7b8-0c6f-4ad4-8472-134b8040b3ed-1-730b17b8-2299-417e-8b05-e2e615c21e38.png" class="img-fluid"><img src="[TS] 발표v2_files/figure-html/2935b7b8-0c6f-4ad4-8472-134b8040b3ed-2-befc4918-7746-4508-824c-3454a0dce87c.png" class="img-fluid" alt="image.png"></p>
+<ul>
+<li><p>이미지출처: https://vizibusy.tistory.com/31</p></li>
+<li><p>오르는 거 보고 신나서 들어갔다가 지금 현재 폭망하는 중……………………………</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
