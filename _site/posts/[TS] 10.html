@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="김보람">
-<meta name="dcterms.date" content="2023-12-04">
+<meta name="dcterms.date" content="2023-12-06">
 
 <title>TS - [TS] 10. Seasonal ARIMA 실습</title>
 <style>
@@ -100,6 +100,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -169,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 4, 2023</p>
+        <p class="date">December 6, 2023</p>
       </div>
     </div>
     
@@ -187,80 +190,168 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="84ee1732-621f-4475-85b9-ff03c40da7a3" class="cell">
+<div id="84ee1732-621f-4475-85b9-ff03c40da7a3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">12</span>, <span class="at">repr.plot.height =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="ex-10.2" class="level1">
 <h1>EX 10.2</h1>
-<div id="a29d2e65-5c5c-49a6-be35-5bdf56b02a98" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"DAT/tourist.txt"</span>)</span>
+<div id="a29d2e65-5c5c-49a6-be35-5bdf56b02a98" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="st">"tourist.txt"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-3-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <ul>
 <li><p>이분산성, 추세와 계절성분을 모두 가지고 있다.</p></li>
 <li><p>변수변환을 통한 분산안정화 부터 진행</p></li>
+<li><p>ACF천천히 감소(계절성분이 있어서 봉긋하게 솟아오르는 그림: 계절차분 필요해)</p></li>
 </ul>
 <section id="분산안정화-변수변환" class="level2">
 <h2 class="anchored" data-anchor-id="분산안정화-변수변환">(1) 분산안정화 : 변수변환</h2>
-<div id="01b7be2f-5671-418c-a8df-c6d30d62fd1e" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>log_z <span class="ot">=</span> <span class="fu">log</span>(z)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sqrt_z <span class="ot">=</span> <span class="fu">sqrt</span>(z)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>boxcox_z <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">BoxCox</span>(z,<span class="at">lambda=</span> forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="01b7be2f-5671-418c-a8df-c6d30d62fd1e" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>log_z <span class="ot">=</span> <span class="fu">log</span>(z)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sqrt_z <span class="ot">=</span> <span class="fu">sqrt</span>(z)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>boxcox_z <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">BoxCox</span>(z,<span class="at">lambda=</span> forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="baa823b2-3c01-4d03-8940-ba1b60552feb" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="baa823b2-3c01-4d03-8940-ba1b60552feb" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.597503413076269
 </div>
-<div id="be37de69-4679-49c0-9ff4-ea7f05a7c604" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z, <span class="at">main =</span> <span class="st">"original"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(log_z, <span class="at">main =</span> <span class="st">'log'</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(sqrt_z, <span class="at">main =</span> <span class="st">'sqrt'</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(boxcox_z, <span class="at">main =</span> <span class="st">'Boxcox'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="fc383e07-f982-4c34-a1e5-f23361e1c451" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(z<span class="sc">~</span>t)) <span class="co">#H0 : 등분산이다</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(log_z<span class="sc">~</span>t))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(sqrt_z<span class="sc">~</span>t))</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(boxcox_z<span class="sc">~</span>t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="be37de69-4679-49c0-9ff4-ea7f05a7c604" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(z, <span class="at">main =</span> <span class="st">"original"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(log_z, <span class="at">main =</span> <span class="st">'log'</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(sqrt_z, <span class="at">main =</span> <span class="st">'sqrt'</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.ts</span>(boxcox_z, <span class="at">main =</span> <span class="st">'Boxcox'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="fc383e07-f982-4c34-a1e5-f23361e1c451" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(z<span class="sc">~</span>t)) <span class="co">#H0 : 등분산이다</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(log_z<span class="sc">~</span>t))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(sqrt_z<span class="sc">~</span>t))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(<span class="fu">lm</span>(boxcox_z<span class="sc">~</span>t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(z ~ t)
+BP = 1.574, df = 1, p-value = 0.2096</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(log_z ~ t)
+BP = 5.4539, df = 1, p-value = 0.01953</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(sqrt_z ~ t)
+BP = 0.26821, df = 1, p-value = 0.6045</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  lm(boxcox_z ~ t)
+BP = 0.026422, df = 1, p-value = 0.8709</code></pre>
+</div>
 </div>
 <ul>
-<li><span class="math inline">\(\lambda = 0.597\)</span>을 이용한 Boxcox 변환 수행</li>
+<li><p>원데이터도 등분산이긴 하지만.. sqrt나 boxcox를 하는게 나은 것 같다.</p></li>
+<li><p><span class="math inline">\(\lambda = 0.597\)</span>을 이용한 Boxcox 변환 수행</p></li>
 </ul>
-<div id="670ad01b-cdcc-40fd-bcd7-2045bbf8ff30" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="670ad01b-cdcc-40fd-bcd7-2045bbf8ff30" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
 </div>
-<div id="ad5e16a6-aacb-4343-a74f-45f752ef9d0e" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> 계절성분과 추세가 존재하므로 우선 계절차분을 통한 계절성분 제거</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<ul>
+<li>계절성분과 추세가 존재하므로 우선 계절차분을 통한 계절성분 제거</li>
+</ul>
 </section>
 <section id="계절차분" class="level2">
 <h2 class="anchored" data-anchor-id="계절차분">(2) 계절차분</h2>
-<div id="3274c775-4dee-43b0-8eb0-45b3b7b1a3e2" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lag12_boxcox_z <span class="ot">=</span> <span class="fu">diff</span>(boxcox_z, <span class="at">lag=</span><span class="dv">12</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3274c775-4dee-43b0-8eb0-45b3b7b1a3e2" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lag12_boxcox_z <span class="ot">=</span> <span class="fu">diff</span>(boxcox_z, <span class="at">lag=</span><span class="dv">12</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <ul>
-<li><p>계절차분을 통해 제절추세는 제거 되었음</p></li>
+<li><p>계절차분을 통해 결정적 계절추세는 제거 되었음</p></li>
 <li><p>결정적 추세는 없는 것으로 보이나, ACF가 조금은 천천히 감소하는 경향이 보이기 때문에 단위근 검정을 통해 차분이 필요한가에 대한 여부 판정</p></li>
+</ul>
+</section>
+<section id="평균" class="level2">
+<h2 class="anchored" data-anchor-id="평균">평균</h2>
+<div id="9a416675-4803-427f-bc9b-0ab0709ab610" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  lag12_boxcox_z
+t = 12.508, df = 119, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 116.3801 160.1566
+sample estimates:
+mean of x 
+ 138.2684 </code></pre>
+</div>
+</div>
+<ul>
+<li>평균 0아님</li>
 </ul>
 </section>
 <section id="단위근-검정" class="level2">
 <h2 class="anchored" data-anchor-id="단위근-검정">(3) 단위근 검정</h2>
-<div id="e5ca2803-fba6-4fed-90db-f6793cd6b55c" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(lag12_boxcox_z, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e5ca2803-fba6-4fed-90db-f6793cd6b55c" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">##단위근 검정 : H0 : 단위근이 있다.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(lag12_boxcox_z, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Title:
+ Augmented Dickey-Fuller Test
+
+Test Results:
+  PARAMETER:
+    Lag Order: 1
+  STATISTIC:
+    Dickey-Fuller: -2.6696
+  P VALUE:
+    0.08535 
+
+Description:
+ Tue Dec  5 20:44:51 2023 by user: </code></pre>
+</div>
 </div>
 <ul>
-<li>유의확률이 아주 크지는 않지만, 유의수준 <span class="math inline">\(\alpha=0.05\)</span>하에서 귀무가설을 기각하지 못하기 때문에 차분을 하기로 함</li>
+<li>유의확률이 아주 크지는 않지만, 유의수준 <span class="math inline">\(\alpha=0.05\)</span>하에서 귀무가설을 기각하지 못하기 때문에 차분을 하기로함, 단위근이 있어!</li>
 </ul>
-<div id="ae0715e2-8f01-4ffe-b8df-d62c09685f94" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>diff_lag12_boxcox_z <span class="ot">=</span> <span class="fu">diff</span>(lag12_boxcox_z)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ae0715e2-8f01-4ffe-b8df-d62c09685f94" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>diff_lag12_boxcox_z <span class="ot">=</span> <span class="fu">diff</span>(lag12_boxcox_z)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_lag12_boxcox_z, <span class="at">lag.max=</span><span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
 </div>
-<div id="d112099a-b228-4275-a01c-97f6529a30f0" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 단위근검정 H0 : phi=1</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fUnitRoots<span class="sc">::</span><span class="fu">adfTest</span>(diff_lag12_boxcox_z, <span class="at">lags =</span> <span class="dv">1</span>, <span class="at">type =</span> <span class="st">"nc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>차분한 후의 자료에 대해서는 더이상 차분이 필요하지 않음</li>
@@ -268,8 +359,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="모형식별" class="level2">
 <h2 class="anchored" data-anchor-id="모형식별">(4) 모형식별</h2>
-<div id="8f73a141-c265-485a-a741-ead4d89bb809" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8f73a141-c265-485a-a741-ead4d89bb809" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(diff_lag12_boxcox_z, <span class="at">lag.max=</span><span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <ul>
 <li><p>ACF는 1차와 12차에서 절단 형태이고, PACF는 1,2차와 12,13 시차 등에서 유의하게 나왔다.</p></li>
@@ -277,47 +371,230 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>diff_lag12_boxcox_z = : <span class="math inline">\(ARIMA(0, 0, 1)(0, 0, 1)_{12}\)</span></p></li>
 <li><p>lag12_boxcox_z = <span class="math inline">\(ARIMA(0,1,1)(0,0,1)_{12}\)</span></p></li>
 <li><p>Boxcox_z = <span class="math inline">\(ARIMA(0,1,1)(0,1,1)_{12}\)</span></p></li>
+<li><p>계절형 AR도 괜찮을 것 같다.</p></li>
 </ul>
 </section>
 <section id="모형적합" class="level2">
 <h2 class="anchored" data-anchor-id="모형적합">(5) 모형적합</h2>
-<div id="06604ba6-ef8f-466d-a8cf-dd3456a9a2af" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-</code> 상수항 추가 여부 확인</p>
+<div id="a4e1ea14-960f-4bea-9ed5-129a26d6726a" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(diff_lag12_boxcox_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  diff_lag12_boxcox_z
+t = 0.11301, df = 118, p-value = 0.9102
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -16.93470  18.98455
+sample estimates:
+mean of x 
+ 1.024925 </code></pre>
 </div>
-<div id="50a06faa-8325-4b09-b833-686ebe06d6b8" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<ul>
+<li>상수항 추가 안해두 된당.</li>
+</ul>
+<p><code>-</code> 모형1</p>
+<div id="4af1c685-9a48-4aee-9847-2253c08691b1" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fit11 <span class="ot">=</span> <span class="fu">arima</span>(diff_lag12_boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">include.mean=</span>F,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fit11</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = diff_lag12_boxcox_z, order = c(0, 0, 1), seasonal = list(order = c(0, 
+    0, 1), period = 12), include.mean = F)
+
+Coefficients:
+          ma1     sma1
+      -0.5307  -0.6370
+s.e.   0.0702   0.0842
+
+sigma^2 estimated as 4831:  log likelihood = -676.87,  aic = 1359.74</code></pre>
+</div>
+</div>
+<p><code>-</code> 모형2</p>
+<div id="34dc4ca1-914c-4c49-a3cc-911e8977554c" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fit12 <span class="ot">=</span> <span class="fu">arima</span>(lag12_boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fit12</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = lag12_boxcox_z, order = c(0, 1, 1), seasonal = list(order = c(0, 0, 
+    1), period = 12))
+
+Coefficients:
+          ma1     sma1
+      -0.5307  -0.6370
+s.e.   0.0702   0.0842
+
+sigma^2 estimated as 4831:  log likelihood = -676.87,  aic = 1359.74</code></pre>
+</div>
+</div>
+<p><code>-</code> 모형3</p>
+<div id="06604ba6-ef8f-466d-a8cf-dd3456a9a2af" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1), 
+    period = 12))
+
+Coefficients:
+          ma1     sma1
+      -0.5307  -0.6370
+s.e.   0.0702   0.0842
+
+sigma^2 estimated as 4831:  log likelihood = -676.87,  aic = 1359.74</code></pre>
+</div>
+</div>
+<ul>
+<li>위의 3개 모형의 값은 동일하게 나온다.</li>
+</ul>
+<div id="50a06faa-8325-4b09-b833-686ebe06d6b8" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1) <span class="co">#원데이터에 적합하는게 좋다.(forecast하기 위해서)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+      Estimate Std. Error z value  Pr(&gt;|z|)    
+ma1  -0.530740   0.070154 -7.5654 3.868e-14 ***
+sma1 -0.637038   0.084175 -7.5680 3.790e-14 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<ul>
+<li>모든 계수가 유의하다.</li>
+</ul>
 <p><span class="math inline">\((1 − B)(1 − B^{12})BoxCox(Z) = (1 − 0.5307B)(1 − 0.6370B^{12})ε_t, ε+t ∼ WN(0, 4831)\)</span></p>
+<ul>
+<li>MA부분, SMA부분이 있다.</li>
+</ul>
 </section>
 <section id="잔차분석" class="level2">
 <h2 class="anchored" data-anchor-id="잔차분석">(6) 잔차분석</h2>
-<div id="70e82673-8e39-4486-aea4-61b2a6b4e359" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="70e82673-8e39-4486-aea4-61b2a6b4e359" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,1)(0,1,1)[12]
+Q* = 9.1519, df = 8, p-value = 0.3296
+
+Model df: 2.   Total lags used: 10
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-19-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <ul>
 <li>잔차의 평균은 0이다</li>
 </ul>
-<div id="c8ef5c5f-c782-4fd7-8c0e-0f2b15a664cf" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">resid</span>(fit1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c8ef5c5f-c782-4fd7-8c0e-0f2b15a664cf" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">resid</span>(fit1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    One Sample t-test
+
+data:  resid(fit1)
+t = 0.83993, df = 131, p-value = 0.4025
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -6.546096 16.206445
+sample estimates:
+mean of x 
+ 4.830174 </code></pre>
+</div>
 </div>
 <ul>
 <li>등분산성을 만족하고, ACF가 모든 시차에서 유의하지 않으므로 WN라고 할 수 있다.</li>
 </ul>
 <p><code>-</code> 포투맨투검정</p>
-<div id="c235c27e-c296-4c85-af61-10ce395f487f" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c235c27e-c296-4c85-af61-10ce395f487f" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit1), <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit1)
+X-squared = 1.4198, df = 1, p-value = 0.2334</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit1)
+X-squared = 7.6505, df = 6, p-value = 0.2648</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit1)
+X-squared = 10.729, df = 12, p-value = 0.5523</code></pre>
+</div>
 </div>
 <ul>
 <li>모든 시차에 대해 유의확률값이 크기 때문에 WN라고 할 수 있다.</li>
 </ul>
-<div id="68ed616e-c2c9-415f-9ee8-8fe5da6a2661" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#portes::LjungBox(fit1, lags=c(6,12,18,24))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="68ed616e-c2c9-415f-9ee8-8fe5da6a2661" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit1, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>7.650531</td>
+<td>5</td>
+<td>0.1765764</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>10.728871</td>
+<td>11</td>
+<td>0.4662493</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>15.730829</td>
+<td>17</td>
+<td>0.5429906</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>25.724146</td>
+<td>23</td>
+<td>0.3140605</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </section>
 <section id="과대적합" class="level2">
@@ -325,56 +602,271 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>boxcox_z = <span class="math inline">\(ARIMA(0,1,1)(0,1,1)_{12}\)</span></p></li>
 <li><p><span class="math inline">\(ARIMA(1,1,1)(0,1,1)_{12}, ARIMA(0,1,2)(0,1,1)_{12}\)</span></p></li>
+<li><p><span class="math inline">\(ARIMA(0,1,1)(1,0,1)_{12}\)</span></p></li>
 </ul>
-<div id="392149f6-6f4c-4a50-80f9-479a9b3c05e0" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-</code> AR추가</p>
+<div id="392149f6-6f4c-4a50-80f9-479a9b3c05e0" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(1, 1, 1), seasonal = list(order = c(0, 1, 1), 
+    period = 12))
+
+Coefficients:
+          ar1      ma1     sma1
+      -0.3345  -0.2984  -0.6183
+s.e.   0.1354   0.1299   0.0828
+
+sigma^2 estimated as 4658:  log likelihood = -674.51,  aic = 1357.01</code></pre>
 </div>
-<div id="d344e946-5854-4954-84cb-94ede9be840c" class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="27a8ed20-fc8b-4cfa-9eef-1836b88260c2" class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fit3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d344e946-5854-4954-84cb-94ede9be840c" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+      Estimate Std. Error z value  Pr(&gt;|z|)    
+ar1  -0.334453   0.135431 -2.4695   0.01353 *  
+ma1  -0.298389   0.129851 -2.2979   0.02157 *  
+sma1 -0.618253   0.082802 -7.4666 8.228e-14 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
 </div>
-<div id="9b0f9d79-5e37-46ad-8503-ebe51ebfd1a8" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="30668221-c041-4e81-89c8-da8afe47cd9b" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-</code> MA추가</p>
+<div id="27a8ed20-fc8b-4cfa-9eef-1836b88260c2" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>fit3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(0, 1, 2), seasonal = list(order = c(0, 1, 1), 
+    period = 12))
+
+Coefficients:
+          ma1     ma2     sma1
+      -0.6445  0.2825  -0.6236
+s.e.   0.0871  0.1009   0.0833
+
+sigma^2 estimated as 4569:  log likelihood = -673.44,  aic = 1354.88</code></pre>
 </div>
+</div>
+<div id="9b0f9d79-5e37-46ad-8503-ebe51ebfd1a8" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+      Estimate Std. Error z value  Pr(&gt;|z|)    
+ma1  -0.644484   0.087127 -7.3970 1.393e-13 ***
+ma2   0.282478   0.100937  2.7985  0.005133 ** 
+sma1 -0.623576   0.083259 -7.4896 6.908e-14 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<p><code>-</code> 계절형 AR</p>
+<div id="7bc958ef-9d56-4bc3-8f12-554b0ac07a66" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> <span class="fu">arima</span>(boxcox_z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">period=</span><span class="dv">12</span>))</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>fit4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(0, 1, 1), seasonal = list(order = c(1, 1, 0), 
+    period = 12))
+
+Coefficients:
+          ma1     sar1
+      -0.5583  -0.5525
+s.e.   0.0670   0.0804
+
+sigma^2 estimated as 5011:  log likelihood = -678.13,  aic = 1362.25</code></pre>
+</div>
+</div>
+<div id="136995eb-90a3-40b2-98cd-ee97e9ddf286" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+      Estimate Std. Error z value  Pr(&gt;|z|)    
+ma1  -0.558307   0.067012 -8.3315 &lt; 2.2e-16 ***
+sar1 -0.552549   0.080366 -6.8754 6.181e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
+<div id="30668221-c041-4e81-89c8-da8afe47cd9b" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1), 
+    period = 12))
+
+Coefficients:
+          ma1     sma1
+      -0.5307  -0.6370
+s.e.   0.0702   0.0842
+
+sigma^2 estimated as 4831:  log likelihood = -676.87,  aic = 1359.74</code></pre>
+</div>
+</div>
+<p><code>-</code> AIC가 제일 작은 모형 선택</p>
 <ul>
 <li><span class="math inline">\(ARIMA(0,1,2)(0,1,1)_{12}\)</span>모형 적합 결과가 더 좋기 때문에 최종 모형으로 선택</li>
 </ul>
-<div id="22a988eb-cff0-4446-a7b7-769d59297492" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="22a988eb-cff0-4446-a7b7-769d59297492" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">checkresiduals</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,2)(0,1,1)[12]
+Q* = 3.3401, df = 7, p-value = 0.8519
+
+Model df: 3.   Total lags used: 10
+</code></pre>
 </div>
-<div id="11354e49-1f1f-4248-ab00-8396cdbfa335" class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="11354e49-1f1f-4248-ab00-8396cdbfa335" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#모형 적합도 검정 : H0 : rho1=...=rho_k=0</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">1</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">6</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(<span class="fu">resid</span>(fit3), <span class="at">lag=</span><span class="dv">12</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit3)
+X-squared = 0.00013728, df = 1, p-value = 0.9907</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit3)
+X-squared = 2.3206, df = 6, p-value = 0.888</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Box-Ljung test
+
+data:  resid(fit3)
+X-squared = 5.1674, df = 12, p-value = 0.9522</code></pre>
+</div>
 </div>
 <ul>
 <li>잔차검정 결과도 이상이 없으므로 fit3을 최종모형으로 선택</li>
 </ul>
+<div id="a94de34a-1192-4789-9947-3b20559f1eb3" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fit3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = boxcox_z, order = c(0, 1, 2), seasonal = list(order = c(0, 1, 1), 
+    period = 12))
+
+Coefficients:
+          ma1     ma2     sma1
+      -0.6445  0.2825  -0.6236
+s.e.   0.0871  0.1009   0.0833
+
+sigma^2 estimated as 4569:  log likelihood = -673.44,  aic = 1354.88</code></pre>
+</div>
+</div>
+<ul>
+<li><p><span class="math inline">\((1-B)(1-B^{12})Z_t = (1 -0.6445 B + 0.2825 B^2)(1-0.6236 B^{12}) \epsilon_t\)</span></p></li>
+<li><p>부호 반대인거 조심!</p></li>
+</ul>
 </section>
 <section id="auto.arima" class="level2">
 <h2 class="anchored" data-anchor-id="auto.arima">(8) auto.arima</h2>
-<div id="8489a002-726c-488b-a7ef-b0f728d484b4" class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(boxcox_z, <span class="at">frequency=</span><span class="dv">12</span>),</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">TRUE</span>, <span class="at">trace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8489a002-726c-488b-a7ef-b0f728d484b4" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(boxcox_z, <span class="at">frequency=</span><span class="dv">12</span>),</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">TRUE</span>, <span class="at">trace =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ ARIMA(2,1,2)(1,1,1)[12]                    : 1357.774
+ ARIMA(0,1,0)(0,1,0)[12]                    : 1432.23
+ ARIMA(1,1,0)(1,1,0)[12]                    : 1360.54
+ ARIMA(0,1,1)(0,1,1)[12]                    : 1359.953
+ ARIMA(2,1,2)(0,1,1)[12]                    : 1358.211
+ ARIMA(2,1,2)(1,1,0)[12]                    : 1359.268
+ ARIMA(2,1,2)(2,1,1)[12]                    : 1359.649
+ ARIMA(2,1,2)(1,1,2)[12]                    : 1358.941
+ ARIMA(2,1,2)(0,1,0)[12]                    : 1394.751
+ ARIMA(2,1,2)(0,1,2)[12]                    : 1358.288
+ ARIMA(2,1,2)(2,1,0)[12]                    : 1359.606
+ ARIMA(2,1,2)(2,1,2)[12]                    : 1361.251
+ ARIMA(1,1,2)(1,1,1)[12]                    : 1356.533
+ ARIMA(1,1,2)(0,1,1)[12]                    : 1357.41
+ ARIMA(1,1,2)(1,1,0)[12]                    : 1357.649
+ ARIMA(1,1,2)(2,1,1)[12]                    : Inf
+ ARIMA(1,1,2)(1,1,2)[12]                    : Inf
+ ARIMA(1,1,2)(0,1,0)[12]                    : 1393.906
+ ARIMA(1,1,2)(0,1,2)[12]                    : 1357.164
+ ARIMA(1,1,2)(2,1,0)[12]                    : Inf
+ ARIMA(1,1,2)(2,1,2)[12]                    : 1359.974
+ ARIMA(0,1,2)(1,1,1)[12]                    : 1354.324
+ ARIMA(0,1,2)(0,1,1)[12]                    : 1355.231
+ ARIMA(0,1,2)(1,1,0)[12]                    : 1355.507
+ ARIMA(0,1,2)(2,1,1)[12]                    : 1356.055
+ ARIMA(0,1,2)(1,1,2)[12]                    : 1355.119
+ ARIMA(0,1,2)(0,1,0)[12]                    : 1391.769
+ ARIMA(0,1,2)(0,1,2)[12]                    : 1354.951
+ ARIMA(0,1,2)(2,1,0)[12]                    : 1355.984
+ ARIMA(0,1,2)(2,1,2)[12]                    : Inf
+ ARIMA(0,1,1)(1,1,1)[12]                    : 1359.93
+ ARIMA(0,1,3)(1,1,1)[12]                    : 1356.525
+ ARIMA(1,1,1)(1,1,1)[12]                    : 1356.427
+ ARIMA(1,1,3)(1,1,1)[12]                    : 1358.675
+
+ Best model: ARIMA(0,1,2)(1,1,1)[12]                    
+</code></pre>
 </div>
-<div id="a537aaf2-beb5-4ce9-af09-c1f2bd5edddb" class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(boxcox_z, <span class="at">frequency=</span><span class="dv">12</span>),</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="st">"adf"</span>,</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">seasonal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Series: ts(boxcox_z, frequency = 12) 
+ARIMA(0,1,2)(1,1,1)[12] 
+
+Coefficients:
+          ma1     ma2     sar1     sma1
+      -0.6662  0.2996  -0.3012  -0.4028
+s.e.   0.0880  0.0997   0.1645   0.1751
+
+sigma^2 = 4601:  log likelihood = -671.9
+AIC=1353.79   AICc=1354.32   BIC=1367.69</code></pre>
 </div>
-<div id="f93b366c-bf49-4c00-9e18-c5f6c299f597" class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a537aaf2-beb5-4ce9-af09-c1f2bd5edddb" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>fit4 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(boxcox_z, <span class="at">frequency=</span><span class="dv">12</span>),</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">seasonal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="f93b366c-bf49-4c00-9e18-c5f6c299f597" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+      Estimate Std. Error z value  Pr(&gt;|z|)    
+ma1  -0.666226   0.088010 -7.5699 3.734e-14 ***
+ma2   0.299594   0.099683  3.0055  0.002652 ** 
+sar1 -0.301227   0.164489 -1.8313  0.067058 .  
+sma1 -0.402808   0.175098 -2.3005  0.021421 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
 </div>
 <ul>
 <li>최종선택 모형에 비해 aic나 분산이 조금 작지만 추가된 계수가 유의하지 않으므로 기존 모형 유지</li>
@@ -382,56 +874,130 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="예측" class="level2">
 <h2 class="anchored" data-anchor-id="예측">(9) 예측</h2>
-<div id="a8a4174c-f674-4638-8d56-b7a98d73fc34" class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fore_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit3, <span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a8a4174c-f674-4638-8d56-b7a98d73fc34" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>fore_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit3, <span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="56d97c8c-38bb-4b5b-bb3f-0af1a055f4dc" class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fore_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="56d97c8c-38bb-4b5b-bb3f-0af1a055f4dc" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>fore_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+133       2780.444 2693.821 2867.067 2647.966 2912.923
+134       2948.470 2856.536 3040.404 2807.869 3089.071
+135       3133.218 3025.951 3240.484 2969.168 3297.267
+136       3219.609 3098.943 3340.275 3035.067 3404.151
+137       3304.710 3171.991 3437.429 3101.734 3507.686
+138       3299.345 3155.579 3443.110 3079.474 3519.215
+139       3256.562 3102.541 3410.584 3021.007 3492.118
+140       3385.280 3221.644 3548.916 3135.020 3635.540
+141       3349.803 3177.087 3522.520 3085.657 3613.950
+142       3514.000 3332.658 3695.342 3236.661 3791.339
+143       3340.552 3150.976 3530.129 3050.621 3630.484
+144       3151.776 2954.309 3349.243 2849.776 3453.776
+145       3024.749 2808.612 3240.886 2694.196 3355.302
+146       3167.091 2940.850 3393.332 2821.085 3513.096
+147       3351.838 3113.152 3590.525 2986.799 3716.878
+148       3438.230 3187.715 3688.744 3055.101 3821.358
+149       3523.330 3261.522 3785.139 3122.929 3923.732
+150       3517.965 3245.330 3790.601 3101.005 3934.925
+151       3475.183 3192.134 3758.231 3042.298 3908.068
+152       3603.901 3310.809 3896.992 3155.656 4052.145
+153       3568.424 3265.622 3871.226 3105.329 4031.519
+154       3732.621 3420.411 4044.831 3255.137 4210.105
+155       3559.173 3237.830 3880.516 3067.721 4050.625
+156       3370.397 3040.173 3700.620 2865.363 3875.430</code></pre>
 </div>
-<div id="af7d2647-595d-4ee4-b713-46a6722766e2" class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fore_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="bd166825-a218-4c5a-8fdc-67145e4fb08b" class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(boxcox_z, <span class="dv">24</span>, <span class="at">p=</span><span class="dv">0</span>,<span class="at">d=</span><span class="dv">1</span>,<span class="at">q=</span><span class="dv">2</span>,<span class="at">P=</span><span class="dv">0</span>, <span class="at">D=</span><span class="dv">1</span>, <span class="at">Q=</span><span class="dv">1</span>, <span class="at">S=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="af7d2647-595d-4ee4-b713-46a6722766e2" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fore_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="bd166825-a218-4c5a-8fdc-67145e4fb08b" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(boxcox_z, <span class="dv">24</span>, <span class="at">p=</span><span class="dv">0</span>,<span class="at">d=</span><span class="dv">1</span>,<span class="at">q=</span><span class="dv">2</span>,<span class="at">P=</span><span class="dv">0</span>, <span class="at">D=</span><span class="dv">1</span>, <span class="at">Q=</span><span class="dv">1</span>, <span class="at">S=</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<dl>
+    <dt>$pred</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>2780.44436470219</li><li>2948.46998834967</li><li>3133.21762076667</li><li>3219.60898627558</li><li>3304.70977212127</li><li>3299.34452206601</li><li>3256.56216204148</li><li>3385.27998378987</li><li>3349.80343457582</li><li>3514.00009457812</li><li>3340.55249656353</li><li>3151.77616396455</li><li>3024.74890238384</li><li>3167.09058936517</li><li>3351.83822178217</li><li>3438.22958729108</li><li>3523.33037313677</li><li>3517.96512308151</li><li>3475.18276305698</li><li>3603.90058480537</li><li>3568.42403559132</li><li>3732.62069559362</li><li>3559.17309757903</li><li>3370.39676498005</li></ol>
+</dd>
+    <dt>$se</dt>
+        <dd>A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>67.5921986216549</li><li>71.7366048879261</li><li>83.7002434641541</li><li>94.1558337596387</li><li>103.56114766584</li><li>112.180664914328</li><li>120.183575646675</li><li>127.685872866368</li><li>134.771185362014</li><li>141.502164923051</li><li>147.927188006552</li><li>154.084448753493</li><li>168.65253754947</li><li>176.536749601591</li><li>186.248055942822</li><li>195.47749928004</li><li>204.290398958884</li><li>212.738528453326</li><li>220.863749560442</li><li>228.700481527725</li><li>236.277431490681</li><li>243.61883960884</li><li>250.745395555351</li><li>257.67482381548</li></ol>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-39-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <ul>
 <li>BoxCox 역변환을 해야함</li>
 </ul>
-<div id="95c8c9ff-93f8-4abe-adc4-13794b5295e1" class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>forecast_z <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>mean, <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>forecast_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="95c8c9ff-93f8-4abe-adc4-13794b5295e1" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>forecast_z <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>mean, <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>forecast_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+A Time Series:<br><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>245634.162066875</li><li>270964.342935491</li><li>299958.645281666</li><li>313921.348143813</li><li>327924.364184853</li><li>327034.276934031</li><li>319971.637075569</li><li>341407.634183245</li><li>335443.762145745</li><li>363399.977817667</li><li>333895.570293801</li><li>302936.523527017</li><li>282791.718952908</li><li>305402.76421357</li><li>335784.680882732</li><li>350387.36379716</li><li>365015.52063737</li><li>364086.17223163</li><li>356709.739667013</li><li>379085.979444533</li><li>372864.107784763</li><li>402007.344466243</li><li>371248.497707336</li><li>338900.503978254</li></ol>
 </div>
-<div id="9a74ebc8-f067-4a16-97e3-7dce0ff397ff" class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>forecast_z_upper95 <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>upper[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>forecast_z_lower95 <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>lower[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a3f3cfaa-91dd-45a0-aca9-512404efa480" class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">24</span>), <span class="fu">c</span>(z, forecast_z_upper95), <span class="at">type=</span><span class="st">'n'</span>, <span class="at">xlab=</span><span class="st">'t'</span>, <span class="at">ylab=</span><span class="st">'z'</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z),z)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lines((length(z)+1) : (length(z)+24), forecast_z, col='red')</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#lines((length(z)+1) : (length(z)+24), forecast::InvBoxCox(fore_fit$lower[,2], lambda=forecast::BoxCox.la</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#lines((length(z)+1) : (length(z)+24), forecast::InvBoxCox(fore_fit$upper[,2], lambda=forecast::BoxCox.la</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9a74ebc8-f067-4a16-97e3-7dce0ff397ff" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>forecast_z_upper95 <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>upper[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>forecast_z_lower95 <span class="ot">=</span> forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>lower[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a3f3cfaa-91dd-45a0-aca9-512404efa480" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">24</span>), <span class="fu">c</span>(z, forecast_z_upper95), <span class="at">type=</span><span class="st">'n'</span>, <span class="at">xlab=</span><span class="st">'t'</span>, <span class="at">ylab=</span><span class="st">'z'</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(z),z)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>((<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">:</span> (<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">24</span>), forecast_z, <span class="at">col=</span><span class="st">'red'</span>)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>((<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">:</span> (<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">24</span>), forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>lower[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z)), <span class="at">col=</span><span class="st">'blue'</span>)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>((<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">:</span> (<span class="fu">length</span>(z)<span class="sc">+</span><span class="dv">24</span>), forecast<span class="sc">::</span><span class="fu">InvBoxCox</span>(fore_fit<span class="sc">$</span>upper[,<span class="dv">2</span>], <span class="at">lambda=</span>forecast<span class="sc">::</span><span class="fu">BoxCox.lambda</span>(z)), <span class="at">col=</span><span class="st">'blue'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-42-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 </section>
 </section>
 <section id="simulation" class="level1">
 <h1>Simulation</h1>
-<div id="06130ef9-c424-4487-82ba-2575c60efda3" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#astsa::sarima.sim(ar = NULL, d = 0, ma = NULL, sar = NULL, D = 0, sma = NULL, S = NULL,</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># n = 500, rand.gen = rnorm, innov = NULL, burnin = NA, t0 = 0, ...)</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">#sarima::sim_sarima(model=list(ar,iorder,ma, sar, siorder, sma, nseasons, sigma2),</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># n = NA, rand.gen = rnorm, n.start = NA, x, eps,</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># xcenter = NULL, xintercept = NULL, ...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="06130ef9-c424-4487-82ba-2575c60efda3" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># astsa::sarima.sim(ar = NULL, d = 0, ma = NULL, sar = NULL, D = 0, sma = NULL, S = NULL,</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="co"># n = 500, rand.gen = rnorm, innov = NULL, burnin = NA, t0 = 0, ...)</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="co"># sarima::sim_sarima(model=list(ar,iorder,ma, sar, siorder, sma, nseasons, sigma2),</span></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="co"># n = NA, rand.gen = rnorm, n.start = NA, x, eps,</span></span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a><span class="co"># xcenter = NULL, xintercept = NULL, ...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b75a74a3-e71f-401a-9c94-302c7e459c48" class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">### ARIMA(p,d,q)(P,D,Q)_s</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> sarima<span class="sc">::</span><span class="fu">sim_sarima</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">n.start=</span><span class="dv">12</span>,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model=</span><span class="fu">list</span>(<span class="at">ar =</span> <span class="fl">0.7</span>, <span class="at">siorder=</span><span class="dv">1</span>, <span class="at">nseasons=</span><span class="dv">12</span>, <span class="at">sigma2 =</span> <span class="dv">1</span>)) <span class="co"># SMA(1)</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b75a74a3-e71f-401a-9c94-302c7e459c48" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="do">### ARIMA(p,d,q)(P,D,Q)_s</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> sarima<span class="sc">::</span><span class="fu">sim_sarima</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">n.start=</span><span class="dv">12</span>,</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model=</span><span class="fu">list</span>(<span class="at">ar =</span> <span class="fl">0.7</span>, <span class="at">siorder=</span><span class="dv">1</span>, <span class="at">nseasons=</span><span class="dv">12</span>, <span class="at">sigma2 =</span> <span class="dv">1</span>)) <span class="co"># SMA(1)</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-44-output-1.png" class="img-fluid"></p>
 </div>
-<div id="4bd46895-2431-4914-8904-05cc30ec2acf" class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.sim</span>(<span class="at">ar =</span> <span class="fl">0.5</span>, <span class="at">d =</span> <span class="dv">1</span>, <span class="at">ma =</span> <span class="fl">0.1</span>, <span class="at">sar =</span> <span class="fl">0.1</span>, <span class="at">D =</span> <span class="dv">1</span>, <span class="at">sma =</span> <span class="dv">0</span>, <span class="at">S =</span> <span class="dv">12</span>, <span class="at">n =</span> <span class="dv">100</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4bd46895-2431-4914-8904-05cc30ec2acf" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> astsa<span class="sc">::</span><span class="fu">sarima.sim</span>(<span class="at">ar =</span> <span class="fl">0.5</span>, <span class="at">d =</span> <span class="dv">1</span>, <span class="at">ma =</span> <span class="fl">0.1</span>, <span class="at">sar =</span> <span class="fl">0.1</span>, <span class="at">D =</span> <span class="dv">1</span>, <span class="at">sma =</span> <span class="dv">0</span>, <span class="at">S =</span> <span class="dv">12</span>, <span class="at">n =</span> <span class="dv">100</span>)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 10_files/figure-html/cell-45-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 
 
