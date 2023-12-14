@@ -9,7 +9,7 @@
 <meta name="author" content="김보람">
 <meta name="dcterms.date" content="2023-12-14">
 
-<title>TS - [TS] (발표) 카카오 주식 시계열분석</title>
+<title>TS - [TS] (발표) 카카오 주식 시계열분석v2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,6 +104,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -150,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">[TS] (발표) 카카오 주식 시계열분석</h1>
+      <h1 class="title">[TS] (발표) 카카오 주식 시계열분석v2</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Time Series</div>
               </div>
@@ -893,10 +895,40 @@ Description:
 <p><img src="[TS] 발표v2_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
 </div>
 </div>
+<div id="11febd95-65af-4939-896c-b29411ef213a" class="cell" data-execution_count="317">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fit0 <span class="ot">=</span> <span class="fu">arima</span>(diff_df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">include.mean=</span>F)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit0)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+arima(x = diff_df2, order = c(1, 1, 0), include.mean = F)
+
+Coefficients:
+          ar1
+      -0.5182
+s.e.   0.0571
+
+sigma^2 estimated as 2e+06:  log likelihood = -1942.95,  aic = 3889.91
+
+Training set error measures:
+                    ME    RMSE      MAE MPE MAPE      MASE      ACF1
+Training set -6.585348 1410.98 1051.466 NaN  Inf 0.8502833 -0.178563</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>
+z test of coefficients:
+
+     Estimate Std. Error z value  Pr(&gt;|z|)    
+ar1 -0.518170   0.057091 -9.0763 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+</div>
+</div>
 <div id="7aeb40c1-3a42-41c1-aa0a-9f5187b33384" class="cell" data-execution_count="175">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">arima</span>(diff_df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">include.mean=</span>F)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">arima</span>(diff_df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">include.mean=</span>F)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>
 Call:
@@ -925,9 +957,9 @@ ar1 -0.011473   0.066555 -0.1724   0.8631</code></pre>
 <li>하나도~ 유의하지 않아</li>
 </ul>
 <div id="9dedc0c5-ea1d-4577-82df-241d0fe4d975" class="cell" data-execution_count="173">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>fit112 <span class="ot">=</span> <span class="fu">arima</span>(df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit112)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit112)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fit112 <span class="ot">=</span> <span class="fu">arima</span>(df2, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit112)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">coeftest</span>(fit112)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>
 Call:
@@ -959,11 +991,11 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 <p>음……………………….</p>
 <div id="1a74f34e-434c-47b9-8df9-5e8ec753818d" class="cell" data-execution_count="182">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fit33 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(df2, <span class="at">frequency=</span><span class="dv">1</span>),</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit33)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co">#lmtest::coeftest(fit33)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fit33 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(df2, <span class="at">frequency=</span><span class="dv">1</span>),</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit33)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">#lmtest::coeftest(fit33)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Fitting models using approximations to speed things up...
@@ -1002,15 +1034,15 @@ Training set -0.0114756</code></pre>
 <section id="fit1" class="level3">
 <h3 class="anchored" data-anchor-id="fit1">fit1</h3>
 <div id="16a2aabb-e042-493a-abcc-cfc095901449" class="cell" data-execution_count="86">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit1)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit1)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-27-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <div id="1fd58ab1-f9e5-4548-a99f-571dfb945cff" class="cell" data-execution_count="88">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal distribution</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal distribution</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>
     Jarque Bera Test
@@ -1020,20 +1052,20 @@ X-squared = 22.4, df = 2, p-value = 1.368e-05</code></pre>
 </div>
 </div>
 <div id="5f9c3f11-0c9b-4f67-bc82-37e2c0511028" class="cell" data-execution_count="89">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <ul>
 <li>정규분포가 아니다. 주식 데이터 특성상.. 중간에 튀어나오는 몇개의 점들로 인해서 ..</li>
 </ul>
 <div id="ca9758b9-9c23-4fb2-af2c-72fb6c63ecbb" class="cell" data-execution_count="91">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit1, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit1, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A matrix: 4 × 4 of type dbl</caption>
@@ -1079,24 +1111,125 @@ X-squared = 22.4, df = 2, p-value = 1.368e-05</code></pre>
 </table>
 </div>
 </div>
-<div id="a730b001-2cd2-49b4-813f-fa9a789477b0" class="cell" data-execution_count="96">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>forecast_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit1, <span class="dv">5</span>)</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>forecast_fit</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="fit112" class="level3">
+<h3 class="anchored" data-anchor-id="fit112">fit112</h3>
+<div id="a35ff570-6323-4025-80e9-fd33eb223bdb" class="cell" data-execution_count="321">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>resid <span class="ot">=</span> <span class="fu">resid</span>(fit112)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<pre><code>    Point Forecast     Lo 80    Hi 80     Lo 95    Hi 95
-226              0 -1487.618 1487.618 -2275.115 2275.115
-227              0 -1487.716 1487.716 -2275.265 2275.265
-228              0 -1487.716 1487.716 -2275.265 2275.265
-229              0 -1487.716 1487.716 -2275.265 2275.265
-230              0 -1487.716 1487.716 -2275.265 2275.265</code></pre>
+<p><img src="[TS] 발표v2_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="fd35c549-d7a3-4410-a81c-98a8bdfb9e75" class="cell" data-execution_count="322">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 정규성검정</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>tseries<span class="sc">::</span><span class="fu">jarque.bera.test</span>(resid) <span class="do">##JB test H0: normal distribution</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Jarque Bera Test
+
+data:  resid
+X-squared = 23.582, df = 2, p-value = 7.572e-06</code></pre>
+</div>
+</div>
+<div id="d785b00f-dd14-41e5-9563-b2a3917b8159" class="cell" data-execution_count="323">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resid)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(resid, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li>정규분포가 아니다. 주식 데이터 특성상.. 중간에 튀어나오는 몇개의 점들로 인해서 ..</li>
+</ul>
+<div id="5ac2f183-44a6-4e82-bb99-e0b5624487d9" class="cell" data-execution_count="325">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 잔차의 포트맨토 검정 ## H0 : rho1=...=rho_k=0</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>portes<span class="sc">::</span><span class="fu">LjungBox</span>(fit112, <span class="at">lags=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">12</span>,<span class="dv">18</span>,<span class="dv">24</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 4 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">lags</th>
+<th data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th data-quarto-table-cell-role="th" scope="col">df</th>
+<th data-quarto-table-cell-role="th" scope="col">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>6</td>
+<td>8.877486</td>
+<td>5</td>
+<td>0.1140518</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>12</td>
+<td>13.696612</td>
+<td>11</td>
+<td>0.2502380</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>18</td>
+<td>18.704037</td>
+<td>17</td>
+<td>0.3457823</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row"></td>
+<td>24</td>
+<td>23.960522</td>
+<td>23</td>
+<td>0.4059972</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="a730b001-2cd2-49b4-813f-fa9a789477b0" class="cell" data-execution_count="327">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>forecast_fit <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fit112, <span class="dv">9</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>forecast_fit</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(forecast_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>    Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+227       50538.54 49058.29 52018.79 48274.69 52802.38
+228       50576.47 48499.48 52653.45 47400.00 53752.93
+229       50613.80 48089.86 53137.74 46753.76 54473.83
+230       50650.54 47758.75 53542.34 46227.92 55073.16
+231       50686.71 47478.52 53894.90 45780.21 55593.21
+232       50722.31 47234.87 54209.74 45388.74 56055.88
+233       50757.34 47019.22 54495.46 45040.38 56474.30
+234       50791.83 46825.94 54757.72 44726.52 56857.14
+235       50825.77 46651.05 55000.49 44441.09 57210.45</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-35-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p><img src="[TS] 발표v2_files/figure-html/d66589c8-dac3-4bee-abc3-b88068fd4ba5-1-445174a0-8fa7-443b-9858-76f6115aabaf.png" class="img-fluid"></p>
+<div id="dee5e98c-cc82-466b-8429-1b8d454bd0cb" class="cell" data-execution_count="328">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>predict12 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">49700</span>,<span class="dv">50800</span>,<span class="dv">50800</span>,<span class="dv">50500</span>,<span class="dv">50500</span>,<span class="dv">51700</span>,<span class="dv">52100</span>,<span class="dv">51800</span>,<span class="dv">50900</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0acd85e5-f57f-43c1-9fbb-1f0440723e20" class="cell" data-execution_count="335">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(forecast_fit<span class="sc">$</span>mean <span class="sc">-</span> predict12)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+85829.3579115474
+</div>
+</div>
+<div id="361d1d3b-4855-4262-81ff-34fce7921bf3" class="cell" data-execution_count="332">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(forecast_fit<span class="sc">$</span>predict12) <span class="sc">-</span> predict12)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+NaN
 </div>
 </div>
 <div id="77c1a8c4-aa80-4839-8b52-f9394b62aa1e" class="cell" data-execution_count="97">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(df2,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>astsa<span class="sc">::</span><span class="fu">sarima.for</span>(df2,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$pred</dt>
@@ -1118,11 +1251,11 @@ X-squared = 22.4, df = 2, p-value = 1.368e-05</code></pre>
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-31-output-2.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-41-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <div id="1ab360dc-338d-4f00-8d06-088e8a3663b3" class="cell" data-execution_count="101">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(kakao)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 11</caption>
@@ -1258,21 +1391,80 @@ X-squared = 22.4, df = 2, p-value = 1.368e-05</code></pre>
 <li><p>train: 1 ~ 8월</p></li>
 <li><p>test: 9 ~ 11월</p></li>
 </ul>
-<div id="3de68294-3454-4444-8389-c08604e0c638" class="cell" data-execution_count="105">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-01-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-08-31"</span>), ]</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-09-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-11-30"</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3de68294-3454-4444-8389-c08604e0c638" class="cell" data-execution_count="384">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-01-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-08-31"</span>), ]</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> df[df<span class="sc">$</span>일자 <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-09-01"</span>) <span class="sc">&amp;</span> df<span class="sc">$</span>일자 <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2023-11-30"</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e66828b8-e493-410d-87ec-8a0a3cc3259e" class="cell" data-execution_count="121">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]   <span class="co"># 166개</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]    <span class="co"># 60개</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e66828b8-e493-410d-87ec-8a0a3cc3259e" class="cell" data-execution_count="400">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]   <span class="co"># 166개</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data[<span class="fu">c</span>(<span class="st">'일자'</span>,<span class="st">'종가'</span>)]    <span class="co"># 60개</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="377b79a9-ec9c-4464-a9e3-5112eae9765a" class="cell" data-execution_count="156">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data<span class="sc">$</span>종가</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="377b79a9-ec9c-4464-a9e3-5112eae9765a" class="cell" data-execution_count="402">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">166</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> train_data<span class="sc">$</span>종가</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> test_data<span class="sc">$</span>종가</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>ddd <span class="ot">&lt;-</span> <span class="fu">c</span>(tr,ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0c45d974-03cb-4baa-aa68-a3c47736528e" class="cell" data-execution_count="142">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(tr, <span class="at">gamma =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e9796689-7121-456a-a03b-ef11b7480adf" class="cell" data-execution_count="411">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">166</span>, ddd[<span class="dv">1</span><span class="sc">:</span><span class="dv">166</span>], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Time"</span>, <span class="at">ylab =</span> <span class="st">"Value"</span>, <span class="at">main =</span> <span class="st">"Train, Test Time Series"</span>,<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">230</span>), <span class="at">ylim=</span><span class="fu">range</span>(<span class="fu">c</span>(tr,ts)))</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">167</span><span class="sc">:</span><span class="dv">266</span>, ddd[<span class="dv">167</span><span class="sc">:</span><span class="dv">266</span>], <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Train"</span>, <span class="st">"Test"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="478f6523-d4e4-4ee3-ac72-1413ba7685c6" class="cell" data-execution_count="370">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>fitc <span class="ot">&lt;-</span> <span class="fu">lm</span>(tr <span class="sc">~</span> t)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fitc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+lm(formula = tr ~ t)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-12020.9  -1322.0    476.5   1581.1   8650.3 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 64815.958    418.727  154.79   &lt;2e-16 ***
+t             -95.047      4.349  -21.85   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2685 on 164 degrees of freedom
+Multiple R-squared:  0.7444,    Adjusted R-squared:  0.7428 
+F-statistic: 477.6 on 1 and 164 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li><span class="math inline">\(\hat T_t = 64815.958 - 95.047t\)</span></li>
+</ul>
+<div id="3cb1bd3b-515b-4105-8fac-a95d83290ac6" class="cell" data-execution_count="371">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>hatT <span class="ot">&lt;-</span> <span class="fu">fitted</span>(fitc)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(<span class="fu">ts</span>(tr), hatT,</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">lty=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"종가"</span>, <span class="at">xlab=</span><span class="st">"time"</span>,</span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"시계열과 분해법에 의한 추세성분"</span>)</span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a><span class="co">#legend("topleft", lty=1:2, col=1:2, lwd=2:3, c("tr", "추세성분"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="ce0a56d2-207a-41da-95bf-d61720f2826c" class="cell" data-execution_count="372">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>it <span class="ot">&lt;-</span> tr <span class="sc">-</span> hatT</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ts.plot</span>(it);<span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>-</code> 이중지수평활</p>
+<div id="b4098292-7eb3-44b8-b821-d3790bd5a2b0" class="cell" data-execution_count="379">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(tr, <span class="at">gamma =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>Holt-Winters exponential smoothing with trend and without seasonal component.
 
@@ -1290,10 +1482,102 @@ a 48173.0848
 b  -118.9456</code></pre>
 </div>
 </div>
-<div id="7018a0c6-0130-498b-8e65-a783b1de84cc" class="cell" data-execution_count="148">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>fit2<span class="ot">=</span><span class="fu">forecast</span>(fit2, <span class="at">h=</span><span class="dv">60</span>)</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>fit2</span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ec63658d-ec15-4342-b6e5-41a18bc86f80" class="cell" data-execution_count="431">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Forecast method: HoltWinters
+
+Model Information:
+Holt-Winters exponential smoothing with trend and without seasonal component.
+
+Call:
+HoltWinters(x = tr, gamma = FALSE)
+
+Smoothing parameters:
+ alpha: 0.9032017
+ beta : 0.04464006
+ gamma: FALSE
+
+Coefficients:
+        [,1]
+a 48173.0848
+b  -118.9456
+
+Error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -108.7283 1212.111 896.0274 -0.1880653 1.554758 0.9962569
+                    ACF1
+Training set -0.01007322
+
+Forecasts:
+    Point Forecast    Lo 80    Hi 80      Lo 95    Hi 95
+167       48054.14 46502.28 49606.00 45680.7752 50427.50
+168       47935.19 45801.61 50068.78 44672.1578 51198.23
+169       47816.25 45192.65 50439.84 43803.8082 51828.69
+170       47697.30 44629.85 50764.76 43006.0357 52388.57
+171       47578.36 44094.38 51062.34 42250.0696 52906.64
+172       47459.41 43576.42 51342.40 41520.8951 53397.93
+173       47340.47 43070.16 51610.77 40809.5942 53871.34
+174       47221.52 42571.82 51871.22 40110.4102 54332.63
+175       47102.57 42078.82 52126.33 39419.4050 54785.74
+176       46983.63 41589.33 52377.92 38733.7668 55233.49
+177       46864.68 41102.00 52627.37 38051.4211 55677.94
+178       46745.74 40615.79 52875.68 37370.7974 56120.68
+179       46626.79 40129.92 53123.66 36690.6820 56562.90
+180       46507.85 39643.75 53371.94 36010.1211 57005.57
+181       46388.90 39156.80 53621.00 35328.3547 57449.45
+182       46269.95 38668.66 53871.25 34644.7701 57895.14
+183       46151.01 38179.00 54123.02 33958.8689 58343.15
+184       46032.06 37687.56 54376.57 33270.2424 58793.88
+185       45913.12 37194.11 54632.12 32578.5530 59247.68
+186       45794.17 36698.49 54889.86 31883.5209 59704.82
+187       45675.23 36200.52 55149.93 31184.9128 60165.54
+188       45556.28 35700.09 55412.47 30482.5338 60630.03
+189       45437.34 35197.08 55677.59 29776.2207 61098.45
+190       45318.39 34691.42 55945.36 29065.8365 61570.94
+191       45199.44 34183.01 56215.88 28351.2665 62047.62
+192       45080.50 33671.81 56489.19 27632.4145 62528.58
+193       44961.55 33157.75 56765.35 26909.2003 63013.91
+194       44842.61 32640.80 57044.41 26181.5568 63503.66
+195       44723.66 32120.92 57326.41 25449.4287 63997.89
+196       44604.72 31598.07 57611.36 24712.7703 64496.66
+197       44485.77 31072.24 57899.30 23971.5446 65000.00
+198       44366.82 30543.40 58190.25 23225.7216 65507.93
+199       44247.88 30011.54 58484.22 22475.2779 66020.48
+200       44128.93 29476.65 58781.22 21720.1955 66537.67
+201       44009.99 28938.71 59081.26 20960.4613 67059.51
+202       43891.04 28397.73 59384.35 20196.0661 67586.02
+203       43772.10 27853.70 59690.50 19427.0046 68117.19
+204       43653.15 27306.61 59999.69 18653.2745 68653.03
+205       43534.21 26756.47 60311.94 17874.8764 69193.53
+206       43415.26 26203.28 60627.24 17091.8132 69738.71
+207       43296.31 25647.05 60945.58 16304.0901 70288.54
+208       43177.37 25087.77 61266.97 15511.7139 70843.02
+209       43058.42 24525.45 61591.39 14714.6934 71402.15
+210       42939.48 23960.11 61918.85 13913.0384 71965.92
+211       42820.53 23391.74 62249.32 13106.7603 72534.30
+212       42701.59 22820.36 62582.81 12295.8715 73107.30
+213       42582.64 22245.97 62919.31 11480.3852 73684.90
+214       42463.69 21668.58 63258.81 10660.3157 74267.07
+215       42344.75 21088.21 63601.29  9835.6777 74853.82
+216       42225.80 20504.86 63946.75  9006.4868 75445.12
+217       42106.86 19918.54 64295.17  8172.7591 76040.96
+218       41987.91 19329.27 64646.55  7334.5109 76641.31
+219       41868.97 18737.05 65000.88  6491.7593 77246.17
+220       41750.02 18141.90 65358.14  5644.5214 77855.52
+221       41631.08 17543.83 65718.32  4792.8147 78469.34
+222       41512.13 16942.85 66081.41  3936.6571 79087.60
+223       41393.18 16338.97 66447.40  3076.0664 79710.30
+224       41274.24 15732.20 66816.28  2211.0606 80337.42
+225       41155.29 15122.56 67188.03  1341.6581 80968.93
+226       41036.35 14510.05 67562.64   467.8771 81604.82</code></pre>
+</div>
+</div>
+<div id="7018a0c6-0130-498b-8e65-a783b1de84cc" class="cell" data-execution_count="380">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>fit2<span class="ot">=</span><span class="fu">forecast</span>(fit2, <span class="at">h=</span><span class="dv">60</span>)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>fit2</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>    Point Forecast    Lo 80    Hi 80      Lo 95    Hi 95
 167       48054.14 46502.28 49606.00 45680.7752 50427.50
@@ -1358,21 +1642,32 @@ b  -118.9456</code></pre>
 226       41036.35 14510.05 67562.64   467.8771 81604.82</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-37-output-2.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-52-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div id="17f8fc3b-1556-4d36-9674-d4321e0f0d55" class="cell" data-execution_count="157">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit2<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2343e6fc-08f5-4e51-b80d-19d3acb2ec6a" class="cell" data-execution_count="424">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit2, <span class="at">main =</span> <span class="st">"HoltWinters Model and Test Data"</span>, <span class="at">ylim=</span><span class="fu">range</span>(<span class="fu">c</span>(tr,ts)))</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">length</span>(tr) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ts), ts, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 범례 추가</span></span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"HoltWinters Model"</span>, <span class="st">"Test Data"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-53-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="17f8fc3b-1556-4d36-9674-d4321e0f0d55" class="cell" data-execution_count="381">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit2<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 21342401.2451419
 </div>
 </div>
-<div id="3987ddaa-2688-49cf-943b-db69e1d577d6" class="cell" data-execution_count="164">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>fore_fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(tr, <span class="at">frequency=</span><span class="dv">1</span>),</span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fore_fit3,<span class="dv">60</span>)</span>
-<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3987ddaa-2688-49cf-943b-db69e1d577d6" class="cell" data-execution_count="414">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>fore_fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">auto.arima</span>(<span class="fu">ts</span>(tr, <span class="at">frequency=</span><span class="dv">1</span>),</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test =</span> <span class="st">"adf"</span>,</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="cn">FALSE</span>, <span class="at">trace =</span> T)</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> forecast<span class="sc">::</span><span class="fu">forecast</span>(fore_fit3,<span class="dv">60</span>)</span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Fitting models using approximations to speed things up...
@@ -1392,13 +1687,106 @@ b  -118.9456</code></pre>
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-39-output-2.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-55-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div id="16568002-4ffe-4423-88e6-b39b140f7c46" class="cell" data-execution_count="165">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit3<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="48f60ba9-cf9f-4348-ac98-602d6fd7c15f" class="cell" data-execution_count="428">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit3, <span class="at">main =</span> <span class="st">"ARIMA Forecast with Test Data"</span>, <span class="at">ylim=</span><span class="fu">range</span>(<span class="fu">c</span>(tr,ts)))</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">length</span>(tr) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ts), ts, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"ARIMA Forecast"</span>, <span class="st">"Test Data"</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="[TS] 발표v2_files/figure-html/cell-56-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div id="16568002-4ffe-4423-88e6-b39b140f7c46" class="cell" data-execution_count="429">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">as.numeric</span>(fit3<span class="sc">$</span>mean) <span class="sc">-</span> ts)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 26575333.3333333
+</div>
+</div>
+<div id="e4066d04-e60d-48ce-9d5a-d9e035661168" class="cell" data-execution_count="430">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Forecast method: ARIMA(0,1,0)
+
+Model Information:
+Series: ts(tr, frequency = 1) 
+ARIMA(0,1,0) 
+
+sigma^2 = 1445653:  log likelihood = -1404.31
+AIC=2810.62   AICc=2810.64   BIC=2813.73
+
+Error measures:
+                    ME     RMSE      MAE        MPE     MAPE      MASE
+Training set -27.39337 1198.726 894.2934 -0.0754439 1.549295 0.9943289
+                    ACF1
+Training set -0.07825018
+
+Forecasts:
+    Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+167          48100 46559.12 49640.88 45743.43 50456.57
+168          48100 45920.87 50279.13 44767.31 51432.69
+169          48100 45431.12 50768.88 44018.30 52181.70
+170          48100 45018.24 51181.76 43386.86 52813.14
+171          48100 44654.49 51545.51 42830.55 53369.45
+172          48100 44325.64 51874.36 42327.61 53872.39
+173          48100 44023.22 52176.78 41865.10 54334.90
+174          48100 43741.74 52458.26 41434.62 54765.38
+175          48100 43477.37 52722.63 41030.29 55169.71
+176          48100 43227.32 52972.68 40647.87 55552.13
+177          48100 42989.49 53210.51 40284.14 55915.86
+178          48100 42762.24 53437.76 39936.61 56263.39
+179          48100 42544.29 53655.71 39603.27 56596.73
+180          48100 42334.56 53865.44 39282.53 56917.47
+181          48100 42132.21 54067.79 38973.05 57226.95
+182          48100 41936.49 54263.51 38673.72 57526.28
+183          48100 41746.80 54453.20 38383.62 57816.38
+184          48100 41562.61 54637.39 38101.92 58098.08
+185          48100 41383.47 54816.53 37827.95 58372.05
+186          48100 41208.99 54991.01 37561.10 58638.90
+187          48100 41038.81 55161.19 37300.84 58899.16
+188          48100 40872.64 55327.36 37046.71 59153.29
+189          48100 40710.21 55489.79 36798.29 59401.71
+190          48100 40551.27 55648.73 36555.22 59644.78
+191          48100 40395.61 55804.39 36317.16 59882.84
+192          48100 40243.03 55956.97 36083.81 60116.19
+193          48100 40093.37 56106.63 35854.91 60345.09
+194          48100 39946.44 56253.56 35630.21 60569.79
+195          48100 39802.12 56397.88 35409.49 60790.51
+196          48100 39660.27 56539.73 35192.54 61007.46
+197          48100 39520.76 56679.24 34979.18 61220.82
+198          48100 39383.48 56816.52 34769.23 61430.77
+199          48100 39248.33 56951.67 34562.54 61637.46
+200          48100 39115.22 57084.78 34358.96 61841.04
+201          48100 38984.05 57215.95 34158.35 62041.65
+202          48100 38854.73 57345.27 33960.59 62239.41
+203          48100 38727.21 57472.79 33765.55 62434.45
+204          48100 38601.39 57598.61 33573.13 62626.87
+205          48100 38477.22 57722.78 33383.23 62816.77
+206          48100 38354.63 57845.37 33195.75 63004.25
+207          48100 38233.57 57966.43 33010.60 63189.40
+208          48100 38113.97 58086.03 32827.69 63372.31
+209          48100 37995.79 58204.21 32646.94 63553.06
+210          48100 37878.97 58321.03 32468.29 63731.71
+211          48100 37763.48 58436.52 32291.65 63908.35
+212          48100 37649.26 58550.74 32116.97 64083.03
+213          48100 37536.28 58663.72 31944.18 64255.82
+214          48100 37424.49 58775.51 31773.21 64426.79
+215          48100 37313.86 58886.14 31604.02 64595.98
+216          48100 37204.35 58995.65 31436.54 64763.46
+217          48100 37095.93 59104.07 31270.73 64929.27
+218          48100 36988.57 59211.43 31106.54 65093.46
+219          48100 36882.24 59317.76 30943.92 65256.08
+220          48100 36776.91 59423.09 30782.83 65417.17
+221          48100 36672.55 59527.45 30623.22 65576.78
+222          48100 36569.13 59630.87 30465.05 65734.95
+223          48100 36466.63 59733.37 30308.29 65891.71
+224          48100 36365.03 59834.97 30152.91 66047.09
+225          48100 36264.29 59935.71 29998.85 66201.15
+226          48100 36164.41 60035.59 29846.10 66353.90</code></pre>
 </div>
 </div>
 <p>어 렵 다</p>
@@ -1406,14 +1794,14 @@ b  -118.9456</code></pre>
 <section id="data-na값.." class="level1">
 <h1>data na값..</h1>
 <div id="a5c61f05-178d-4749-83f8-048297786a1e" class="cell" data-execution_count="246">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>date_na <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(date_na, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>miss_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(일자 <span class="ot">=</span> date_na, 종가 <span class="ot">=</span> <span class="cn">NA</span>)</span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">head</span>(kakao[<span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>)],<span class="dv">226</span>)</span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>df3<span class="sc">$</span>일자<span class="ot">&lt;-</span> <span class="fu">as.Date</span>(df3<span class="sc">$</span>일자, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
-<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df3, miss_row)</span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> df4[<span class="fu">order</span>(df4<span class="sc">$</span>일자),, drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(df4) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>date_na <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(date_na, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>miss_row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(일자 <span class="ot">=</span> date_na, 종가 <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">head</span>(kakao[<span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>)],<span class="dv">226</span>)</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>df3<span class="sc">$</span>일자<span class="ot">&lt;-</span> <span class="fu">as.Date</span>(df3<span class="sc">$</span>일자, <span class="at">format =</span> <span class="st">"%Y/%m/%d"</span>)</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df3, miss_row)</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> df4[<span class="fu">order</span>(df4<span class="sc">$</span>일자),, drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(df4) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 2</caption>
@@ -1488,15 +1876,15 @@ b  -118.9456</code></pre>
 <section id="결측값-채우기na.locf" class="level2">
 <h2 class="anchored" data-anchor-id="결측값-채우기na.locf">1. 결측값 채우기(na.locf)</h2>
 <div id="184dda65-4041-4bbf-bee1-f17c0c9d4178" class="cell" data-execution_count="277">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>df4[<span class="dv">1</span>,]<span class="sc">$</span>종가 <span class="ot">&lt;-</span> <span class="dv">53100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df4[<span class="dv">1</span>,]<span class="sc">$</span>종가 <span class="ot">&lt;-</span> <span class="dv">53100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="b39d11cc-382b-417b-9fa9-d093d280a774" class="cell" data-execution_count="278">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>df_l <span class="ot">&lt;-</span> <span class="fu">na.locf</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>df_l <span class="ot">&lt;-</span> <span class="fu">na.locf</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="25c06b23-5e4e-4f6e-9517-f3e2ed5061b0" class="cell" data-execution_count="279">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_l,<span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_l,<span class="at">lag.max=</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-63-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <ul>
@@ -1506,13 +1894,13 @@ b  -118.9456</code></pre>
 <section id="결측값-채우기평균값" class="level2">
 <h2 class="anchored" data-anchor-id="결측값-채우기평균값">2. 결측값 채우기(평균값!)</h2>
 <div id="6c4b55e5-8f26-46e6-975b-2fe61ab7dba7" class="cell" data-execution_count="260">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>df_m <span class="ot">&lt;-</span> df4</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>df_m<span class="sc">$</span>종가 <span class="ot">&lt;-</span>  zoo<span class="sc">::</span><span class="fu">na.aggregate</span>(df4<span class="sc">$</span>종가, <span class="at">FUN =</span> mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>df_m <span class="ot">&lt;-</span> df4</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>df_m<span class="sc">$</span>종가 <span class="ot">&lt;-</span>  zoo<span class="sc">::</span><span class="fu">na.aggregate</span>(df4<span class="sc">$</span>종가, <span class="at">FUN =</span> mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="6c808e7d-9b66-4463-936c-d2e5f0cd2ef9" class="cell" data-execution_count="271">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(df_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-65-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>—&gt; 이건 누가 봐도 이상함 ㅎ</p>
@@ -1520,25 +1908,25 @@ b  -118.9456</code></pre>
 <section id="결측값-채우기-nna.approx" class="level2">
 <h2 class="anchored" data-anchor-id="결측값-채우기-nna.approx">3. 결측값 채우기 (Nna.approx)</h2>
 <div id="2accb452-53de-47ff-b30c-e358081542a5" class="cell" data-execution_count="274">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df_a <span class="ot">&lt;-</span> <span class="fu">na.approx</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>df_a <span class="ot">&lt;-</span> <span class="fu">na.approx</span>(df4<span class="sc">$</span>종가)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="2740cc42-2b43-4f8a-a591-e619fb77d15f" class="cell" data-execution_count="291">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>df_aa <span class="ot">&lt;-</span> df4</span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>df_aa<span class="sc">$</span>종가 <span class="ot">&lt;-</span> df_a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>df_aa <span class="ot">&lt;-</span> df4</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>df_aa<span class="sc">$</span>종가 <span class="ot">&lt;-</span> df_a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="d5317790-64bf-4a3b-a2ca-ac107899cccf" class="cell" data-execution_count="281">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-68-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>비슷하다.</p>
 <section id="그냥-해보기..-주별월별-데이터로-바꾸기." class="level4">
 <h4 class="anchored" data-anchor-id="그냥-해보기..-주별월별-데이터로-바꾸기.">그냥 해보기.. (주별/월별 데이터로 바꾸기.)</h4>
 <div id="39430ee4-1f13-41a7-bdba-53852332d568" class="cell" data-execution_count="306">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>df_week <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">week</span>(df4<span class="sc">$</span>일자)</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>weekly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_week, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(weekly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>df_week <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">week</span>(df4<span class="sc">$</span>일자)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>weekly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_week, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(weekly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 2</caption>
@@ -1589,20 +1977,20 @@ b  -118.9456</code></pre>
 </table>
 </div>
 </div>
-<div id="78e31e7f-b6cf-46ef-aee5-005c1d60efae" class="cell" data-execution_count="300">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weekly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="78e31e7f-b6cf-46ef-aee5-005c1d60efae" class="cell" data-execution_count="436">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weekly_avg, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-53-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-70-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <div id="0296a4ee-d797-4af9-b695-eab513cf3665" class="cell" data-execution_count="307">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>df_month <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">month</span>(df4<span class="sc">$</span>일자)</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>monthly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_month, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>df_month <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">month</span>(df4<span class="sc">$</span>일자)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>monthly_avg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df_aa<span class="sc">$</span>종가 <span class="sc">~</span> df_month, <span class="at">data =</span> df_aa, <span class="at">FUN =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="53f6920d-7c5e-42e6-81db-d4ec483ef4c7" class="cell" data-execution_count="308">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(monthly_avg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="53f6920d-7c5e-42e6-81db-d4ec483ef4c7" class="cell" data-execution_count="438">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(monthly_avg, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-55-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-72-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -1616,15 +2004,15 @@ b  -118.9456</code></pre>
 <section id="번외내-주식은-어떘을까" class="level2">
 <h2 class="anchored" data-anchor-id="번외내-주식은-어떘을까">번외(내 주식은 어떘을까?)</h2>
 <div id="3d47e935-0ffa-4279-89d4-4d3f1c68b598" class="cell" data-execution_count="309">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"kakao2021.csv"</span>, <span class="at">fileEncoding =</span> <span class="st">"ISO-8859-1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"kakao2021.csv"</span>, <span class="at">fileEncoding =</span> <span class="st">"ISO-8859-1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="d2230f8e-7578-4ede-9694-e49f6f38bedb" class="cell" data-execution_count="311">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>,<span class="st">"대비"</span>,<span class="st">"등락률"</span>,<span class="st">"시가"</span>,<span class="st">"고가"</span>,<span class="st">"저가"</span>,<span class="st">"거래량"</span>,<span class="st">"거래대금"</span>,<span class="st">"시가총액"</span>,<span class="st">"상장주식수"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"일자"</span>,<span class="st">"종가"</span>,<span class="st">"대비"</span>,<span class="st">"등락률"</span>,<span class="st">"시가"</span>,<span class="st">"고가"</span>,<span class="st">"저가"</span>,<span class="st">"거래량"</span>,<span class="st">"거래대금"</span>,<span class="st">"시가총액"</span>,<span class="st">"상장주식수"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="e7fb2f9d-904f-4cd2-a279-8475e24bbfd9" class="cell" data-execution_count="312">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> kakao2021[<span class="fu">order</span>(kakao2021<span class="sc">$</span>일자),]</span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kakao2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>kakao2021 <span class="ot">&lt;-</span> kakao2021[<span class="fu">order</span>(kakao2021<span class="sc">$</span>일자),]</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kakao2021) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kakao2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 11</caption>
@@ -1748,16 +2136,16 @@ b  -118.9456</code></pre>
 </div>
 </div>
 <div id="00b121e2-03ab-46ce-a033-16b406493b2b" class="cell" data-execution_count="313">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>df_my <span class="ot">&lt;-</span> kakao2021<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>df_my <span class="ot">&lt;-</span> kakao2021<span class="sc">$</span>종가</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="2dd579c1-7087-457a-bd38-e9bed804bd32" class="cell" data-execution_count="315">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_my)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>forecast<span class="sc">::</span><span class="fu">tsdisplay</span>(df_my)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="[TS] 발표v2_files/figure-html/cell-60-output-1.png" class="img-fluid"></p>
+<p><img src="[TS] 발표v2_files/figure-html/cell-77-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>ㅠㅠㅠㅠ</p>
-<p><img src="[TS] 발표v2_files/figure-html/2935b7b8-0c6f-4ad4-8472-134b8040b3ed-1-730b17b8-2299-417e-8b05-e2e615c21e38.png" class="img-fluid"><img src="[TS] 발표v2_files/figure-html/2935b7b8-0c6f-4ad4-8472-134b8040b3ed-2-befc4918-7746-4508-824c-3454a0dce87c.png" class="img-fluid" alt="image.png"></p>
+<p><img src="[TS] 발표v2_files/figure-html/2935b7b8-0c6f-4ad4-8472-134b8040b3ed-1-730b17b8-2299-417e-8b05-e2e615c21e38.png" class="img-fluid">!</p>
 <ul>
 <li><p>이미지출처: https://vizibusy.tistory.com/31</p></li>
 <li><p>오르는 거 보고 신나서 들어갔다가 지금 현재 폭망하는 중……………………………</p></li>
